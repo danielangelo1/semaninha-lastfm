@@ -1,0 +1,118 @@
+* {
+  box-sizing: border-box;
+}
+
+p {
+  margin: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 960px;
+  color: #222222;
+}
+
+li {
+  list-style: none;
+}
+
+h1 {
+  padding-top: 10px;
+  margin-top: 0;
+  text-align: center;
+}
+
+label {
+  padding: 4px;
+}
+
+select,
+button,
+input {
+  padding: 10px;
+  margin-bottom: 30px;
+}
+
+#albumGrid {
+  display: grid;
+  margin-top: 10px;
+  margin: 0;
+  gap: 0;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 0;
+  grid-row-gap: 0;
+  max-width: 1250px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#albumGrid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#downloadButton {
+  display: none;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  background-color: #28a745;
+  color: #ffffff;
+  border-radius: 4px;
+  margin: 0 auto;
+}
+
+#downloadButton:hover {
+  background-color: #1e7e34;
+}
+
+.generateButton {
+  margin-top: 10px;
+  padding: 10px;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  background-color: #0056b3;
+  color: #ffffff;
+  border-radius: 4px;
+}
+
+.generateButton:hover {
+  background-color: #003c80;
+}
+
+@media (max-width: 768px) {
+  select,
+  button,
+  input {
+    padding: 5px;
+    margin-bottom: 0px;
+  }
+  #downloadButton {
+    margin-top: 10px;
+  }
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.socialMedias {
+  display: flex;
+  justify-content: center;
+  margin: 5px;
+}
+
+.socialMedias img {
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+}

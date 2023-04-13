@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Semaninha Last.fm</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="./script/FileSaver.js"></script>
+    <script src="./script/dom-to-image.js"></script>
+    <script src="./script.js"></script>
+
+</head>
+
+<body>
+    <h1>SEMANINHA</h1>
+    <div id="controls">
+        <label for="userInput">Nome de usuário:</label>
+        <input type="text" id="userInput" required>
+        <label for="timeRange">Período:</label>
+        <select id="timeRange">
+            <option value="7day">Últimos 7 dias</option>
+            <option value="1month">Último mês</option>
+            <option value="3month">Últimos 3 meses</option>
+            <option value="6month">Últimos 6 meses</option>
+            <option value="12month">Último ano</option>
+            <option value="overall">Geral</option>
+        </select>
+        <label for="gridSize">Tamanho:</label>
+        <select id="gridSize">
+            <option value="3">3x3</option>
+            <option value="4">4x4</option>
+            <option value="5">5x5</option>
+        </select>
+        <label for="gridType">Tipo:</label>
+        <select id="gridType">
+            <option value="albums">Álbum</option>
+            <option value="artists">Artista</option>
+        </select>
+        <button class="generateButton" onclick="generateGrid()">Gerar Grid</button>
+        <button id="downloadButton" onclick="downloadGrid()">Baixar Grid</button>
+    </div>
+    <div id="albumGrid"></div>
+
+    <footer>
+        <p>Desenvolvido por <a href="https://github.com/danielangelo1">Daniel Ângelo</a></p>
+        <ul class="socialMedias">
+            <li><a href="https://last.fm/user/dandowski" target="_blank"> <img src="./img/lastfm.svg"
+                        alt="Icone do Last FM"></a></li>
+            <li><a href="https://twitter.com/dandowski" target="_blank"> <img src="./img/twitter.svg"
+                        alt="Icone do Twitter"></a></li>
+            <li><a href="https://last.fm/user/dandowski" target="_blank"> <img src="./img/github.svg"
+                        alt="Icone do Github"></a></li>
+        </ul>
+    </footer>
+</body>
+
+</html>
