@@ -29,11 +29,16 @@ label {
   padding: 4px;
 }
 
+ul {
+  padding: 0;
+}
+
 select,
 button,
 input {
   padding: 10px;
   margin-bottom: 30px;
+  border-radius: 4px;
 }
 
 #controls {
@@ -86,7 +91,6 @@ input {
   cursor: pointer;
   background-color: #28a745;
   color: #ffffff;
-  border-radius: 4px;
 }
 
 #downloadButton:hover {
@@ -100,7 +104,6 @@ input {
   cursor: pointer;
   background-color: #0056b3;
   color: #ffffff;
-  border-radius: 4px;
 }
 
 .generateButton:hover {
@@ -144,5 +147,9 @@ footer {
   }
   #controls {
     margin-bottom: 10px;
+  }
+  #userInput {
+    width: 100px;
+    height: 24px;
   }
 }
