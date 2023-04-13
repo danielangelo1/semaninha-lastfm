@@ -1,21 +1,16 @@
-const gridWidth = 3; // Largura padrão do grid
-const gridHeight = 3; // Altura padrão do grid
-
 function generateGrid() {
+  // Obter os valores dos campos de entrada do usuário
   const userInput = document.getElementById("userInput").value;
   const timeRange = document.getElementById("timeRange").value;
   const gridSize = document.getElementById("gridSize").value;
-  const gridType = document.getElementById("gridType").value; // Adicionado novo campo para obter o tipo de grid
+  const gridType = document.getElementById("gridType").value;
   const albumGrid = document.getElementById("albumGrid");
 
-  // Fazer requisição à API do Last.fm com os parâmetros escolhidos pelo usuário
-  // (usando a biblioteca fetch ou outra de sua preferência)
-  // Exemplo:
   let apiMethod = "";
   if (gridType === "albums") {
     apiMethod = "user.getTopAlbums";
   } else if (gridType === "artists") {
-    apiMethod = "user.getTopArtists"; // Alterado para obter top artistas
+    apiMethod = "user.getTopArtists";
   }
 
   fetch(
@@ -23,36 +18,33 @@ function generateGrid() {
   )
     .then((response) => response.json())
     .then((data) => {
-      albumGrid.innerHTML = ""; // Limpar o grid de imagens
+      albumGrid.innerHTML = "";
 
-      // Calcular o número total de células no grid com base no tamanho escolhido
       const totalCells = gridSize * gridSize;
 
-      // Iterar pelos álbuns ou artistas retornados pela API e criar elementos de imagem para exibir no grid
       if (gridType === "albums") {
         data.topalbums.album.slice(0, totalCells).forEach((album) => {
           const img = document.createElement("img");
-          img.src = album.image[3]["#text"]; // Usar a imagem de tamanho médio
+          img.src = album.image[3]["#text"];
           img.alt = album.name;
-          img.className = "album-image"; // Adicionar classe para aplicar estilo CSS
+          img.className = "album-image";
           albumGrid.appendChild(img);
           console.log(data);
         });
       } else if (gridType === "artists") {
         data.topartists.artist.slice(0, totalCells).forEach((artist) => {
           const img = document.createElement("img");
-          img.src = artist.image[3]["#text"]; // Usar a imagem de tamanho médio
+          img.src = artist.image[3]["#text"];
           img.alt = artist.name;
-          img.className = "album-image"; // Adicionar classe para aplicar estilo CSS
+          img.className = "album-image";
           albumGrid.appendChild(img);
         });
       }
 
-      // Definir a largura e altura do grid com base no tamanho escolhido
+      // Definir o tamanho do grid
       albumGrid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
       albumGrid.style.gridTemplateRows = `repeat(${gridSize}, 1fr)`;
 
-      // Mostrar o botão de download
       const downloadButton = document.getElementById("downloadButton");
       downloadButton.style.display = "block";
     })
@@ -73,9 +65,9 @@ function downloadGrid() {
       const link = document.createElement("a");
       link.href = dataUrl;
       link.download = "albumGrid.png";
-      document.body.appendChild(link); // Adicionar o link ao corpo do documento para que seja clicável
-      link.click(); // Simular o clique no link para iniciar o download
-      document.body.removeChild(link); // Remover o link do corpo do documento após o download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     })
     .catch(function (error) {
       console.error("Erro ao gerar a imagem do grid:", error);
