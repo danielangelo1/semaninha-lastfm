@@ -22,6 +22,7 @@ h1 {
   padding-top: 10px;
   margin-top: 0;
   text-align: center;
+  font-size: 3em;
 }
 
 label {
@@ -33,6 +34,15 @@ button,
 input {
   padding: 10px;
   margin-bottom: 30px;
+}
+
+#controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 #albumGrid {
@@ -53,6 +63,21 @@ input {
   height: 100%;
   object-fit: cover;
 }
+.album-container {
+  /* Estilo do album-container */
+  /* Por exemplo: */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.album-caption {
+  text-align: center;
+  font-size: 14px;
+  margin-top: -20px;
+}
 
 #downloadButton {
   display: none;
@@ -62,7 +87,6 @@ input {
   background-color: #28a745;
   color: #ffffff;
   border-radius: 4px;
-  margin: 0 auto;
 }
 
 #downloadButton:hover {
@@ -70,7 +94,6 @@ input {
 }
 
 .generateButton {
-  margin-top: 10px;
   padding: 10px;
   justify-content: center;
   border: none;
@@ -84,19 +107,10 @@ input {
   background-color: #003c80;
 }
 
-@media (max-width: 768px) {
-  select,
-  button,
-  input {
-    padding: 5px;
-    margin-bottom: 0px;
-  }
-  #downloadButton {
-    margin-top: 10px;
-  }
-}
-
 footer {
+  left: 0;
+  bottom: 0;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -115,4 +129,20 @@ footer {
   width: 30px;
   height: 30px;
   margin: 0 5px;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2em;
+    padding: 0px;
+  }
+  select,
+  button,
+  input {
+    padding: 5px;
+    margin-bottom: 0px;
+  }
+  #controls {
+    margin-bottom: 10px;
+  }
 }

@@ -32,7 +32,7 @@ function generateGrid() {
       if (gridType === "albums") {
         data.topalbums.album.slice(0, totalCells).forEach((album) => {
           const img = document.createElement("img");
-          img.src = album.image[2]["#text"]; // Usar a imagem de tamanho médio
+          img.src = album.image[3]["#text"]; // Usar a imagem de tamanho médio
           img.alt = album.name;
           img.className = "album-image"; // Adicionar classe para aplicar estilo CSS
           albumGrid.appendChild(img);
@@ -41,11 +41,10 @@ function generateGrid() {
       } else if (gridType === "artists") {
         data.topartists.artist.slice(0, totalCells).forEach((artist) => {
           const img = document.createElement("img");
-          img.src = artist.image[2]["#text"]; // Usar a imagem de tamanho médio
+          img.src = artist.image[3]["#text"]; // Usar a imagem de tamanho médio
           img.alt = artist.name;
           img.className = "album-image"; // Adicionar classe para aplicar estilo CSS
           albumGrid.appendChild(img);
-          console.log(data);
         });
       }
 
@@ -58,6 +57,7 @@ function generateGrid() {
       downloadButton.style.display = "block";
     })
     .catch((error) => {
+      alert("Usuário não encontrado!");
       console.error("Erro na requisição à API do Last.fm:", error);
     });
 }
