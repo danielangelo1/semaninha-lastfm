@@ -19,10 +19,12 @@ li {
 }
 
 h1 {
+  font-family: "Poppins", sans-serif;
   padding-top: 10px;
   margin-top: 0;
   text-align: center;
   font-size: 3em;
+  color: #c3000d;
 }
 
 label {
