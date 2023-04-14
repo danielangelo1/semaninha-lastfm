@@ -69,16 +69,6 @@ function generateGrid() {
               context.shadowColor = "black";
               context.shadowBlur = 7;
               context.fillStyle = "white";
-
-              const textWidth = context.measureText(album.name).width; // Mede a largura do texto
-              const maxWidth = imageWidth - 20; // Largura máxima do texto é igual à largura da imagem menos 20 pixels
-
-              if (textWidth > maxWidth) {
-                const scaleFactor = maxWidth / textWidth; // Fator de escala para ajustar o tamanho do texto
-                const scaledFontSize = 18 * scaleFactor; // Tamanho de fonte escalado
-                context.font = `${scaledFontSize}px Arial`; // Aplica o tamanho de fonte escalado
-              }
-
               context.fillText(album.name, x + 10, y + 20);
             }
             if (showAlbumPlaycount) {
