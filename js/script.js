@@ -22,87 +22,141 @@ function generateGrid() {
   )
     .then((response) => response.json())
     .then((data) => {
-      albumGrid.innerHTML = "";
-
       const totalCells = gridSize * gridSize;
+      const canvas = document.createElement("canvas");
+      canvas.width = 1250;
+      canvas.height = 1250;
+      const context = canvas.getContext("2d");
+
+      let loadedCount = 0; // contador de imagens carregadas
+
+      const handleLoad = () => {
+        loadedCount++;
+        if (loadedCount === totalCells) {
+          const generatedImage = document.createElement("img");
+          generatedImage.src = canvas.toDataURL();
+          generatedImage.alt =
+            gridType === "albums"
+              ? "Generated Album Grid"
+              : "Generated Artist Grid";
+          generatedImage.className = "generated-image";
+          albumGrid.innerHTML = "";
+          albumGrid.appendChild(generatedImage);
+
+          const downloadButton = document.getElementById("downloadButton");
+          downloadButton.style.display = "block";
+        }
+      };
 
       if (gridType === "albums") {
-        data.topalbums.album.slice(0, totalCells).forEach((album) => {
-          const albumContainer = document.createElement("div");
-          albumContainer.className = "album";
-
-          const img = document.createElement("img");
+        const albums = data.topalbums.album.slice(0, totalCells);
+        albums.forEach((album, index) => {
+          const img = new Image();
           img.src = album.image[3]["#text"];
-          img.alt = album.name;
-          img.className = "album-image";
-          albumContainer.appendChild(img);
+          img.crossOrigin = "Anonymous";
+          img.onload = function () {
+            const x = (index % gridSize) * (canvas.width / gridSize);
+            const y = Math.floor(index / gridSize) * (canvas.height / gridSize);
+            context.drawImage(
+              img,
+              x,
+              y,
+              canvas.width / gridSize,
+              canvas.height / gridSize
+            );
+            if (showAlbumName) {
+              context.font = "18px Arial";
+              context.shadowColor = "black";
+              context.shadowBlur = 7;
+              context.fillStyle = "white";
 
-          if (showAlbumName) {
-            const albumName = document.createElement("div");
-            albumName.className = "album-name";
-            albumName.textContent = album.name;
-            albumContainer.appendChild(albumName);
-          }
+              const textWidth = context.measureText(album.name).width; // Mede a largura do texto
+              const maxWidth = imageWidth - 20; // Largura máxima do texto é igual à largura da imagem menos 20 pixels
 
-          if (showAlbumPlaycount) {
-            const albumPlaycount = document.createElement("div");
-            albumPlaycount.className = "album-playcount";
-            albumPlaycount.textContent = `Plays: ${album.playcount}`;
-            albumContainer.appendChild(albumPlaycount);
-          }
+              if (textWidth > maxWidth) {
+                const scaleFactor = maxWidth / textWidth; // Fator de escala para ajustar o tamanho do texto
+                const scaledFontSize = 18 * scaleFactor; // Tamanho de fonte escalado
+                context.font = `${scaledFontSize}px Arial`; // Aplica o tamanho de fonte escalado
+              }
 
-          albumGrid.appendChild(albumContainer);
+              context.fillText(album.name, x + 10, y + 20);
+            }
+            if (showAlbumPlaycount) {
+              context.font = "16px Arial";
+              context.fillStyle = "white";
+              context.fillText(`Plays: ${album.playcount}`, x + 10, y + 40);
+            }
+            handleLoad();
+          };
+          img.onerror = function () {
+            const x = (index % gridSize) * (canvas.width / gridSize);
+            const y = Math.floor(index / gridSize) * (canvas.height / gridSize);
+            context.fillStyle = "black";
+            context.fillRect(
+              x,
+              y,
+              canvas.width / gridSize,
+              canvas.height / gridSize
+            );
+            handleLoad();
+          };
         });
       } else if (gridType === "artists") {
-        data.topartists.artist.slice(0, totalCells).forEach((artist) => {
-          const img = document.createElement("img");
+        const artists = data.topartists.artist.slice(0, totalCells);
+        artists.forEach((artist, index) => {
+          const img = new Image();
           img.src = artist.image[3]["#text"];
-          img.alt = artist.name;
-          img.className = "album-image";
-          albumGrid.appendChild(img);
+          img.crossOrigin = "Anonymous";
+          img.onload = function () {
+            const x = (index % gridSize) * (canvas.width / gridSize);
+            const y = Math.floor(index / gridSize) * (canvas.height / gridSize);
+            context.drawImage(
+              img,
+              x,
+              y,
+              canvas.width / gridSize,
+              canvas.height / gridSize
+            );
+            if (showAlbumName) {
+              context.font = "18px Arial";
+              context.fillStyle = "white";
+              context.fillText(artist.name, x + 10, y + 20);
+            }
+            if (showAlbumPlaycount) {
+              context.font = "16px Arial";
+              context.fillStyle = "white";
+              context.fillText(`Plays: ${artist.playcount}`, x + 10, y + 40);
+            }
+            handleLoad();
+          };
+          img.onerror = function () {
+            const x = (index % gridSize) * (canvas.width / gridSize);
+            const y = Math.floor(index / gridSize) * (canvas.height / gridSize);
+            context.fillStyle = "black";
+            context.fillRect(
+              x,
+              y,
+              canvas.width / gridSize,
+              canvas.height / gridSize
+            );
+            handleLoad();
+          };
         });
       }
-
-      // Definir o tamanho do grid
-      albumGrid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
-      albumGrid.style.gridTemplateRows = `repeat(${gridSize}, 1fr)`;
-
-      const downloadButton = document.getElementById("downloadButton");
-      downloadButton.style.display = "block";
     })
     .catch((error) => {
-      alert("Usuário não encontrado!");
-      console.error("Erro na requisição à API do Last.fm:", error);
+      console.error("Erro ao obter os dados do Last.fm:", error);
     });
 }
 
 function downloadGrid() {
-  const albumGrid = document.getElementById("albumGrid");
-
-  // Usar a biblioteca dom-to-image para capturar o conteúdo do grid como uma imagem
-  domtoimage
-    .toPng(albumGrid)
-    .then(function (dataUrl) {
-      // Criar um link de download para a imagem gerada
-      const link = document.createElement("a");
-
-      // Criar um elemento de imagem para redimensionar a imagem
-      const img = new Image();
-      img.src = dataUrl;
-      img.onload = function () {
-        const canvas = document.createElement("canvas");
-        canvas.width = 1250;
-        canvas.height = 1250;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, 1250, 1250);
-        link.href = canvas.toDataURL("image/png");
-        link.download = "albumGrid.png";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      };
-    })
-    .catch(function (error) {
-      console.error("Erro ao gerar a imagem do grid:", error);
-    });
+  const generatedImage = document.querySelector(".generated-image");
+  if (generatedImage) {
+    const link = document.createElement("a");
+    link.href = generatedImage.src;
+    link.download = "semaninha.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 }
