@@ -4,6 +4,10 @@ function generateGrid() {
   const timeRange = document.getElementById("timeRange").value;
   const gridSize = document.getElementById("gridSize").value;
   const gridType = document.getElementById("gridType").value;
+  const showAlbumName = document.getElementById("showAlbumName").checked;
+  const showAlbumPlaycount =
+    document.getElementById("showAlbumPlaycount").checked;
+
   const albumGrid = document.getElementById("albumGrid");
 
   let apiMethod = "";
@@ -24,12 +28,30 @@ function generateGrid() {
 
       if (gridType === "albums") {
         data.topalbums.album.slice(0, totalCells).forEach((album) => {
+          const albumContainer = document.createElement("div");
+          albumContainer.className = "album";
+
           const img = document.createElement("img");
           img.src = album.image[3]["#text"];
           img.alt = album.name;
           img.className = "album-image";
-          albumGrid.appendChild(img);
-          console.log(data);
+          albumContainer.appendChild(img);
+
+          if (showAlbumName) {
+            const albumName = document.createElement("div");
+            albumName.className = "album-name";
+            albumName.textContent = album.name;
+            albumContainer.appendChild(albumName);
+          }
+
+          if (showAlbumPlaycount) {
+            const albumPlaycount = document.createElement("div");
+            albumPlaycount.className = "album-playcount";
+            albumPlaycount.textContent = `Plays: ${album.playcount}`;
+            albumContainer.appendChild(albumPlaycount);
+          }
+
+          albumGrid.appendChild(albumContainer);
         });
       } else if (gridType === "artists") {
         data.topartists.artist.slice(0, totalCells).forEach((artist) => {
@@ -63,11 +85,22 @@ function downloadGrid() {
     .then(function (dataUrl) {
       // Criar um link de download para a imagem gerada
       const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = "albumGrid.png";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+
+      // Criar um elemento de imagem para redimensionar a imagem
+      const img = new Image();
+      img.src = dataUrl;
+      img.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = 1250;
+        canvas.height = 1250;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, 1250, 1250);
+        link.href = canvas.toDataURL("image/png");
+        link.download = "albumGrid.png";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
     })
     .catch(function (error) {
       console.error("Erro ao gerar a imagem do grid:", error);

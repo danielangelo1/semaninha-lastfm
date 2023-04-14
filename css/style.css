@@ -39,7 +39,6 @@ select,
 button,
 input {
   padding: 10px;
-  margin-bottom: 30px;
   border-radius: 4px;
 }
 
@@ -50,6 +49,7 @@ input {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 6px;
+  margin: 0;
 }
 
 #albumGrid {
@@ -80,12 +80,6 @@ input {
   text-align: center;
 }
 
-.album-caption {
-  text-align: center;
-  font-size: 14px;
-  margin-top: -20px;
-}
-
 #downloadButton {
   display: none;
   padding: 10px;
@@ -104,12 +98,12 @@ input {
   justify-content: center;
   border: none;
   cursor: pointer;
-  background-color: #0056b3;
+  background-color: #c3000d;
   color: #ffffff;
 }
 
 .generateButton:hover {
-  background-color: #003c80;
+  background-color: #9c000a;
 }
 
 footer {
@@ -154,4 +148,72 @@ footer {
     width: 100px;
     height: 24px;
   }
+}
+.album {
+  position: relative;
+}
+
+.album-name,
+.album-playcount {
+  position: absolute;
+  left: 0;
+  padding: 8px;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.album-name {
+  top: 0;
+}
+
+.album-playcount {
+  bottom: 0;
+}
+
+.optionals {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 900px) {
+  .optionals {
+    flex-wrap: nowrap;
+    gap: 0;
+    order: 0;
+    text-align: center;
+    font-size: 0.8em;
+  }
+  .generateButton {
+    display: block;
+    width: 100%;
+    font-size: 1em;
+    order: 1;
+  }
+  #downloadButton {
+    display: block;
+    width: 100%;
+    font-size: 1em;
+    order: 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .controls {
+    flex-wrap: wrap;
+  }
+}
+
+.generated-image {
+  display: block;
+  margin-top: 16px;
+  max-width: 100%;
+  height: auto;
 }

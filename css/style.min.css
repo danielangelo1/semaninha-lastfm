@@ -1,1 +1,136 @@
-*{box-sizing:border-box}p{margin:0}body{font-family:Arial,sans-serif;margin:0 auto;padding:20px;max-width:960px;color:#222}li{list-style:none}h1{font-family:Poppins,sans-serif;padding-top:10px;margin-top:0;text-align:center;font-size:3em;color:#c3000d}label{padding:4px}ul{padding:0}button,input,select{padding:10px;margin-bottom:30px;border-radius:4px}#controls{display:flex;justify-content:center;align-items:center;flex-direction:row;flex-wrap:wrap;gap:6px}#albumGrid{display:grid;margin-top:10px;margin:0;gap:0;grid-template-columns:repeat(3,1fr);grid-column-gap:0;grid-row-gap:0;max-width:1250px;margin-left:auto;margin-right:auto}#albumGrid img{width:100%;height:100%;object-fit:cover}.album-container{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.album-caption{text-align:center;font-size:14px;margin-top:-20px}#downloadButton{display:none;padding:10px;border:none;cursor:pointer;background-color:#28a745;color:#fff}#downloadButton:hover{background-color:#1e7e34}.generateButton{padding:10px;justify-content:center;border:none;cursor:pointer;background-color:#0056b3;color:#fff}.generateButton:hover{background-color:#003c80}footer{left:0;bottom:0;width:100%;display:flex;justify-content:center;align-items:center;flex-direction:column;margin-top:20px}.socialMedias{display:flex;justify-content:center;margin:5px}.socialMedias img{display:block;width:30px;height:30px;margin:0 5px}@media (max-width:768px){h1{font-size:2em;padding:0}button,input,select{padding:5px;margin-bottom:0}#controls{margin-bottom:10px}#userInput{width:100px;height:24px}}
+* {
+  box-sizing: border-box;
+}
+p {
+  margin: 0;
+}
+body {
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 960px;
+  color: #222;
+}
+li {
+  list-style: none;
+}
+h1 {
+  font-family: Poppins, sans-serif;
+  padding-top: 10px;
+  margin-top: 0;
+  text-align: center;
+  font-size: 3em;
+  color: #c3000d;
+}
+label {
+  padding: 4px;
+}
+ul {
+  padding: 0;
+}
+button,
+input,
+select {
+  padding: 10px;
+  margin-bottom: 30px;
+  border-radius: 4px;
+}
+#controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+#albumGrid {
+  display: grid;
+  margin-top: 10px;
+  margin: 0;
+  gap: 0;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 0;
+  grid-row-gap: 0;
+  max-width: 1250px;
+  margin-left: auto;
+  margin-right: auto;
+}
+#albumGrid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.album-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.album-caption {
+  text-align: center;
+  font-size: 14px;
+  margin-top: -20px;
+}
+#downloadButton {
+  display: none;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  background-color: #28a745;
+  color: #fff;
+}
+#downloadButton:hover {
+  background-color: #1e7e34;
+}
+.generateButton {
+  padding: 10px;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  background-color: #0056b3;
+  color: #fff;
+}
+.generateButton:hover {
+  background-color: #c3000d;
+}
+footer {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
+}
+.socialMedias {
+  display: flex;
+  justify-content: center;
+  margin: 5px;
+}
+.socialMedias img {
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+}
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2em;
+    padding: 0;
+  }
+  button,
+  input,
+  select {
+    padding: 5px;
+    margin-bottom: 0;
+  }
+  #controls {
+    margin-bottom: 10px;
+  }
+  #userInput {
+    width: 100px;
+    height: 24px;
+  }
+}
