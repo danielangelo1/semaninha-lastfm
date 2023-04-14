@@ -2,27 +2,23 @@
 <html lang="pt-br">
 
 <head>
-
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Semaninha Last.fm</title>
-    <meta name="description" content="Gerador de colagem dos albuns mais escutados do LAST FM">
+    <title>Gerador de Semaninha</title>
+    <meta name="description" content="Gerador de colagem dos albuns mais escutados na semaninha do LAST FM">
     <link rel="preload" href="./css/style.min.css" as="style">
     <link rel="stylesheet" href="./css/style.min.css">
+    <link rel="shortcut icon" href="./img/music.svg" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-
-
 </head>
 
 <body>
     <h1>SEMANINHA</h1>
     <div id="controls">
-        <!-- <label for="userInput"></label> -->
         <input type="text" id="userInput" placeholder="Nome do usúario" required>
-        <!-- <label for="timeRange"></label> -->
         <select id="timeRange">
             <option value="7day">Últimos 7 dias</option>
             <option value="1month">Último mês</option>
@@ -31,13 +27,11 @@
             <option value="12month">Último ano</option>
             <option value="overall">Geral</option>
         </select>
-        <!-- <label for="gridSize"></label> -->
         <select id="gridSize">
             <option value="3">3x3</option>
             <option value="4">4x4</option>
             <option value="5">5x5</option>
         </select>
-        <!-- <label for="gridType"></label> -->
         <select id="gridType">
             <option value="albums">Álbum</option>
             <option value="artists">Artista</option>
