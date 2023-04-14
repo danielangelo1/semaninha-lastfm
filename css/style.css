@@ -11,7 +11,7 @@ body {
   margin: 0 auto;
   padding: 20px;
   max-width: 960px;
-  color: #222222;
+  background-color: #f7f7f7;
 }
 
 li {
@@ -82,6 +82,7 @@ input {
   cursor: pointer;
   background-color: #28a745;
   color: #ffffff;
+  text-transform: uppercase;
 }
 
 #downloadButton:hover {
@@ -95,6 +96,7 @@ input {
   cursor: pointer;
   background-color: #c3000d;
   color: #ffffff;
+  text-transform: uppercase;
 }
 
 .generateButton:hover {
@@ -125,7 +127,7 @@ footer {
   margin: 0 5px;
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 700px) {
   h1 {
     font-size: 2em;
     padding: 0px;
@@ -137,7 +139,7 @@ footer {
     margin-bottom: 0px;
   }
   #controls {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
   #userInput {
     width: 100px;
@@ -180,11 +182,12 @@ footer {
 
 @media (max-width: 900px) {
   .optionals {
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: 0;
     order: 0;
     text-align: center;
     font-size: 0.8em;
+    justify-content: flex-start;
   }
   .generateButton {
     display: block;
@@ -197,6 +200,12 @@ footer {
     width: 100%;
     font-size: 1em;
     order: 2;
+  }
+  #controls {
+    justify-content: start;
+  }
+  #userInput {
+    width: 140px;
   }
 }
 

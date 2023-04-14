@@ -3,11 +3,12 @@ function generateGrid() {
   const userInput = document.getElementById("userInput").value;
   const timeRange = document.getElementById("timeRange").value;
   const gridSize = document.getElementById("gridSize").value;
-  const gridType = document.getElementById("gridType").value;
+  // const gridType = document.getElementById("gridType").value;
   const showAlbumName = document.getElementById("showAlbumName").checked;
   const showAlbumPlaycount =
     document.getElementById("showAlbumPlaycount").checked;
 
+  const gridType = "albums";
   const albumGrid = document.getElementById("albumGrid");
 
   let apiMethod = "";
@@ -66,15 +67,34 @@ function generateGrid() {
             );
             if (showAlbumName) {
               context.font = "18px Arial";
-              context.shadowColor = "black";
-              context.shadowBlur = 7;
+              context.shadowColor = "#2b2b2b";
+              context.shadowBlur = 5;
+              context.shadowOffsetX = 2;
+              context.shadowOffsetY = 2;
               context.fillStyle = "white";
-              context.fillText(album.name, x + 10, y + 20);
+              context.fillText(album.artist.name, x + 5, y + 20);
+
+              // Medir a largura do texto do nome do álbum e do artista
+              const albumText = `${album.artist.name} - ${album.name}`;
+              const albumTextWidth = context.measureText(albumText).width;
+
+              // Verificar se a largura do texto é maior que a largura da imagem do álbum
+              if (albumTextWidth > img.width) {
+                const scaleFactor = img.width / albumTextWidth; // Fator de escala para ajustar o tamanho do texto
+                const scaledFontSize = 18 * scaleFactor; // Tamanho de fonte escalado
+                context.font = `${scaledFontSize}px Arial`;
+              }
+
+              context.fillText(album.name, x + 5, y + 40);
             }
             if (showAlbumPlaycount) {
-              context.font = "16px Arial";
+              context.font = "18px Arial";
+              context.shadowColor = "#2b2b2b";
+              context.shadowBlur = 5;
+              context.shadowOffsetX = 2;
+              context.shadowOffsetY = 2;
               context.fillStyle = "white";
-              context.fillText(`Plays: ${album.playcount}`, x + 10, y + 40);
+              context.fillText(`Plays: ${album.playcount}`, x + 5, y + 60);
             }
             handleLoad();
           };
@@ -109,13 +129,21 @@ function generateGrid() {
             );
             if (showAlbumName) {
               context.font = "18px Arial";
+              context.shadowColor = "#2b2b2b";
+              context.shadowBlur = 5;
+              context.shadowOffsetX = 2;
+              context.shadowOffsetY = 2;
               context.fillStyle = "white";
-              context.fillText(artist.name, x + 10, y + 20);
+              context.fillText(artist.name, x + 5, y + 20);
             }
             if (showAlbumPlaycount) {
-              context.font = "16px Arial";
+              context.font = "18px Arial";
+              context.shadowColor = "#2b2b2b";
+              context.shadowBlur = 5;
+              context.shadowOffsetX = 2;
+              context.shadowOffsetY = 2;
               context.fillStyle = "white";
-              context.fillText(`Plays: ${artist.playcount}`, x + 10, y + 40);
+              context.fillText(`Plays: ${artist.playcount}`, x + 5, y + 40);
             }
             handleLoad();
           };
@@ -136,6 +164,9 @@ function generateGrid() {
     })
     .catch((error) => {
       console.error("Erro ao obter os dados do Last.fm:", error);
+      alert(
+        "Erro ao obter os dados do Last.fm. Verifique o nome de usuário e tente novamente."
+      );
     });
 }
 

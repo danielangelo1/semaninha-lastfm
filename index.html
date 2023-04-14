@@ -32,18 +32,18 @@
             <option value="4">4x4</option>
             <option value="5">5x5</option>
         </select>
-        <select id="gridType">
+        <!-- <select id="gridType">
             <option value="albums">Álbum</option>
             <option value="artists">Artista</option>
-        </select>
+        </select> -->
         <button class="generateButton" onclick="generateGrid()">Gerar</button>
         <button id="downloadButton" onclick="downloadGrid()">Baixar Colagem</button>
 
         <div class="optionals">
-            <label for="showAlbumName">Mostrar Nome do Álbum:</label>
+            <label for="showAlbumName">Mostrar Nome do Álbum/Artista:</label>
             <input type="checkbox" id="showAlbumName" checked />
             <label for="showAlbumPlaycount">Mostrar Quantidade de Plays:</label>
-            <input type="checkbox" id="showAlbumPlaycount" checked />
+            <input type="checkbox" id="showAlbumPlaycount" />
         </div>
     </div>
     <div id="albumGrid"></div>
