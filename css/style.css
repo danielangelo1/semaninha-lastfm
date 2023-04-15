@@ -19,6 +19,11 @@ li {
   list-style: none;
 }
 
+input[type="checkbox"] {
+  height: 18px;
+  width: 18px;
+}
+
 h1 {
   font-family: "Poppins", sans-serif;
   padding-top: 10px;
@@ -149,6 +154,7 @@ footer::before {
     padding: 5px;
     margin-bottom: 0px;
   }
+
   #controls {
     margin-bottom: 5px;
   }
@@ -216,7 +222,7 @@ footer::before {
     justify-content: start;
   }
   #userInput {
-    width: 140px;
+    width: 120px;
   }
 }
 

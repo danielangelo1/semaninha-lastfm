@@ -10,12 +10,25 @@ function generateGrid() {
 
   const gridType = "albums";
   const albumGrid = document.getElementById("albumGrid");
+  let fontSize = 18;
 
   let apiMethod = "";
   if (gridType === "albums") {
     apiMethod = "user.getTopAlbums";
   } else if (gridType === "artists") {
     apiMethod = "user.getTopArtists";
+  }
+
+  switch (gridSize) {
+    case "3":
+      fontSize = 18;
+      break;
+    case "4":
+      fontSize = 16;
+      break;
+    case "5":
+      fontSize = 14;
+      break;
   }
 
   fetch(
@@ -66,13 +79,13 @@ function generateGrid() {
               canvas.height / gridSize
             );
             if (showAlbumName) {
-              context.font = "18px Arial";
+              context.font = `${fontSize}px Arial`;
               context.shadowColor = "#2b2b2b";
               context.shadowBlur = 5;
               context.shadowOffsetX = 2;
               context.shadowOffsetY = 2;
               context.fillStyle = "white";
-              context.fillText(album.artist.name, x + 5, y + 20);
+              context.fillText(album.artist.name, x + 2, y + 20);
 
               // Medir a largura do texto do nome do álbum e do artista
               const albumText = `${album.artist.name} - ${album.name}`;
@@ -81,20 +94,20 @@ function generateGrid() {
               // Verificar se a largura do texto é maior que a largura da imagem do álbum
               if (albumTextWidth > img.width) {
                 const scaleFactor = img.width / albumTextWidth; // Fator de escala para ajustar o tamanho do texto
-                const scaledFontSize = 18 * scaleFactor; // Tamanho de fonte escalado
+                const scaledFontSize = `${fontSize} * scaleFactor`; // Tamanho de fonte escalado
                 context.font = `${scaledFontSize}px Arial`;
               }
 
-              context.fillText(album.name, x + 5, y + 40);
+              context.fillText(album.name, x + 2, y + 40);
             }
             if (showAlbumPlaycount) {
-              context.font = "18px Arial";
+              context.font = `${fontSize}px Arial`;
               context.shadowColor = "#2b2b2b";
               context.shadowBlur = 5;
               context.shadowOffsetX = 2;
               context.shadowOffsetY = 2;
               context.fillStyle = "white";
-              context.fillText(`Plays: ${album.playcount}`, x + 5, y + 60);
+              context.fillText(`Plays: ${album.playcount}`, x + 2, y + 60);
             }
             handleLoad();
           };
@@ -109,23 +122,23 @@ function generateGrid() {
               canvas.height / gridSize
             );
             if (showAlbumName) {
-              context.font = "18px Arial";
+              context.font = `${fontSize}px "Fira Sans"`;
               context.shadowColor = "#2b2b2b";
               context.shadowBlur = 5;
               context.shadowOffsetX = 2;
               context.shadowOffsetY = 2;
               context.fillStyle = "white";
-              context.fillText(album.artist.name, x + 5, y + 20);
-              context.fillText(album.name, x + 5, y + 40);
+              context.fillText(album.artist.name, x + 2, y + 20);
+              context.fillText(album.name, x + 2, y + 40);
             }
             if (showAlbumPlaycount) {
-              context.font = "18px Arial";
+              context.font = `${fontSize}px Arial`;
               context.shadowColor = "#2b2b2b";
               context.shadowBlur = 5;
               context.shadowOffsetX = 2;
               context.shadowOffsetY = 2;
               context.fillStyle = "white";
-              context.fillText(`Plays: ${album.playcount}`, x + 5, y + 60);
+              context.fillText(`Plays: ${album.playcount}`, x + 2, y + 60);
             }
             handleLoad();
           };
