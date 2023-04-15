@@ -2,7 +2,8 @@
   box-sizing: border-box;
 }
 
-p {
+p,
+input {
   margin: 0;
 }
 
@@ -111,6 +112,16 @@ footer {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-top: 20px;
+}
+
+footer::before {
+  content: "";
+  margin-bottom: 10px;
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: #ececec;
   margin-top: 20px;
 }
 
