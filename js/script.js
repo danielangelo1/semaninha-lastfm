@@ -108,6 +108,25 @@ function generateGrid() {
               canvas.width / gridSize,
               canvas.height / gridSize
             );
+            if (showAlbumName) {
+              context.font = "18px Arial";
+              context.shadowColor = "#2b2b2b";
+              context.shadowBlur = 5;
+              context.shadowOffsetX = 2;
+              context.shadowOffsetY = 2;
+              context.fillStyle = "white";
+              context.fillText(album.artist.name, x + 5, y + 20);
+              context.fillText(album.name, x + 5, y + 40);
+            }
+            if (showAlbumPlaycount) {
+              context.font = "18px Arial";
+              context.shadowColor = "#2b2b2b";
+              context.shadowBlur = 5;
+              context.shadowOffsetX = 2;
+              context.shadowOffsetY = 2;
+              context.fillStyle = "white";
+              context.fillText(`Plays: ${album.playcount}`, x + 5, y + 60);
+            }
             handleLoad();
           };
         });
@@ -179,5 +198,7 @@ function downloadGrid() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  } else {
+    alert("Sem imagem para baixar!");
   }
 }
