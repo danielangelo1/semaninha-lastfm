@@ -1,5 +1,4 @@
 function generateGrid() {
-  // Obter os valores dos campos de entrada do usuário
   const userInput = document.getElementById("userInput").value;
   const timeRange = document.getElementById("timeRange").value;
   const gridSize = document.getElementById("gridSize").value;
@@ -42,7 +41,7 @@ function generateGrid() {
       canvas.height = 1250;
       const context = canvas.getContext("2d");
 
-      let loadedCount = 0; // contador de imagens carregadas
+      let loadedCount = 0;
 
       const handleLoad = () => {
         loadedCount++;
@@ -87,14 +86,12 @@ function generateGrid() {
               context.fillStyle = "white";
               context.fillText(album.artist.name, x + 2, y + 20);
 
-              // Medir a largura do texto do nome do álbum e do artista
               const albumText = `${album.artist.name} - ${album.name}`;
               const albumTextWidth = context.measureText(albumText).width;
 
-              // Verificar se a largura do texto é maior que a largura da imagem do álbum
               if (albumTextWidth > img.width) {
-                const scaleFactor = img.width / albumTextWidth; // Fator de escala para ajustar o tamanho do texto
-                const scaledFontSize = `${fontSize} * scaleFactor`; // Tamanho de fonte escalado
+                const scaleFactor = img.width / albumTextWidth;
+                const scaledFontSize = fontSize * scaleFactor;
                 context.font = `${scaledFontSize}px Arial`;
               }
 
@@ -122,12 +119,12 @@ function generateGrid() {
               canvas.height / gridSize
             );
             if (showAlbumName) {
-              context.font = `${fontSize}px "Fira Sans"`;
+              context.font = `${fontSize}px Arial`;
               context.shadowColor = "#2b2b2b";
               context.shadowBlur = 5;
               context.shadowOffsetX = 2;
               context.shadowOffsetY = 2;
-              context.fillStyle = "white";
+              context.fillStyle = "white !important";
               context.fillText(album.artist.name, x + 2, y + 20);
               context.fillText(album.name, x + 2, y + 40);
             }
@@ -137,7 +134,7 @@ function generateGrid() {
               context.shadowBlur = 5;
               context.shadowOffsetX = 2;
               context.shadowOffsetY = 2;
-              context.fillStyle = "white";
+              context.fillStyle = "white !important";
               context.fillText(`Plays: ${album.playcount}`, x + 2, y + 60);
             }
             handleLoad();

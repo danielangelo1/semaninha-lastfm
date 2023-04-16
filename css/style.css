@@ -83,7 +83,6 @@ input {
 
 #downloadButton {
   display: none;
-  padding: 10px;
   border: none;
   cursor: pointer;
   background-color: #28a745;
@@ -96,13 +95,13 @@ input {
 }
 
 .generateButton {
-  padding: 10px;
   justify-content: center;
   border: none;
   cursor: pointer;
   background-color: #c3000d;
   color: #ffffff;
   text-transform: uppercase;
+  width: 100px;
 }
 
 .generateButton:hover {
