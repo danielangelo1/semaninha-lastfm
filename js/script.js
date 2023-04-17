@@ -124,7 +124,7 @@ function generateGrid() {
               context.shadowBlur = 5;
               context.shadowOffsetX = 2;
               context.shadowOffsetY = 2;
-              context.fillStyle = "white !important";
+              context.fillStyle = "white";
               context.fillText(album.artist.name, x + 2, y + 20);
               context.fillText(album.name, x + 2, y + 40);
             }
@@ -134,7 +134,7 @@ function generateGrid() {
               context.shadowBlur = 5;
               context.shadowOffsetX = 2;
               context.shadowOffsetY = 2;
-              context.fillStyle = "white !important";
+              context.fillStyle = "white";
               context.fillText(`Plays: ${album.playcount}`, x + 2, y + 60);
             }
             handleLoad();
