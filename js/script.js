@@ -36,7 +36,7 @@ function generateGrid() {
       placeY = 14;
       break;
     case "7":
-      fontSize = 10;
+      fontSize = 12;
       placeY = 12;
       break;
   }
