@@ -28,6 +28,12 @@ function generateGrid() {
     case "5":
       fontSize = 14;
       break;
+    case "6":
+      fontSize = 12;
+      break;
+    case "7":
+      fontSize = 10;
+      break;
   }
 
   fetch(
