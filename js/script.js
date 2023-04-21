@@ -21,24 +21,29 @@ function generateGrid() {
   switch (gridSize) {
     case "3":
       fontSize = 18;
+      placeY = 20;
       break;
     case "4":
       fontSize = 16;
+      placeY = 18;
       break;
     case "5":
       fontSize = 14;
+      placeY = 16;
       break;
     case "6":
       fontSize = 12;
+      placeY = 14;
       break;
     case "7":
       fontSize = 10;
+      placeY = 12;
       break;
   }
 
-  fetch(
-    `https://ws.audioscrobbler.com/2.0/?method=${apiMethod}&user=${userInput}&period=${timeRange}&api_key=e713e4ee81e3cfee0417956233a9faa1&format=json`
-  )
+  let url = `https://ws.audioscrobbler.com/2.0/?method=${apiMethod}&user=${userInput}&period=${timeRange}&api_key=e713e4ee81e3cfee0417956233a9faa1&format=json`;
+
+  fetch(url)
     .then((response) => response.json())
     .then((data) => {
       const totalCells = gridSize * gridSize;
@@ -86,11 +91,11 @@ function generateGrid() {
             if (showAlbumName) {
               context.font = `${fontSize}px Arial`;
               context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 5;
-              context.shadowOffsetX = 2;
-              context.shadowOffsetY = 2;
+              context.shadowBlur = 1;
+              context.shadowOffsetX = 1;
+              context.shadowOffsetY = 1;
               context.fillStyle = "white";
-              context.fillText(album.artist.name, x + 2, y + 20);
+              context.fillText(album.artist.name, x + 2, y + placeY);
 
               const albumText = `${album.artist.name} - ${album.name}`;
               const albumTextWidth = context.measureText(albumText).width;
@@ -101,16 +106,20 @@ function generateGrid() {
                 context.font = `${scaledFontSize}px Arial`;
               }
 
-              context.fillText(album.name, x + 2, y + 40);
+              context.fillText(album.name, x + 2, y + (placeY + 20));
             }
             if (showAlbumPlaycount) {
               context.font = `${fontSize}px Arial`;
               context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 5;
-              context.shadowOffsetX = 2;
-              context.shadowOffsetY = 2;
+              context.shadowBlur = 1;
+              context.shadowOffsetX = 1;
+              context.shadowOffsetY = 1;
               context.fillStyle = "white";
-              context.fillText(`Plays: ${album.playcount}`, x + 2, y + 60);
+              context.fillText(
+                `Plays: ${album.playcount}`,
+                x + 2,
+                y + (placeY + 40)
+              );
             }
             handleLoad();
           };
@@ -127,21 +136,25 @@ function generateGrid() {
             if (showAlbumName) {
               context.font = `${fontSize}px Arial`;
               context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 5;
-              context.shadowOffsetX = 2;
-              context.shadowOffsetY = 2;
+              context.shadowBlur = 1;
+              context.shadowOffsetX = 1;
+              context.shadowOffsetY = 1;
               context.fillStyle = "white";
-              context.fillText(album.artist.name, x + 2, y + 20);
-              context.fillText(album.name, x + 2, y + 40);
+              context.fillText(album.artist.name, x + 2, y + placeY);
+              context.fillText(album.name, x + 2, y + (placeY + 20));
             }
             if (showAlbumPlaycount) {
               context.font = `${fontSize}px Arial`;
               context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 5;
-              context.shadowOffsetX = 2;
-              context.shadowOffsetY = 2;
+              context.shadowBlur = 1;
+              context.shadowOffsetX = 1;
+              context.shadowOffsetY = 1;
               context.fillStyle = "white";
-              context.fillText(`Plays: ${album.playcount}`, x + 2, y + 60);
+              context.fillText(
+                `Plays: ${album.playcount}`,
+                x + 2,
+                y + (placeY + 40)
+              );
             }
             handleLoad();
           };
