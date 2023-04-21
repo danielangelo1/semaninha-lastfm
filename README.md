@@ -1,4 +1,3 @@
-Bikcraft 🚴
 <h1 align="center"> SEMANINHA </h1>
 
 ## 📖 Sobre   
