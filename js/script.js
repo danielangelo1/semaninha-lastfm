@@ -21,23 +21,23 @@ function generateGrid() {
   switch (gridSize) {
     case "3":
       fontSize = 18;
-      placeY = 20;
+      placeY = 18;
       break;
     case "4":
       fontSize = 16;
-      placeY = 18;
+      placeY = 16;
       break;
     case "5":
       fontSize = 14;
-      placeY = 16;
+      placeY = 14;
       break;
     case "6":
       fontSize = 12;
-      placeY = 14;
+      placeY = 12;
       break;
     case "7":
       fontSize = 12;
-      placeY = 12;
+      placeY = 10;
       break;
   }
 
@@ -89,9 +89,9 @@ function generateGrid() {
               canvas.height / gridSize
             );
             if (showAlbumName) {
-              context.font = `${fontSize}px Arial`;
+              context.font = `${fontSize}px Fira Sans`;
               context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 1;
+              context.shadowBlur = 0.3;
               context.shadowOffsetX = 1;
               context.shadowOffsetY = 1;
               context.fillStyle = "white";
@@ -103,22 +103,22 @@ function generateGrid() {
               if (albumTextWidth > img.width) {
                 const scaleFactor = img.width / albumTextWidth;
                 const scaledFontSize = fontSize * scaleFactor;
-                context.font = `${scaledFontSize}px Arial`;
+                context.font = `${scaledFontSize}px Fira Sans`;
               }
 
-              context.fillText(album.name, x + 2, y + (placeY + 20));
+              context.fillText(album.name, x + 2, y + (placeY + 16));
             }
             if (showAlbumPlaycount) {
-              context.font = `${fontSize}px Arial`;
+              context.font = `${fontSize}px Fira Sans`;
               context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 1;
+              context.shadowBlur = 0.3;
               context.shadowOffsetX = 1;
               context.shadowOffsetY = 1;
               context.fillStyle = "white";
               context.fillText(
                 `Plays: ${album.playcount}`,
                 x + 2,
-                y + (placeY + 40)
+                y + (placeY + 32)
               );
             }
             handleLoad();
@@ -134,26 +134,26 @@ function generateGrid() {
               canvas.height / gridSize
             );
             if (showAlbumName) {
-              context.font = `${fontSize}px Arial`;
+              context.font = `${fontSize}px Fira Sans`;
               context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 1;
+              context.shadowBlur = 0.3;
               context.shadowOffsetX = 1;
               context.shadowOffsetY = 1;
               context.fillStyle = "white";
               context.fillText(album.artist.name, x + 2, y + placeY);
-              context.fillText(album.name, x + 2, y + (placeY + 20));
+              context.fillText(album.name, x + 2, y + (placeY + 16));
             }
             if (showAlbumPlaycount) {
-              context.font = `${fontSize}px Arial`;
+              context.font = `${fontSize}px Fira Sans`;
               context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 1;
+              context.shadowBlur = 0.3;
               context.shadowOffsetX = 1;
               context.shadowOffsetY = 1;
               context.fillStyle = "white";
               context.fillText(
                 `Plays: ${album.playcount}`,
                 x + 2,
-                y + (placeY + 40)
+                y + (placeY + 32)
               );
             }
             handleLoad();
