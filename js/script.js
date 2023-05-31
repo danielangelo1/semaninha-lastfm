@@ -1,3 +1,21 @@
+var style = document.createElement("style");
+var fonteFiraSans = new FontFace("Fira Sans", 'url("./FiraSans-Italic.ttf")');
+
+fonteFiraSans.load().then(function (loadedFont) {
+  document.fonts.add(loadedFont);
+
+  style.appendChild(
+    document.createTextNode(`
+    @font-face {
+      font-family: 'Fira Sans';
+      src: url('./FiraSans-Italic.ttf') format('truetype');
+    }
+  `)
+  );
+
+  document.head.appendChild(style);
+});
+
 function generateGrid() {
   const userInput = document.getElementById("userInput").value;
   const timeRange = document.getElementById("timeRange").value;
@@ -176,7 +194,7 @@ function generateGrid() {
               canvas.height / gridSize
             );
             if (showAlbumName) {
-              context.font = "18px Arial";
+              context.font = "18px Fira Sans";
               context.shadowColor = "#2b2b2b";
               context.shadowBlur = 5;
               context.shadowOffsetX = 2;
@@ -185,7 +203,7 @@ function generateGrid() {
               context.fillText(artist.name, x + 5, y + 20);
             }
             if (showAlbumPlaycount) {
-              context.font = "18px Arial";
+              context.font = "18px Fira Sans";
               context.shadowColor = "#2b2b2b";
               context.shadowBlur = 5;
               context.shadowOffsetX = 2;

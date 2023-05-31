@@ -41,6 +41,9 @@ ul {
   padding: 0;
 }
 
+button {
+  font-family: "Poppins", sans-serif;
+}
 select,
 button,
 input {
