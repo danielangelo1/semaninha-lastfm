@@ -13,12 +13,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536268514682786"
-        crossorigin="anonymous"></script>
 </head>
 
 <body>
     <h1>SEMANINHA</h1>
+
+    <div class="slide-in">
+        <p class="info">ACESSE O SITE AGORA TAMBÉM PELO LINK: <a href="https://semaninha.net">semaninha.net</a></p>
+      </div>
+
     <div id="controls">
         <input type="text" id="userInput" placeholder="Nome do usúario" required>
         <select id="timeRange">
@@ -44,6 +47,7 @@
         <button id="downloadButton" onclick="downloadGrid()">Baixar Colagem</button>
 
         <div class="optionals">
+
             <label for="showAlbumName">Mostrar Nome do Álbum/Artista:</label>
             <input type="checkbox" id="showAlbumName" checked />
             <label for="showAlbumPlaycount">Mostrar Quantidade de Plays:</label>
@@ -51,6 +55,7 @@
         </div>
     </div>
     <div id="albumGrid"></div>
+
 
     <footer>
         <p>Desenvolvido por <a href="https://github.com/danielangelo1" target="_blank">Daniel Ângelo</a> © 2023. </p>

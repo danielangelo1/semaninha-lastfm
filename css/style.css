@@ -51,6 +51,34 @@ input {
   border-radius: 4px;
 }
 
+.slide-in {
+  position: relative;
+  top: -50px;
+  animation: slide 1s forwards;
+}
+
+@keyframes slide {
+  0% {
+    top: -50px;
+  }
+  100% {
+    top: 0;
+  }
+}
+
+.info {
+  font-size: 18px;
+  font-weight: bold;
+  color: #c3000d;
+  text-align: center;
+  padding: 20px;
+}
+
+.info a {
+  color: #9c000a;
+  text-decoration: none;
+}
+
 #controls {
   display: flex;
   justify-content: center;
