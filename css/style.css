@@ -8,6 +8,11 @@ input {
 }
 
 body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "cv11", "salt", "ss01", "ss03", "cv01", "cv02", "cv03",
+    "cv04", "cv05", "cv06", "cv09", "cv10";
   font-family: Arial, sans-serif;
   margin: 0 auto;
   padding: 20px;
@@ -26,8 +31,8 @@ input[type="checkbox"] {
 
 h1 {
   font-family: "Poppins", sans-serif;
-  padding-top: 10px;
-  margin-top: 0;
+  padding: 10px;
+  margin: 0;
   text-align: center;
   font-size: 3em;
   color: #c3000d;
@@ -51,32 +56,21 @@ input {
   border-radius: 4px;
 }
 
-.slide-in {
-  position: relative;
-  top: -50px;
-  animation: slide 1s forwards;
+.text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 20px;
 }
 
-@keyframes slide {
-  0% {
-    top: -50px;
-  }
-  100% {
-    top: 0;
-  }
-}
-
-.info {
-  font-size: 18px;
-  font-weight: bold;
-  color: #c3000d;
-  text-align: center;
-  padding: 20px;
-}
-
-.info a {
-  color: #9c000a;
-  text-decoration: none;
+.text p {
+  /* padding-left: 190px; */
+  max-width: 510px;
+  text-align: start;
+  margin: 0;
 }
 
 #controls {
@@ -238,9 +232,12 @@ footer::before {
   }
   .generateButton {
     display: block;
-    width: 100%;
+    /* width: 100%; */
     font-size: 1em;
     order: 1;
+  }
+  .text p {
+    font-size: 0.8em;
   }
   #downloadButton {
     display: none;
@@ -252,12 +249,28 @@ footer::before {
     justify-content: start;
   }
   #userInput {
-    width: 120px;
+    width: 100%;
+    height: 32px;
+  }
+  #timeRange {
+    width: 100%;
+    /* max-width: 300px; */
+  }
+  #gridSize {
+    width: 100%;
+    /* max-width: 300px; */
+  }
+  .optionals {
+    font-size: 1em;
+  }
+  .generateButton {
+    font-size: 1.2em;
+    width: 100%;
   }
 }
 
 @media (max-width: 600px) {
-  .controls {
+  #controls {
     flex-wrap: wrap;
   }
 }
