@@ -1,33 +1,51 @@
-var style = document.createElement("style");
-var fonteFiraSans = new FontFace("Fira Sans", 'url("./FiraSans-Italic.ttf")');
+const API_KEY = "e713e4ee81e3cfee0417956233a9faa1";
+const FONT_NAME = "Fira Sans";
+const FONT_URL = "./FiraSans-Italic.ttf";
 
-fonteFiraSans.load().then(function (loadedFont) {
-  document.fonts.add(loadedFont);
+let fontSize = 18;
+let placeY = 18;
 
-  style.appendChild(
-    document.createTextNode(`
-    @font-face {
-      font-family: 'Fira Sans';
-      src: url('./FiraSans-Italic.ttf') format('truetype');
-    }
-  `)
-  );
+function setFont(context, size) {
+  context.font = `${size}px ${FONT_NAME}`;
+  context.shadowColor = "#2b2b2b";
+  context.shadowBlur = 0.3;
+  context.shadowOffsetX = 1;
+  context.shadowOffsetY = 1;
+  context.fillStyle = "white";
+}
 
-  document.head.appendChild(style);
-});
+async function loadFontAndStyle() {
+  const style = document.createElement("style");
+  const font = new FontFace(FONT_NAME, `url("${FONT_URL}")`);
+
+  try {
+    await font.load();
+    document.fonts.add(font);
+
+    style.appendChild(
+      document.createTextNode(`
+      @font-face {
+        font-family: '${FONT_NAME}';
+        src: url('${FONT_URL}') format('truetype');
+      }
+    `)
+    );
+
+    document.head.appendChild(style);
+  } catch (error) {
+    console.error("Erro ao carregar a fonte:", error);
+  }
+}
 
 function generateGrid() {
   const userInput = document.getElementById("userInput").value;
   const timeRange = document.getElementById("timeRange").value;
   const gridSize = document.getElementById("gridSize").value;
-  // const gridType = document.getElementById("gridType").value;
   const showAlbumName = document.getElementById("showAlbumName").checked;
   const showAlbumPlaycount =
     document.getElementById("showAlbumPlaycount").checked;
-
-  const gridType = "albums";
+  const gridType = "albums"; // Pode ser alterado para "artists" se necessário
   const albumGrid = document.getElementById("albumGrid");
-  let fontSize = 18;
 
   let apiMethod = "";
   if (gridType === "albums") {
@@ -59,12 +77,13 @@ function generateGrid() {
       break;
   }
 
-  let url = `https://ws.audioscrobbler.com/2.0/?method=${apiMethod}&user=${userInput}&period=${timeRange}&api_key=e713e4ee81e3cfee0417956233a9faa1&format=json`;
+  let url = `https://ws.audioscrobbler.com/2.0/?method=${apiMethod}&user=${userInput}&period=${timeRange}&api_key=${API_KEY}&format=json`;
 
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
       const totalCells = gridSize * gridSize;
+
       const canvas = document.createElement("canvas");
       canvas.width = 1250;
       canvas.height = 1250;
@@ -107,32 +126,12 @@ function generateGrid() {
               canvas.height / gridSize
             );
             if (showAlbumName) {
-              context.font = `${fontSize}px Fira Sans`;
-              context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 0.3;
-              context.shadowOffsetX = 1;
-              context.shadowOffsetY = 1;
-              context.fillStyle = "white";
+              setFont(context, fontSize);
               context.fillText(album.artist.name, x + 2, y + placeY);
-
-              const albumText = `${album.artist.name} - ${album.name}`;
-              const albumTextWidth = context.measureText(albumText).width;
-
-              if (albumTextWidth > img.width) {
-                const scaleFactor = img.width / albumTextWidth;
-                const scaledFontSize = fontSize * scaleFactor;
-                context.font = `${scaledFontSize}px Fira Sans`;
-              }
-
               context.fillText(album.name, x + 2, y + (placeY + 16));
             }
             if (showAlbumPlaycount) {
-              context.font = `${fontSize}px Fira Sans`;
-              context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 0.3;
-              context.shadowOffsetX = 1;
-              context.shadowOffsetY = 1;
-              context.fillStyle = "white";
+              setFont(context, fontSize);
               context.fillText(
                 `Plays: ${album.playcount}`,
                 x + 2,
@@ -151,29 +150,6 @@ function generateGrid() {
               canvas.width / gridSize,
               canvas.height / gridSize
             );
-            if (showAlbumName) {
-              context.font = `${fontSize}px Fira Sans`;
-              context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 0.3;
-              context.shadowOffsetX = 1;
-              context.shadowOffsetY = 1;
-              context.fillStyle = "white";
-              context.fillText(album.artist.name, x + 2, y + placeY);
-              context.fillText(album.name, x + 2, y + (placeY + 16));
-            }
-            if (showAlbumPlaycount) {
-              context.font = `${fontSize}px Fira Sans`;
-              context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 0.3;
-              context.shadowOffsetX = 1;
-              context.shadowOffsetY = 1;
-              context.fillStyle = "white";
-              context.fillText(
-                `Plays: ${album.playcount}`,
-                x + 2,
-                y + (placeY + 32)
-              );
-            }
             handleLoad();
           };
         });
@@ -194,21 +170,11 @@ function generateGrid() {
               canvas.height / gridSize
             );
             if (showAlbumName) {
-              context.font = "18px Fira Sans";
-              context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 5;
-              context.shadowOffsetX = 2;
-              context.shadowOffsetY = 2;
-              context.fillStyle = "white";
+              setFont(context, fontSize);
               context.fillText(artist.name, x + 5, y + 20);
             }
             if (showAlbumPlaycount) {
-              context.font = "18px Fira Sans";
-              context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 5;
-              context.shadowOffsetX = 2;
-              context.shadowOffsetY = 2;
-              context.fillStyle = "white";
+              setFont(context, fontSize);
               context.fillText(`Plays: ${artist.playcount}`, x + 5, y + 40);
             }
             handleLoad();
@@ -249,3 +215,5 @@ function downloadGrid() {
     alert("Sem imagem para baixar!");
   }
 }
+
+loadFontAndStyle();
