@@ -176,6 +176,16 @@ footer::before {
   margin-top: 20px;
 }
 
+a {
+  text-decoration: none;
+  color: #9c000a;
+  font-size: 1em;
+}
+
+a:hover {
+  color: #c3000d;
+}
+
 .socialMedias {
   display: flex;
   justify-content: center;

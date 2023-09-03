@@ -35,6 +35,20 @@ a {
   font-size: 1.2em;
 }
 
+h2 {
+  font-size: 1.5em;
+  color: #c3000d;
+  text-align: center;
+  padding: 10px;
+}
+
+h3 {
+  font-size: 1.2em;
+  color: #c3000d;
+  text-align: center;
+  padding: 10px;
+}
+
 .botao {
   background-color: #c3000d;
   color: #fff;
@@ -45,6 +59,25 @@ a {
   text-transform: uppercase;
   font-size: 1.2em;
   margin-top: 20px;
+}
+
+.redes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.redes li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+}
+
+.redes img {
+  width: 30px;
+  margin: 0 10px;
+  cursor: pointer;
 }
 
 a:hover {
@@ -66,5 +99,12 @@ ul {
   h1 {
     font-size: 2em;
     padding: 0;
+  }
+  h2 {
+    font-size: 1.2em;
+    padding: 0;
+  }
+  h3 {
+    font-size: 1em;
   }
 }
