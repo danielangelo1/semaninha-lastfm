@@ -26,12 +26,25 @@ main {
 
 p {
   margin: 0;
+  padding: 6px;
 }
 
 a {
   text-decoration: none;
   color: #c3000d;
   font-size: 1.2em;
+}
+
+.botao {
+  background-color: #c3000d;
+  color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 1.2em;
+  margin-top: 20px;
 }
 
 a:hover {
@@ -42,6 +55,10 @@ h1 {
   font-size: 3em;
   color: #c3000d;
   text-align: center;
+  padding: 10px;
+}
+
+ul {
   padding: 10px;
 }
 
