@@ -133,6 +133,28 @@ input {
   background-color: #9c000a;
 }
 
+.pages {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+}
+
+nav a {
+  text-decoration: none;
+  color: #000;
+  font-size: 1em;
+  padding: 10px;
+}
+
+nav a:hover {
+  color: #c3000d;
+}
+
 footer {
   left: 0;
   bottom: 0;
@@ -141,7 +163,7 @@ footer {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 footer::before {
@@ -158,6 +180,7 @@ footer::before {
   display: flex;
   justify-content: center;
   margin: 5px;
+  gap: 2rem;
 }
 
 .socialMedias img {
