@@ -1,4 +1,5 @@
-const API_KEY = "e713e4ee81e3cfee0417956233a9faa1";
+import API_KEY from "./apikey";
+
 const FONT_NAME = "Fira Sans";
 const FONT_URL = "./FiraSans-Italic.ttf";
 
