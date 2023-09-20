@@ -1,10 +1,9 @@
-import API_KEY from "./apikey";
+require("dotenv").config();
+
+const API_KEY = process.env.API_KEY;
 
 const FONT_NAME = "Fira Sans";
 const FONT_URL = "./FiraSans-Italic.ttf";
-
-let fontSize = 18;
-let placeY = 18;
 
 function setFont(context, size) {
   context.font = `${size}px ${FONT_NAME}`;
@@ -25,11 +24,11 @@ async function loadFontAndStyle() {
 
     style.appendChild(
       document.createTextNode(`
-      @font-face {
-        font-family: '${FONT_NAME}';
-        src: url('${FONT_URL}') format('truetype');
-      }
-    `)
+        @font-face {
+          font-family: '${FONT_NAME}';
+          src: url('${FONT_URL}') format('truetype');
+        }
+      `)
     );
 
     document.head.appendChild(style);
@@ -37,6 +36,7 @@ async function loadFontAndStyle() {
     console.error("Erro ao carregar a fonte:", error);
   }
 }
+loadFontAndStyle();
 
 function generateGrid() {
   const userInput = document.getElementById("userInput").value;
@@ -54,6 +54,9 @@ function generateGrid() {
   } else if (gridType === "artists") {
     apiMethod = "user.getTopArtists";
   }
+
+  let fontSize = 18;
+  let placeY = 18;
 
   switch (gridSize) {
     case "3":
@@ -216,5 +219,3 @@ function downloadGrid() {
     alert("Sem imagem para baixar!");
   }
 }
-
-loadFontAndStyle();
