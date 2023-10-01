@@ -1,6 +1,4 @@
-require("dotenv").config();
-
-const API_KEY = process.env.API_KEY;
+const API_KEY = "e713e4ee81e3cfee0417956233a9faa1";
 
 const FONT_NAME = "Fira Sans";
 const FONT_URL = "./FiraSans-Italic.ttf";
@@ -154,6 +152,19 @@ function generateGrid() {
               canvas.width / gridSize,
               canvas.height / gridSize
             );
+            if (showAlbumName) {
+              setFont(context, fontSize);
+              context.fillText(album.artist.name, x + 2, y + placeY);
+              context.fillText(album.name, x + 2, y + (placeY + 16));
+            }
+            if (showAlbumPlaycount) {
+              setFont(context, fontSize);
+              context.fillText(
+                `Plays: ${album.playcount}`,
+                x + 2,
+                y + (placeY + 32)
+              );
+            }
             handleLoad();
           };
         });
