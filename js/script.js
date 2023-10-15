@@ -79,7 +79,9 @@ function generateGrid() {
       break;
   }
 
-  let url = `https://ws.audioscrobbler.com/2.0/?method=${apiMethod}&user=${userInput}&period=${timeRange}&api_key=${API_KEY}&format=json`;
+  let url = `https://ws.audioscrobbler.com/2.0/?method=${apiMethod}&user=${userInput}&period=${timeRange}&api_key=${API_KEY}&limit=${
+    gridSize * gridSize
+  }&format=json`;
 
   fetch(url)
     .then((response) => response.json())
