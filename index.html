@@ -73,8 +73,10 @@
             <option value="albums">Álbum</option>
             <option value="artists">Artista</option>
         </select> -->
-      <button class="generateButton">Gerar</button>
-      <button id="downloadButton">Baixar Colagem</button>
+      <button class="generateButton" onclick="generateGrid()">Gerar</button>
+      <button id="downloadButton" onclick="downloadGrid()">
+        Baixar Colagem
+      </button>
 
       <div class="optionals">
         <label for="showAlbumName">Mostrar Nome do Álbum/Artista:</label>
@@ -121,6 +123,5 @@
   </body>
   <script defer src="/_vercel/insights/script.js"></script>
   <script src="./js/plugins/FileSaver.js"></script>
-  <script type="module" src="./js/script.js"></script>
-  <!-- <script src="./js/script.min.js"></script> -->
+  <script src="./js/script.min.js"></script>
 </html>
