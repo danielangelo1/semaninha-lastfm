@@ -1,48 +1,13 @@
 import getApiKey from "./apikey.js";
+import loadFontAndStyle from "./loadFont.js";
 import saveValuesLocalStorage from "./saveValuesLocalStorage.js";
-import setFont from "./fontHandle.js";
+import setFont from "./setFont.js";
 
 export default function initGenateGrid() {
   const API_KEY = getApiKey();
 
-  const FONT_NAME = "Fira Sans";
-  const FONT_URL = "../FiraSans-Italic.ttf";
-
-  const setFont = (context, size) => {
-    context.font = `${size}px ${FONT_NAME}`;
-    context.shadowColor = "#2b2b2b";
-    context.shadowBlur = 0.3;
-    context.shadowOffsetX = 1;
-    context.shadowOffsetY = 1;
-    context.fillStyle = "white";
-  };
-
-  async function loadFontAndStyle() {
-    const style = document.createElement("style");
-    const font = new FontFace(FONT_NAME, `url("${FONT_URL}")`);
-
-    try {
-      await font.load();
-      document.fonts.add(font);
-
-      style.appendChild(
-        document.createTextNode(`
-        @font-face {
-          font-family: '${FONT_NAME}';
-          src: url('${FONT_URL}') format('truetype');
-        }
-      `)
-      );
-
-      document.head.appendChild(style);
-    } catch (error) {
-      console.error("Erro ao carregar a fonte:", error);
-    }
-  }
-
-  loadFontAndStyle();
-
   const generateGrid = () => {
+    loadFontAndStyle();
     const userInput = document.getElementById("userInput").value;
     const timeRange = document.getElementById("timeRange").value;
     const gridSize = document.getElementById("gridSize").value;
@@ -111,7 +76,10 @@ export default function initGenateGrid() {
 
         const handleLoad = () => {
           loadedCount++;
+          const progress = document.querySelector(".loading-spinner");
+
           if (loadedCount === totalCells) {
+            progress.style.display = "none";
             const generatedImage = document.createElement("img");
             generatedImage.src = canvas.toDataURL();
             generatedImage.alt =
@@ -124,6 +92,8 @@ export default function initGenateGrid() {
 
             const downloadButton = document.getElementById("downloadButton");
             downloadButton.style.display = "block";
+          } else {
+            progress.style.display = "block";
           }
         };
 
