@@ -73,10 +73,8 @@
             <option value="albums">Álbum</option>
             <option value="artists">Artista</option>
         </select> -->
-      <button class="generateButton" onclick="generateGrid()">Gerar</button>
-      <button id="downloadButton" onclick="downloadGrid()">
-        Baixar Colagem
-      </button>
+      <button class="generateButton">Gerar</button>
+      <button id="downloadButton">Baixar Colagem</button>
 
       <div class="optionals">
         <label for="showAlbumName">Mostrar Nome do Álbum/Artista:</label>
@@ -85,6 +83,10 @@
         <input type="checkbox" id="showAlbumPlaycount" />
       </div>
     </div>
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+    </div>
+
     <div id="albumGrid"></div>
 
     <footer>
@@ -123,5 +125,5 @@
   </body>
   <script defer src="/_vercel/insights/script.js"></script>
   <script src="./js/plugins/FileSaver.js"></script>
-  <script src="./js/script.min.js"></script>
+  <script type="module" src="./js/script.min.js"></script>
 </html>
