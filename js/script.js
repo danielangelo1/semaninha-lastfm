@@ -46,6 +46,14 @@ function generateGrid() {
   const gridType = "albums"; // Pode ser alterado para "artists" se necessário
   const albumGrid = document.getElementById("albumGrid");
 
+  saveValuesLocalStorage(
+    userInput,
+    timeRange,
+    gridSize,
+    showAlbumName,
+    showAlbumPlaycount
+  );
+
   let apiMethod = "";
   if (gridType === "albums") {
     apiMethod = "user.getTopAlbums";
@@ -232,3 +240,43 @@ function downloadGrid() {
     alert("Sem imagem para baixar!");
   }
 }
+
+function saveValuesLocalStorage(
+  userInput,
+  timeRange,
+  gridSize,
+  showAlbumName,
+  showAlbumPlaycount
+) {
+  localStorage.setItem("userInput", userInput);
+  localStorage.setItem("timeRange", timeRange);
+  localStorage.setItem("gridSize", gridSize);
+  localStorage.setItem("showAlbumName", showAlbumName);
+  localStorage.setItem("showAlbumPlaycount", showAlbumPlaycount);
+}
+
+function loadValuesLocalStorage() {
+  const userInput = localStorage.getItem("userInput");
+  const timeRange = localStorage.getItem("timeRange");
+  const gridSize = localStorage.getItem("gridSize");
+  const showAlbumName = localStorage.getItem("showAlbumName");
+  const showAlbumPlaycount = localStorage.getItem("showAlbumPlaycount");
+
+  if (userInput) {
+    document.getElementById("userInput").value = userInput;
+  }
+  if (timeRange) {
+    document.getElementById("timeRange").value = timeRange;
+  }
+  if (gridSize) {
+    document.getElementById("gridSize").value = gridSize;
+  }
+  if (showAlbumName) {
+    document.getElementById("showAlbumName").checked = showAlbumName;
+  }
+  if (showAlbumPlaycount) {
+    document.getElementById("showAlbumPlaycount").checked = showAlbumPlaycount;
+  }
+}
+
+loadValuesLocalStorage();
