@@ -1,4 +1,4 @@
-export default function initDonwloadGrid() {
+export default function initDownloadGrid() {
   function downloadGrid() {
     const generatedImage = document.querySelector(".generated-image");
     if (generatedImage) {
