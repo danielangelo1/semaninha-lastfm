@@ -319,6 +319,11 @@ input:focus {
   border: 1px solid #c3000d;
 }
 
+select:focus {
+  outline: none;
+  border: 1px solid #c3000d;
+}
+
 .loading-container {
   display: flex;
   justify-content: center;
