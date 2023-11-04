@@ -2,6 +2,7 @@ import getApiKey from "./apikey.js";
 import loadFontAndStyle from "./loadFont.js";
 import saveValuesLocalStorage from "./saveValuesLocalStorage.js";
 import setFont from "./setFont.js";
+import setFontSize from "./fontHandler.js";
 
 export default function initGenateGrid() {
   const API_KEY = getApiKey();
@@ -32,31 +33,7 @@ export default function initGenateGrid() {
       apiMethod = "user.getTopArtists";
     }
 
-    let fontSize = 18;
-    let placeY = 18;
-
-    switch (gridSize) {
-      case "3":
-        fontSize = 18;
-        placeY = 18;
-        break;
-      case "4":
-        fontSize = 16;
-        placeY = 14;
-        break;
-      case "5":
-        fontSize = 14;
-        placeY = 12;
-        break;
-      case "6":
-        fontSize = 12;
-        placeY = 10;
-        break;
-      case "7":
-        fontSize = 12;
-        placeY = 10;
-        break;
-    }
+    const { fontSize, placeY } = setFontSize(gridSize);
 
     let url = `https://ws.audioscrobbler.com/2.0/?method=${apiMethod}&user=${userInput}&period=${timeRange}&api_key=${API_KEY}&limit=${
       gridSize * gridSize
