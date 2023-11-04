@@ -35,6 +35,9 @@ export default function initGenateGrid() {
 
     const { fontSize, placeY } = setFontSize(gridSize);
 
+    const ajustableY = gridSize >= 6 ? placeY - 4 : placeY;
+    const ajustableY2 = gridSize >= 6 ? placeY - 8 : placeY;
+
     let url = `https://ws.audioscrobbler.com/2.0/?method=${apiMethod}&user=${userInput}&period=${timeRange}&api_key=${API_KEY}&limit=${
       gridSize * gridSize
     }&format=json`;
@@ -94,14 +97,14 @@ export default function initGenateGrid() {
               if (showAlbumName) {
                 setFont(context, fontSize);
                 context.fillText(album.artist.name, x + 2, y + placeY);
-                context.fillText(album.name, x + 2, y + (placeY + 16));
+                context.fillText(album.name, x + 2, y + (ajustableY + 16));
               }
               if (showAlbumPlaycount) {
                 setFont(context, fontSize);
                 context.fillText(
                   `Plays: ${album.playcount}`,
                   x + 2,
-                  y + (placeY + 32)
+                  y + (ajustableY2 + 32)
                 );
               }
               handleLoad();
@@ -120,14 +123,14 @@ export default function initGenateGrid() {
               if (showAlbumName) {
                 setFont(context, fontSize);
                 context.fillText(album.artist.name, x + 2, y + placeY);
-                context.fillText(album.name, x + 2, y + (placeY + 16));
+                context.fillText(album.name, x + 2, y + (adj + 16));
               }
               if (showAlbumPlaycount) {
                 setFont(context, fontSize);
                 context.fillText(
                   `Plays: ${album.playcount}`,
                   x + 2,
-                  y + (placeY + 32)
+                  y + (adj + 32)
                 );
               }
               handleLoad();
