@@ -144,6 +144,11 @@ input {
   margin: 0;
 }
 
+input,
+select {
+  border: 1px solid #c3000d;
+}
+
 nav a {
   text-decoration: none;
   color: #000;
@@ -164,6 +169,7 @@ footer {
   align-items: center;
   flex-direction: column;
   margin-top: 10px;
+  position: fixed;
 }
 
 footer::before {
