@@ -160,6 +160,12 @@ nav a:hover {
   color: #c3000d;
 }
 
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 footer {
   left: 0;
   bottom: 0;
@@ -168,8 +174,7 @@ footer {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 10px;
-  position: fixed;
+  margin-top: auto;
 }
 
 footer::before {
