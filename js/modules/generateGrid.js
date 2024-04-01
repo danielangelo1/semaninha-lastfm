@@ -23,7 +23,7 @@ export default function initGenateGrid() {
       timeRange,
       gridSize,
       showAlbumName,
-      showAlbumPlaycount
+      showAlbumPlaycount,
     );
 
     let apiMethod = "";
@@ -92,7 +92,7 @@ export default function initGenateGrid() {
                 x,
                 y,
                 canvas.width / gridSize,
-                canvas.height / gridSize
+                canvas.height / gridSize,
               );
               if (showAlbumName) {
                 setFont(context, fontSize);
@@ -104,7 +104,7 @@ export default function initGenateGrid() {
                 context.fillText(
                   `Plays: ${album.playcount}`,
                   x + 2,
-                  y + (ajustableY2 + 32)
+                  y + (ajustableY2 + 32),
                 );
               }
               handleLoad();
@@ -118,19 +118,19 @@ export default function initGenateGrid() {
                 x,
                 y,
                 canvas.width / gridSize,
-                canvas.height / gridSize
+                canvas.height / gridSize,
               );
               if (showAlbumName) {
                 setFont(context, fontSize);
                 context.fillText(album.artist.name, x + 2, y + placeY);
-                context.fillText(album.name, x + 2, y + (adj + 16));
+                context.fillText(album.name, x + 2, y + (ajustableY + 16));
               }
               if (showAlbumPlaycount) {
                 setFont(context, fontSize);
                 context.fillText(
                   `Plays: ${album.playcount}`,
                   x + 2,
-                  y + (adj + 32)
+                  y + (ajustableY2 + 32),
                 );
               }
               handleLoad();
@@ -151,7 +151,7 @@ export default function initGenateGrid() {
                 x,
                 y,
                 canvas.width / gridSize,
-                canvas.height / gridSize
+                canvas.height / gridSize,
               );
               if (showAlbumName) {
                 setFont(context, fontSize);
@@ -172,7 +172,7 @@ export default function initGenateGrid() {
                 x,
                 y,
                 canvas.width / gridSize,
-                canvas.height / gridSize
+                canvas.height / gridSize,
               );
               handleLoad();
             };
@@ -182,7 +182,7 @@ export default function initGenateGrid() {
       .catch((error) => {
         console.error("Erro ao obter os dados do Last.fm:", error);
         alert(
-          "Erro ao obter os dados do Last.fm. Verifique o nome de usuário e tente novamente."
+          "Erro ao obter os dados do Last.fm. Verifique o nome de usuário e tente novamente.",
         );
       });
   };
