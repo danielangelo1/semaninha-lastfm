@@ -1,9 +1,9 @@
-import UserInput from "./components/UserInput/UserInput";
+import Router from "./router/Router";
 
 function App() {
   return (
     <>
-      <UserInput />
+      <Router />
     </>
   );
 }
