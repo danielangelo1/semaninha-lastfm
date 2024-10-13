@@ -1,15 +1,9 @@
-import { getTopAlbums } from "./services/AlbumService";
+import UserInput from "./components/UserInput/UserInput";
 
 function App() {
   return (
     <>
-      <button
-        onClick={() =>
-          getTopAlbums({ user: "dandowski", period: "7day", limit: 5 })
-        }
-      >
-        Get Top Albums
-      </button>
+      <UserInput />
     </>
   );
 }

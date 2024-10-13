@@ -1,3 +1,4 @@
+import { ApiResponse } from "../types/apiResponse";
 import { UserRequest } from "../types/userRequest";
 import { api } from "./api";
 
@@ -10,7 +11,7 @@ export const getTopAlbums = async (data: UserRequest) => {
         data.limit
       }&api_key=${import.meta.env.VITE_API_KEY}&format=json`,
     );
-    return response.data;
+    return response.data as ApiResponse;
   } catch (error) {
     return { message: "Ocorreu um erro durante a requisição" };
   }
