@@ -1,39 +1,50 @@
-<h1 align="center"> SEMANINHA </h1>
+# React + TypeScript + Vite
 
-## 📖 Sobre   
-O Site **Semaninha** é um gerador de colagem dos albuns mais escutados pelo usuário no **Last FM**
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
----
+Currently, two official plugins are available:
 
-## 🚀 Tecnologias e ferramentas utilizadas
-- **HTML5**
-- **CSS3**
-- **JavaScript**
-- **LAST FM API**
-- **File Saver**
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
----
+## Expanding the ESLint configuration
 
-## 🖥️ Demonstração
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-https://user-images.githubusercontent.com/84107769/233744746-765e816b-ef9b-4f62-969d-b49b7f5276e9.mp4
- 
+- Configure the top-level `parserOptions` property like this:
 
-Você pode acessar o projeto clicando [aqui](https://semaninha-lastfm.vercel.app/).
-
----
-
-## 🔧 Como executar o projeto
-
-```bash
-# Clone o repositório
-git clone https://github.com/danielangelo1/semaninha-lastfm
-
-# Entre no diretório
-cd semaninha-lastfm
+```js
+export default tseslint.config({
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
 ```
-Depois disso, utilize uma ferramenta como o [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) para criar um servidor local e executar o projeto.
 
----
+- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
+- Optionally add `...tseslint.configs.stylisticTypeChecked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-**Desenvolvido com 💛 por [Daniel Ângelo](https://github.com/danielangelo1/).**
+```js
+// eslint.config.js
+import react from 'eslint-plugin-react'
+
+export default tseslint.config({
+  // Set the react version
+  settings: { react: { version: '18.3' } },
+  plugins: {
+    // Add the react plugin
+    react,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended rules
+    ...react.configs.recommended.rules,
+    ...react.configs['jsx-runtime'].rules,
+  },
+})
+```

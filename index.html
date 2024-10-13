@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gerador de Semaninha</title>
     <meta
@@ -13,123 +14,9 @@
       name="keywords"
       content="lastfm, last.fm, collage, semaninha, colagem, gerador, generator, music, musica, album, artista, artist"
     />
-    <link rel="preload" href="./css/style.css" as="style" />
-    <link rel="stylesheet" href="./css/style.css" />
-    <link rel="shortcut icon" href="./img/music.svg" type="image/x-icon" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536268514682786"
-      crossorigin="anonymous"
-    ></script>
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-ZH43560L1L"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "G-ZH43560L1L");
-    </script>
   </head>
-
-  <body class="container">
-    <main>
-      <div class="text">
-        <h1>SEMANINHA.NET</h1>
-        <p>
-          Mostre que você tem o melhor gosto músical do mundo! Use o semaninha
-          para gerar colagens com os seus albuns mais ouvidos do Last.fm
-        </p>
-      </div>
-      <div id="controls">
-        <input
-          type="text"
-          id="userInput"
-          placeholder="Nome do usúario"
-          required
-        />
-        <select id="timeRange">
-          <option value="7day">Últimos 7 dias</option>
-          <option value="1month">Último mês</option>
-          <option value="3month">Últimos 3 meses</option>
-          <option value="6month">Últimos 6 meses</option>
-          <option value="12month">Último ano</option>
-          <option value="overall">Geral</option>
-        </select>
-        <select id="gridSize">
-          <option value="3">3x3</option>
-          <option value="4">4x4</option>
-          <option value="5">5x5</option>
-          <option value="6">6x6</option>
-          <option value="7">7x7</option>
-        </select>
-        <!-- <select id="gridType">
-            <option value="albums">Álbum</option>
-            <option value="artists">Artista</option>
-        </select> -->
-        <button class="generateButton">Gerar</button>
-        <button id="downloadButton">Baixar Colagem</button>
-
-        <div class="optionals">
-          <label for="showAlbumName">Mostrar Nome do Álbum/Artista:</label>
-          <input type="checkbox" id="showAlbumName" checked />
-          <label for="showAlbumPlaycount">Mostrar Quantidade de Plays:</label>
-          <input type="checkbox" id="showAlbumPlaycount" />
-        </div>
-      </div>
-      <div class="loading-container">
-        <div class="loading-spinner"></div>
-      </div>
-
-      <div id="albumGrid"></div>
-    </main>
-    <footer>
-      <p>
-        Desenvolvido por
-        <a href="https://github.com/danielangelo1" target="_blank"
-          >Daniel Ângelo</a
-        >
-        © 2024.
-      </p>
-      <ul class="socialMedias">
-        <li>
-          <a href="https://last.fm/user/dandowski" target="_blank">
-            <img src="./img/lastfm.svg" alt="Icone do Last FM"
-          /></a>
-        </li>
-        <li>
-          <a href="https://twitter.com/dandowski" target="_blank">
-            <img src="./img/twitter.svg" alt="Icone do Twitter"
-          /></a>
-        </li>
-        <li>
-          <a href="https://github.com/danielangelo1" target="_blank">
-            <img src="./img/github.svg" alt="Icone do Github"
-          /></a>
-        </li>
-      </ul>
-
-      <nav>
-        <ul class="pages">
-          <li><a href="/pages/privacy.html">Política de Privacidade</a></li>
-          <li><a href="/pages/about.html">Sobre</a></li>
-        </ul>
-      </nav>
-    </footer>
-
-    <script defer src="/_vercel/insights/script.js"></script>
-    <script src="./js/plugins/FileSaver.js"></script>
-    <script type="module" src="./js/script.js"></script>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
