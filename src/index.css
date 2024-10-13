@@ -16,5 +16,13 @@ body {
   padding: 20px;
   max-width: 960px;
   background-color: #f7f7f7;
-  font-family: "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
 }

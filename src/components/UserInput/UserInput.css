@@ -1,0 +1,36 @@
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+}
+
+form button {
+  border: none;
+  background-color: #c3000d;
+  color: #ffffff;
+  text-transform: uppercase;
+  cursor: pointer;
+  width: 100px;
+  font-family: "Poppins", sans-serif;
+}
+
+form button:hover {
+  background-color: #9c000a;
+}
+
+form input,
+button,
+select {
+  border: 1px solid #c3000d;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border: 1.5px solid #c3000d;
+}

@@ -1,0 +1,5 @@
+main p {
+  max-width: 500px;
+  margin: 0 auto 20px;
+  text-align: start;
+}

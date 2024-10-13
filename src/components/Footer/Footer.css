@@ -1,0 +1,34 @@
+footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+  gap: 5px;
+}
+footer::before {
+  content: "";
+  width: 100%;
+  height: 1px;
+  background-color: #ececec;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.social-medias {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.link-pages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.link-pages a:hover {
+  color: #c3000d;
+}

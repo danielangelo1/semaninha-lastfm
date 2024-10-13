@@ -1,6 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { UserRequest } from "../../types/userRequest";
 import { getTopAlbums } from "../../services/AlbumService";
+import "./UserInput.css";
 
 const UserInput = () => {
   const onSubmit: SubmitHandler<UserRequest> = (data: UserRequest) => {
@@ -30,8 +31,15 @@ const UserInput = () => {
         <option value="overall">Geral</option>
       </select>
       {errors.period && <span>Período é obrigatório</span>}
-      <input {...register("limit", { required: true })} />
-      <button type="submit">Get Top Albums</button>
+      <select {...register("limit", { required: true })}>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+      </select>
+      <button type="submit">Gerar</button>
     </form>
   );
 };
