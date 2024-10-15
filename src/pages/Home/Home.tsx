@@ -3,7 +3,7 @@ import "./Home.css";
 
 const Home = () => {
   return (
-    <main>
+    <main className="home">
       <p>
         Mostre que você tem o melhor gosto músical do mundo! Use o semaninha
         para gerar colagens com os seus albuns mais ouvidos do Last.fm

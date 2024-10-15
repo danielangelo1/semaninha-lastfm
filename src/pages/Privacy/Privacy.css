@@ -1,0 +1,31 @@
+.privacy-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.privacy-container h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.privacy-container ul {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.privacy-container li {
+  margin-bottom: 10px;
+}
+
+.privacy-container a {
+  color: #c3000d;
+}
+
+.contact {
+  margin-top: 20px;
+}

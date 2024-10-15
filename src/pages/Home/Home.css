@@ -1,5 +1,11 @@
-main p {
+.home p {
   max-width: 500px;
   margin: 0 auto 20px;
   text-align: start;
+}
+
+@media (max-width: 768px) {
+  .home p {
+    font-size: 0.85em;
+  }
 }

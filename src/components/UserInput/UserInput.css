@@ -34,3 +34,38 @@ select:focus {
   outline: none;
   border: 1.5px solid #c3000d;
 }
+
+.optionals {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.optionals input[type="checkbox"] {
+  margin-right: 5px;
+  height: 20px;
+  width: 20px;
+}
+
+@media (max-width: 768px) {
+  form {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  form input,
+  select {
+    width: 100%;
+  }
+  form button {
+    width: 100%;
+    font-size: 1.2em;
+  }
+  .optionals {
+    justify-content: flex-start;
+  }
+}

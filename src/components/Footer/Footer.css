@@ -5,6 +5,9 @@ footer {
   align-items: center;
   margin-top: auto;
   gap: 5px;
+
+  width: 100%;
+  margin-bottom: 20px;
 }
 footer::before {
   content: "";
@@ -31,4 +34,12 @@ footer::before {
 
 .link-pages a:hover {
   color: #c3000d;
+}
+
+.author {
+  color: #c3000d;
+}
+
+.author:hover {
+  text-decoration: underline;
 }

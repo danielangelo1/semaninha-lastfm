@@ -5,7 +5,18 @@ import "./Footer.css";
 const Footer = () => {
   return (
     <footer>
-      <p>Desenvolvido por Daniel Ângelo © 2024.</p>
+      <p>
+        Desenvolvido por{" "}
+        <Link
+          to={"https://github.com/danielangelo1"}
+          target="_blank"
+          rel="noreferrer"
+          className="author"
+        >
+          Daniel Ângelo
+        </Link>{" "}
+        © 2024.
+      </p>
       <div className="social-medias">
         <Link
           to={"https://www.last.fm/user/dandowski"}
@@ -31,7 +42,6 @@ const Footer = () => {
       </div>
       <div className="link-pages">
         <Link to="/privacy">Política de Privacidade</Link>
-        <Link to="/about">Sobre</Link>
       </div>
     </footer>
   );
