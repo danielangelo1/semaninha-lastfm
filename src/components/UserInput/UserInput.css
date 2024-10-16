@@ -50,6 +50,7 @@ select:focus {
   margin-right: 5px;
   height: 20px;
   width: 20px;
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {

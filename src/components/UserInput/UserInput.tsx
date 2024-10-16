@@ -3,12 +3,22 @@ import { UserRequest } from "../../types/userRequest";
 import { getTopAlbums } from "../../services/AlbumService";
 import "./UserInput.css";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Canvas from "../Canvas/Canvas";
+import { ApiResponse } from "../../types/apiResponse";
 
 const UserInput = () => {
+  const [albumData, setAlbumData] = useState<ApiResponse | null>(null);
+  const [userInput, setUserInput] = useState<UserRequest | null>(null);
+
   const onSubmit: SubmitHandler<UserRequest> = (data: UserRequest) => {
-    getTopAlbums(data);
+    setUserInput(data);
+    const response = getTopAlbums(data);
+    response.then((data) => {
+      setAlbumData(data);
+    });
   };
+
   const {
     register,
     handleSubmit,
@@ -53,10 +63,13 @@ const UserInput = () => {
       <button type="submit">Gerar</button>
       <div className="optionals">
         <label htmlFor="showAlbum">Exibir nome do album/artista</label>
-        <input type="checkbox" {...register("showAlbum")} />
+        <input type="checkbox" id="showAlbum" {...register("showAlbum")} />
         <label htmlFor="showPlays">Exibir quantidade de plays</label>
-        <input type="checkbox" {...register("showPlays")} />
+        <input type="checkbox" id="showPlays" {...register("showPlays")} />
       </div>
+      {albumData && userInput && (
+        <Canvas data={albumData} userInput={userInput} />
+      )}
     </form>
   );
 };

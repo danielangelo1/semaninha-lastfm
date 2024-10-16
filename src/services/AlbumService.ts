@@ -8,7 +8,7 @@ export const getTopAlbums = async (data: UserRequest) => {
   try {
     const response = await api.get(
       `${endpoint}user=${data.user}&period=${data.period}&limit=${
-        data.limit
+        data.limit * data.limit
       }&api_key=${import.meta.env.VITE_API_KEY}&format=json`,
     );
     return response.data as ApiResponse;
