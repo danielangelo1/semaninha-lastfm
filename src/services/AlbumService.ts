@@ -11,8 +11,11 @@ export const getTopAlbums = async (data: UserRequest) => {
         data.limit * data.limit
       }&api_key=${import.meta.env.VITE_API_KEY}&format=json`,
     );
+    if (response.status !== 200) {
+      throw new Error("Erro na requisição");
+    }
     return response.data as ApiResponse;
   } catch (error) {
-    return { message: "Ocorreu um erro durante a requisição" };
+    throw new Error("Usuário não encontrado");
   }
 };

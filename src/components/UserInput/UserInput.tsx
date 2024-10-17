@@ -6,24 +6,37 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import Canvas from "../Canvas/Canvas";
 import { ApiResponse } from "../../types/apiResponse";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 const UserInput = () => {
   const [albumData, setAlbumData] = useState<ApiResponse | null>(null);
   const [userInput, setUserInput] = useState<UserRequest | null>(null);
+  const { getLocalStorage, setLocalStorage } = useLocalStorage();
 
-  const onSubmit: SubmitHandler<UserRequest> = (data: UserRequest) => {
-    setUserInput(data);
-    const response = getTopAlbums(data);
-    response.then((data) => {
-      setAlbumData(data);
-    });
+  const onSubmit: SubmitHandler<UserRequest> = async (data: UserRequest) => {
+    try {
+      setUserInput(data);
+      setLocalStorage(data);
+      const response = await getTopAlbums(data);
+      setAlbumData(response);
+    } catch (error) {
+      toast.error("Usuário não encontrado");
+    }
   };
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<UserRequest>();
+  } = useForm<UserRequest>({
+    defaultValues: {
+      user: getLocalStorage().user || "",
+      period: getLocalStorage().period || "1month",
+      limit: parseInt(getLocalStorage().limit || "5"),
+      showAlbum: getLocalStorage().showAlbum === "true",
+      showPlays: getLocalStorage().showPlays === "false",
+    },
+  });
 
   useEffect(() => {
     if (errors.user) {
