@@ -1,6 +1,7 @@
 import { ApiResponse } from "../../types/apiResponse";
 import { useEffect, useRef } from "react";
 import { UserRequest } from "../../types/userRequest";
+import { setFont } from "../../utils/FontHandler";
 
 interface CanvasProps {
   data: ApiResponse;
@@ -22,6 +23,10 @@ const Canvas = ({ data, userInput }: CanvasProps) => {
     if (context) {
       context.fillStyle = "#f5f5f5";
       context.fillRect(0, 0, canvas.width, canvas.height);
+      const { albumSize, artistSize, especialPlays } = setFont(
+        context,
+        userInput.limit,
+      );
 
       const imagePromises = data.topalbums.album.map((album, index) => {
         return new Promise<void>((resolve) => {
@@ -41,27 +46,43 @@ const Canvas = ({ data, userInput }: CanvasProps) => {
               canvas.height / userInput.limit,
             );
             if (userInput.showAlbum) {
-              context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 0.3;
-              context.shadowOffsetX = 1;
-              context.shadowOffsetY = 1;
-              context.fillStyle = "white";
-              context.fillText(album.artist.name, x + 2, y + 1);
-              context.fillText(album.name, x + 2, y + (1 + 16));
+              context.fillText(album.artist.name, x + 2, artistSize + y);
+              context.fillText(album.name, x + 2, y + (albumSize + 16));
             }
             if (userInput.showPlays) {
-              context.shadowColor = "#2b2b2b";
-              context.shadowBlur = 0.3;
-              context.shadowOffsetX = 1;
-              context.shadowOffsetY = 1;
-              context.fillStyle = "white";
               context.fillText(
                 `Plays: ${album.playcount}`,
                 x + 2,
-                y + canvas.height / userInput.limit - 30,
+                y + (especialPlays + 32),
               );
             }
-            resolve();
+          };
+          resolve();
+          img.onerror = () => {
+            const x =
+              (index % userInput.limit) * (canvas.width / userInput.limit);
+            const y =
+              Math.floor(index / userInput.limit) *
+              (canvas.height / userInput.limit);
+            context.fillStyle = "black";
+            context.fillRect(
+              x,
+              y,
+              canvas.width / userInput.limit,
+              canvas.height / userInput.limit,
+            );
+            if (userInput.showAlbum) {
+              context.fillStyle = "white";
+              context.fillText(album.artist.name, x + 2, artistSize + y);
+              context.fillText(album.name, x + 2, y + (albumSize + 16));
+            }
+            if (userInput.showPlays) {
+              context.fillText(
+                `Plays: ${album.playcount}`,
+                x + 2,
+                y + (especialPlays + 32),
+              );
+            }
           };
         });
       });
