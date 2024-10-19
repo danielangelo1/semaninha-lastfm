@@ -21,6 +21,7 @@ const UserInput = () => {
       setAlbumData(response);
     } catch (error) {
       toast.error("Usuário não encontrado");
+      console.error(error);
     }
   };
 
@@ -55,7 +56,11 @@ const UserInput = () => {
         placeholder="Nome do usuário"
         {...register("user", { required: true })}
       />
-      <select id="period" {...register("period", { required: true })}>
+      <select
+        id="period"
+        aria-label="Selecione o período"
+        {...register("period", { required: true })}
+      >
         <option value="7day">Últimos 7 dias</option>
         <option value="1month">Último mês</option>
         <option value="3month">Últimos 3 meses</option>
@@ -63,7 +68,10 @@ const UserInput = () => {
         <option value="12month">Último ano</option>
         <option value="overall">Geral</option>
       </select>
-      <select {...register("limit", { required: true })}>
+      <select
+        aria-label="Selecione o tamanho do grid"
+        {...register("limit", { required: true })}
+      >
         <option value="3">3x3</option>
         <option value="4">4x4</option>
         <option value="5">5x5</option>

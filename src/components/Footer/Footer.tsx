@@ -22,6 +22,7 @@ const Footer = () => {
           to={"https://www.last.fm/user/dandowski"}
           target="_blank"
           rel="noreferrer"
+          aria-label="Last.fm"
         >
           <LastfmLogo size={32} />
         </Link>
@@ -29,6 +30,7 @@ const Footer = () => {
           to={"https://twitter.com/dandowski"}
           target="_blank"
           rel="noreferrer"
+          aria-label="Twitter"
         >
           <TwitterLogo size={32} />
         </Link>
@@ -36,6 +38,7 @@ const Footer = () => {
           to={"https://github.com/danielangelo1"}
           target="_blank"
           rel="noreferrer"
+          aria-label="GitHub"
         >
           <GithubLogo size={32} />
         </Link>
