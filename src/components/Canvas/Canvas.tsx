@@ -42,7 +42,7 @@ const ImageRenderer = ({
         context.fillStyle = "#f5f5f5";
         context.fillRect(0, 0, canvas.width, canvas.height);
 
-        const { albumSize, artistSize, especialPlays } = setFont(
+        const { albumSize, artistSize, especialPlays } = await setFont(
           context,
           userInput.limit,
         );

@@ -13,8 +13,12 @@ export default function fontHandler(gridSize: number) {
   return fontSizes[gridSize];
 }
 
-export function setFont(context: CanvasRenderingContext2D, gridSize: number) {
+export async function setFont(
+  context: CanvasRenderingContext2D,
+  gridSize: number,
+) {
   const [artistSize, albumSize, especialPlays] = fontHandler(gridSize);
+  await document.fonts.load(`${artistSize}px Fira Sans`);
 
   context.font = `${artistSize}px Fira Sans`;
   context.shadowColor = "#2b2b2b";
