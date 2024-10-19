@@ -8,11 +8,15 @@ O Site **Semaninha** é um gerador de colagem dos albuns mais escutados pelo usu
 
 ## 🚀 Tecnologias e ferramentas utilizadas
 
-- **HTML5**
-- **CSS3**
-- **JavaScript**
-- **LAST FM API**
-- **File Saver**
+- **React**
+- **TypeScript**
+- **CSS**
+- **React Hook Form**
+- **Phosphor Icons**
+- **Axios**
+- **Vercel**
+- **Last FM API**
+- **Vite**
 
 ---
 
