@@ -4,13 +4,15 @@ import { api } from "./api";
 
 const endpoint = "?method=user.gettopalbums&";
 
-export const getTopAlbums = async (data: UserRequest) => {
+export const getTopAlbums = async (data: UserRequest): Promise<ApiResponse> => {
+  const gridSize = data.limit * data.limit;
   try {
     const response = await api.get(
-      `${endpoint}user=${data.user}&period=${data.period}&limit=${
-        data.limit * data.limit
-      }&api_key=${import.meta.env.VITE_API_KEY}&format=json`,
+      `${endpoint}user=${data.user}&period=${
+        data.period
+      }&limit=${gridSize}&api_key=${import.meta.env.VITE_API_KEY}&format=json`,
     );
+
     if (response.status !== 200) {
       throw new Error("Erro na requisição");
     }

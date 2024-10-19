@@ -11,12 +11,14 @@ import useLocalStorage from "../../hooks/useLocalStorage";
 const UserInput = () => {
   const [albumData, setAlbumData] = useState<ApiResponse | null>(null);
   const [userInput, setUserInput] = useState<UserRequest | null>(null);
+  const [loading, setLoading] = useState(false);
   const { getLocalStorage, setLocalStorage } = useLocalStorage();
 
   const onSubmit: SubmitHandler<UserRequest> = async (data: UserRequest) => {
     try {
       setUserInput(data);
       setLocalStorage(data);
+      setLoading(true);
       const response = await getTopAlbums(data);
       setAlbumData(response);
     } catch (error) {
@@ -89,7 +91,12 @@ const UserInput = () => {
         <input type="checkbox" id="showPlays" {...register("showPlays")} />
       </div>
       {albumData && userInput && (
-        <Canvas data={albumData} userInput={userInput} />
+        <Canvas
+          data={albumData}
+          userInput={userInput}
+          loading={loading}
+          loadingHandler={setLoading}
+        />
       )}
     </form>
   );
