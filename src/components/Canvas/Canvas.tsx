@@ -3,7 +3,7 @@ import { ApiResponse } from "../../types/apiResponse";
 import { UserRequest } from "../../types/userRequest";
 import { setFont } from "../../utils/FontHandler";
 import { Audio } from "react-loader-spinner";
-import "./Canvas.css";
+import "./canvas.css";
 import { toast } from "react-toastify";
 
 interface ImageRendererProps {
