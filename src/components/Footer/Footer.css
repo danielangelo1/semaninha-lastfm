@@ -5,10 +5,9 @@ footer {
   align-items: center;
   margin-top: auto;
   gap: 5px;
-
   width: 100%;
-  margin-bottom: 20px;
 }
+
 footer::before {
   content: "";
   width: 100%;
@@ -42,4 +41,18 @@ footer::before {
 
 .author:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  footer {
+    padding: 0px;
+  }
+
+  .social-medias {
+    gap: 20px;
+  }
+
+  .link-pages {
+    gap: 10px;
+  }
 }

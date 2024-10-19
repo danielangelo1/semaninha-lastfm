@@ -17,7 +17,10 @@ body {
   max-width: 960px;
   background-color: #f7f7f7;
   font-family: "Poppins", sans-serif;
-  min-height: 100vh;
+}
+
+#root {
+  min-height: 92vh;
   display: flex;
   flex-direction: column;
 }
