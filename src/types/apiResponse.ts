@@ -2,6 +2,7 @@ interface Artist {
   mbid: string;
   name: string;
   url: string;
+  playcount: string;
 }
 
 interface Image {
@@ -18,8 +19,14 @@ interface Album {
   url: string;
 }
 
-export interface ApiResponse {
+export interface AlbumApiResponse {
   topalbums: {
     album: Album[];
+  };
+}
+
+export interface ArtistApiResponse {
+  topartists: {
+    artist: Artist[];
   };
 }

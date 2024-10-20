@@ -4,4 +4,5 @@ export interface UserRequest {
   limit: number;
   showAlbum?: boolean;
   showPlays?: boolean;
+  type?: string;
 }

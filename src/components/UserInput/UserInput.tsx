@@ -1,15 +1,16 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { UserRequest } from "../../types/userRequest";
-import { getTopAlbums } from "../../services/AlbumService";
+import { getTopAlbums, getTopArtists } from "../../services/LastFM";
 import "./UserInput.css";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import Canvas from "../Canvas/Canvas";
-import { ApiResponse } from "../../types/apiResponse";
+import { AlbumApiResponse, ArtistApiResponse } from "../../types/apiResponse";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
 const UserInput = () => {
-  const [albumData, setAlbumData] = useState<ApiResponse | null>(null);
+  const [albumData, setAlbumData] = useState<AlbumApiResponse | null>(null);
+  const [artistData, setArtistData] = useState<ArtistApiResponse | null>(null);
   const [userInput, setUserInput] = useState<UserRequest | null>(null);
   const [loading, setLoading] = useState(false);
   const { getLocalStorage, setLocalStorage } = useLocalStorage();
@@ -19,8 +20,13 @@ const UserInput = () => {
       setUserInput(data);
       setLocalStorage(data);
       setLoading(true);
-      const response = await getTopAlbums(data);
-      setAlbumData(response);
+      if (data.type === "album") {
+        const response = await getTopAlbums(data);
+        setAlbumData(response);
+      } else {
+        const response = await getTopArtists(data);
+        setArtistData(response);
+      }
     } catch (error) {
       toast.error("Usuário não encontrado");
       console.error(error);
@@ -84,6 +90,13 @@ const UserInput = () => {
         <option value="9">9x9</option>
         <option value="10">10x10</option>
       </select>
+      <select
+        aria-label="Selecione o tipo de imagem"
+        {...register("type", { required: true })}
+      >
+        <option value="album">Álbums</option>
+        <option value="artist">Artistas</option>
+      </select>
       <button type="submit">Gerar</button>
       <div className="optionals">
         <label htmlFor="showAlbum">Exibir nome do album/artista</label>
@@ -99,6 +112,14 @@ const UserInput = () => {
       {albumData && userInput && (
         <Canvas
           data={albumData}
+          userInput={userInput}
+          loading={loading}
+          loadingHandler={setLoading}
+        />
+      )}
+      {artistData && userInput && (
+        <Canvas
+          data={artistData}
           userInput={userInput}
           loading={loading}
           loadingHandler={setLoading}
