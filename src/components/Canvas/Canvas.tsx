@@ -35,8 +35,8 @@ const ImageRenderer = ({
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d");
 
-      canvas.width = 1250;
-      canvas.height = 1250;
+      canvas.width = 1300;
+      canvas.height = 1300;
 
       if (context) {
         context.fillStyle = "#f5f5f5";
