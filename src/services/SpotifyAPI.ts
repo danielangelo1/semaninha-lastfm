@@ -1,3 +1,4 @@
+import { Artist } from "../types/apiResponse";
 import { SpotifyArtistResponse } from "../types/spotify";
 import { spotifyApi } from "./api";
 
@@ -19,17 +20,22 @@ const getToken = async () => {
   return data.access_token;
 };
 
-export const getArtistImage = async (
-  artistName: string,
-): Promise<SpotifyArtistResponse> => {
+export const getArtistImage = async (artistName: string): Promise<T> => {
   const token = await getToken();
   const response = await spotifyApi.get(
-    `/search?q=${encodeURIComponent(artistName)}&type=artist&limit=1`,
+    `/search?q=${encodeURIComponent(artistName)}&type=artist&limit=5`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     },
   );
-  return response.data as SpotifyArtistResponse;
+  const found = response.data.artists.items
+    .filter((a) => a.images.length)
+    .find(
+      (artist: Artist) =>
+        artist.name.toLowerCase() === artistName.toLowerCase(),
+    );
+  const spotifyObject = found || response.data.artists.items[0];
+  return spotifyObject as SpotifyArtistResponse;
 };

@@ -53,7 +53,7 @@ const ImageRenderer = ({
             const img = new Image();
             img.crossOrigin = "anonymous";
             const spotifyResponse = await getArtistImage(artist.name);
-            img.src = spotifyResponse.artists.items[0].images[0].url;
+            img.src = spotifyResponse.images[0].url;
             img.onload = () => {
               const x =
                 (index % userInput.limit) * (canvas.width / userInput.limit);
@@ -67,12 +67,14 @@ const ImageRenderer = ({
                 canvas.width / userInput.limit,
                 canvas.height / userInput.limit,
               );
-              context.fillText(artist.name, x + 2, artistSize + y);
+              if (userInput.showAlbum) {
+                context.fillText(artist.name, x + 2, artistSize + y);
+              }
               if (userInput.showPlays) {
                 context.fillText(
                   `Plays: ${artist.playcount}`,
                   x + 2,
-                  y + (especialPlays + 32),
+                  y + (especialPlays + 16),
                 );
               }
               resolve();
@@ -91,12 +93,14 @@ const ImageRenderer = ({
                 canvas.height / userInput.limit,
               );
               context.fillStyle = "white";
-              context.fillText(artist.name, x + 2, artistSize + y);
+              if (userInput.showAlbum) {
+                context.fillText(artist.name, x + 2, artistSize + y);
+              }
               if (userInput.showPlays) {
                 context.fillText(
                   `Plays: ${artist.playcount}`,
                   x + 2,
-                  y + (especialPlays + 32),
+                  y + (especialPlays + 16),
                 );
               }
               resolve();
