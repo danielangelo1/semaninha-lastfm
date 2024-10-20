@@ -29,6 +29,7 @@ const UserInput = () => {
 
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm<UserRequest>({
@@ -88,7 +89,12 @@ const UserInput = () => {
         <label htmlFor="showAlbum">Exibir nome do album/artista</label>
         <input type="checkbox" id="showAlbum" {...register("showAlbum")} />
         <label htmlFor="showPlays">Exibir quantidade de plays</label>
-        <input type="checkbox" id="showPlays" {...register("showPlays")} />
+        <input
+          disabled={!watch("showAlbum")}
+          type="checkbox"
+          id="showPlays"
+          {...register("showPlays")}
+        />
       </div>
       {albumData && userInput && (
         <Canvas
