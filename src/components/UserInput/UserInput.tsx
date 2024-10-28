@@ -104,6 +104,7 @@ const UserInput = () => {
         <label htmlFor="showPlays">Exibir quantidade de plays</label>
         <input
           disabled={!watch("showAlbum")}
+          checked={watch("showAlbum") && watch("showPlays")}
           type="checkbox"
           id="showPlays"
           {...register("showPlays")}
