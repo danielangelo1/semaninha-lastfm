@@ -21,9 +21,11 @@ const UserInput = () => {
       setLocalStorage(data);
       setLoading(true);
       if (data.type === "album") {
+        setArtistData(null);
         const response = await getTopAlbums(data);
         setAlbumData(response);
       } else {
+        setAlbumData(null);
         const response = await getTopArtists(data);
         setArtistData(response);
       }
@@ -45,6 +47,7 @@ const UserInput = () => {
       limit: parseInt(getLocalStorage().limit || "5"),
       showAlbum: getLocalStorage().showAlbum === "true",
       showPlays: getLocalStorage().showPlays === "false",
+      type: getLocalStorage().type || "album",
     },
   });
 
@@ -110,21 +113,24 @@ const UserInput = () => {
           {...register("showPlays")}
         />
       </div>
-      {albumData && userInput && (
-        <Canvas
-          data={albumData}
-          userInput={userInput}
-          loading={loading}
-          loadingHandler={setLoading}
-        />
-      )}
-      {artistData && userInput && (
-        <Canvas
-          data={artistData}
-          userInput={userInput}
-          loading={loading}
-          loadingHandler={setLoading}
-        />
+      {userInput && (
+        <>
+          {albumData ? (
+            <Canvas
+              data={albumData}
+              userInput={userInput}
+              loading={loading}
+              loadingHandler={setLoading}
+            />
+          ) : artistData ? (
+            <Canvas
+              data={artistData}
+              userInput={userInput}
+              loading={loading}
+              loadingHandler={setLoading}
+            />
+          ) : null}
+        </>
       )}
     </form>
   );

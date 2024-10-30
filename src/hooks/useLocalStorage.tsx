@@ -7,6 +7,7 @@ export default function useLocalStorage() {
     localStorage.setItem("limit", values.limit.toString());
     localStorage.setItem("showAlbum", values.showAlbum?.toString() || "false");
     localStorage.setItem("showPlays", values.showPlays?.toString() || "false");
+    localStorage.setItem("type", values.type || "album");
   };
 
   const getLocalStorage = () => {
@@ -15,8 +16,9 @@ export default function useLocalStorage() {
     const limit = localStorage.getItem("limit");
     const showAlbum = localStorage.getItem("showAlbum");
     const showPlays = localStorage.getItem("showPlays");
+    const type = localStorage.getItem("type");
 
-    return { user, period, limit, showAlbum, showPlays };
+    return { user, period, limit, showAlbum, showPlays, type };
   };
 
   return { setLocalStorage, getLocalStorage };
