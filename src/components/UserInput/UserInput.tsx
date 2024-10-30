@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { UserRequest } from "../../types/userRequest";
-import { getTopAlbums, getTopArtists } from "../../services/LastFM";
+import { getTopAlbums, getTopArtists } from "../../services/LastFmService";
 import "./UserInput.css";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";

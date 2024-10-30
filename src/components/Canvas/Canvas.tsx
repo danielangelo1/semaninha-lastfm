@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { UserRequest } from "../../types/userRequest";
 import { setFont } from "../../utils/FontHandler";
@@ -5,7 +6,7 @@ import { Audio } from "react-loader-spinner";
 import "./canvas.css";
 import { toast } from "react-toastify";
 import { AlbumApiResponse, ArtistApiResponse } from "../../types/apiResponse";
-import { getArtistImage } from "../../services/SpotifyAPI";
+import { getArtistImage } from "../../services/SpotifyService";
 
 interface ImageRendererProps {
   data: ArtistApiResponse | AlbumApiResponse;
@@ -53,7 +54,7 @@ const ImageRenderer = ({
             const img = new Image();
             img.crossOrigin = "anonymous";
             const spotifyResponse = await getArtistImage(artist.name);
-            img.src = spotifyResponse.images[0].url;
+            img.src = spotifyResponse.url;
             img.onload = () => {
               const x =
                 (index % userInput.limit) * (canvas.width / userInput.limit);
