@@ -36,3 +36,18 @@ export const getTopArtists = async (
   }
   return response.data as ArtistApiResponse;
 };
+
+export const getTopTracks = async (data: UserRequest) => {
+  const gridSize = data.limit * data.limit;
+
+  const response = await api.get(
+    `?method=user.gettoptracks&user=${data.user}&period=${
+      data.period
+    }&limit=${gridSize}&api_key=${import.meta.env.VITE_API_KEY}&format=json`,
+  );
+
+  if (response.status !== 200) {
+    throw new Error("Erro na requisição");
+  }
+  return response.data;
+};
