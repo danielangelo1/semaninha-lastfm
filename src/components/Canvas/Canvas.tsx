@@ -55,7 +55,7 @@ const ImageRenderer = ({
             const img = new Image();
             img.crossOrigin = "anonymous";
             const spotifyResponse = await getArtistImage(artist.name);
-            img.src = spotifyResponse.url;
+            img.src = spotifyResponse?.url || "";
             img.onload = () => {
               const x =
                 (index % userInput.limit) * (canvas.width / userInput.limit);
