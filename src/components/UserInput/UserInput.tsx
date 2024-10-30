@@ -1,12 +1,12 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { UserRequest } from "../../types/userRequest";
-import { getTopAlbums, getTopArtists } from "../../services/LastFmService";
 import "./UserInput.css";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import Canvas from "../Canvas/Canvas";
 import { AlbumApiResponse, ArtistApiResponse } from "../../types/apiResponse";
 import useLocalStorage from "../../hooks/useLocalStorage";
+import { getTopAlbums, getTopArtists } from "../../services/LastFMService";
 
 const UserInput = () => {
   const [albumData, setAlbumData] = useState<AlbumApiResponse | null>(null);
