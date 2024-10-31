@@ -1,5 +1,5 @@
 import { UserRequest } from "../types/userRequest";
-import { setFont } from "./fontHandler";
+import { setFont } from "./FontHandler";
 
 export const createCanvasContext = () => {
   const canvas = document.createElement("canvas");
