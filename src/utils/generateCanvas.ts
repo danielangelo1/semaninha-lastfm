@@ -43,13 +43,13 @@ export const createAlbumImage = async (
         drawTextOnCanvas(context, item.artist.name, x + 2, artistSize + y);
         drawTextOnCanvas(context, item.name, x + 2, y + (albumSize + 16));
       }
-      if (userInput.showPlays) console.log(especialPlays);
-      drawTextOnCanvas(
-        context,
-        `Plays: ${item.playcount}`,
-        x + 2,
-        y + (especialPlays + 30),
-      );
+      if (userInput.showPlays)  
+        drawTextOnCanvas(
+          context,
+          `Plays: ${item.playcount}`,
+          x + 2,
+          y + (especialPlays + 30),
+        );
     },
   );
 };

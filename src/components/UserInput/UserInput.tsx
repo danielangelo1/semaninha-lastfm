@@ -39,6 +39,7 @@ const UserInput = () => {
     register,
     watch,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<UserRequest>({
     defaultValues: {
@@ -50,6 +51,14 @@ const UserInput = () => {
       type: getLocalStorage().type || "album",
     },
   });
+
+  const showAlbum = watch("showAlbum");
+
+  useEffect(() => {
+    if (!showAlbum) {
+      setValue("showPlays", false);
+    }
+  }, [showAlbum, setValue]);
 
   useEffect(() => {
     if (errors.user) {
