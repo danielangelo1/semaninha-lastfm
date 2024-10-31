@@ -4,6 +4,14 @@ import { musicBrainzApi, spotifyApi } from "./api";
 let spotifyToken: string | null = null;
 let tokenExpirationTime: number | null = null;
 
+const formatArtistName = (artistName: string) => {
+  return artistName
+    .toLowerCase()
+    .replace(/\$/g, "s")
+    .replace(/\s+/g, " ")
+    .trim();
+};
+
 const getToken = async () => {
   const currentTime = Date.now();
   if (
@@ -59,7 +67,11 @@ export const getArtistImage = async (artistName: string): Promise<Image> => {
 
   const found = response.data.artists.items
     .filter((a) => a.images.length)
-    .find((artist) => artist.name.toLowerCase() === artistName.toLowerCase());
+    .find(
+      (artist) => artist.name.toLowerCase() === formatArtistName(artistName),
+    );
+  console.log(artistName.toLowerCase());
+  console.log(found, response.data.artists.items[0]);
   const spotifyObject = found || response.data.artists.items[0];
   return spotifyObject.images[0];
 };
