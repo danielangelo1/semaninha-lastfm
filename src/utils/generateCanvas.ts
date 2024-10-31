@@ -1,3 +1,4 @@
+import { getArtistImageScraper } from "../services/scraper";
 import { getArtistImage } from "../services/SpotifyService";
 import { AlbumApiResponse, ArtistApiResponse } from "../types/apiResponse";
 import { UserRequest } from "../types/userRequest";
@@ -9,9 +10,10 @@ export const createSpotifyImage = async (
 ) => {
   const imgs = await Promise.all(
     data.topartists.artist.map((artist) =>
-      getArtistImage(artist.name).then((res) => res?.url ?? ""),
+      getArtistImageScraper(artist.url).then((image) => image),
     ),
   );
+
   return processImages(
     data.topartists.artist,
     userInput,
@@ -43,7 +45,7 @@ export const createAlbumImage = async (
         drawTextOnCanvas(context, item.artist.name, x + 2, artistSize + y);
         drawTextOnCanvas(context, item.name, x + 2, y + (albumSize + 16));
       }
-      if (userInput.showPlays)  
+      if (userInput.showPlays)
         drawTextOnCanvas(
           context,
           `Plays: ${item.playcount}`,

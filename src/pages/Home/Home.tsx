@@ -1,7 +1,14 @@
+import { useEffect } from "react";
 import UserInput from "../../components/UserInput/UserInput";
 import "./Home.css";
+import { getArtistImageScraper } from "../../services/scraper";
 
 const Home = () => {
+  useEffect(() => {
+    getArtistImageScraper("https://www.last.fm/music/Queen").then((image) => {
+      console.log(image);
+    });
+  }, []);
   return (
     <main className="home">
       <p>
