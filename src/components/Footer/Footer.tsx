@@ -2,6 +2,8 @@ import { GithubLogo, LastfmLogo, TwitterLogo } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 import "./Footer.css";
 
+const actualYear = new Date().getFullYear();
+
 const Footer = () => {
   return (
     <footer>
@@ -15,7 +17,7 @@ const Footer = () => {
         >
           Daniel Ângelo
         </Link>{" "}
-        © 2024.
+        © {actualYear}.
       </p>
       <div className="social-medias">
         <Link
