@@ -24,6 +24,11 @@ footer::before {
   gap: 40px;
 }
 
+.social-medias a:hover {
+  color: #c3000d;
+  transition: 0.3s;
+}
+
 .link-pages {
   display: flex;
   justify-content: center;
