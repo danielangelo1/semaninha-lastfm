@@ -1,5 +1,4 @@
 import { getArtistImageScraper } from "../services/scraper";
-import { getArtistImage } from "../services/SpotifyService";
 import { AlbumApiResponse, ArtistApiResponse } from "../types/apiResponse";
 import { UserRequest } from "../types/userRequest";
 import { drawTextOnCanvas, processImages } from "./canvasUtils";
