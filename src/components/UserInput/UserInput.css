@@ -78,6 +78,7 @@ select:focus {
   height: 20px;
   width: 20px;
   cursor: pointer;
+  accent-color: #c3000d;
 }
 
 @media (max-width: 768px) {
