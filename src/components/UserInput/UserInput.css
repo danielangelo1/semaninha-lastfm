@@ -1,10 +1,12 @@
 form {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 0.5rem;
   margin: 0;
+  width: 100%;
 }
 
 form button {
@@ -15,6 +17,7 @@ form button {
   cursor: pointer;
   width: 100px;
   font-family: "Poppins", sans-serif;
+  width: 100%;
 }
 
 form button:hover {
@@ -41,9 +44,33 @@ select:focus {
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  gap: 1rem;
+  margin-top: 0.625rem;
+  margin-bottom: 0.625rem;
+  width: 80%;
+}
+
+.user-input {
+  width: 80%;
+
+  input {
+    width: 100%;
+  }
+}
+
+.select-options {
+  display: flex;
+  width: 80%;
+  gap: 2rem;
+
+  .select {
+    display: flex;
+    flex-direction: column;
+
+    select {
+      width: 225px;
+    }
+  }
 }
 
 .optionals input[type="checkbox"] {
@@ -67,6 +94,26 @@ select:focus {
     font-size: 1.2em;
   }
   .optionals {
-    justify-content: flex-start;
+    justify-content: space-between;
+  }
+
+  .user-input,
+  .select-options,
+  .optionals {
+    width: 100%;
+  }
+
+  .select-options {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    .select {
+      width: 100%;
+
+      select {
+        width: 100%;
+      }
+    }
   }
 }

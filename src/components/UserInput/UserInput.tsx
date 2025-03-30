@@ -71,45 +71,58 @@ const UserInput = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input
-        id="user"
-        type="text"
-        placeholder="Nome do usuário"
-        {...register("user", { required: true })}
-      />
-      <select
-        id="period"
-        aria-label="Selecione o período"
-        {...register("period", { required: true })}
-      >
-        <option value="7day">Últimos 7 dias</option>
-        <option value="1month">Último mês</option>
-        <option value="3month">Últimos 3 meses</option>
-        <option value="6month">Últimos 6 meses</option>
-        <option value="12month">Último ano</option>
-        <option value="overall">Geral</option>
-      </select>
-      <select
-        aria-label="Selecione o tamanho do grid"
-        {...register("limit", { required: true })}
-      >
-        <option value="3">3x3</option>
-        <option value="4">4x4</option>
-        <option value="5">5x5</option>
-        <option value="6">6x6</option>
-        <option value="7">7x7</option>
-        <option value="8">8x8</option>
-        <option value="9">9x9</option>
-        <option value="10">10x10</option>
-      </select>
-      <select
-        aria-label="Selecione o tipo de imagem"
-        {...register("type", { required: true })}
-      >
-        <option value="album">Álbums</option>
-        <option value="artist">Artistas</option>
-      </select>
-      <button type="submit">Gerar</button>
+      <div className="user-input">
+        <label htmlFor="user">Nome do usuário</label>
+        <input
+          id="user"
+          type="text"
+          placeholder="Digite o nome do LastFM"
+          {...register("user", { required: true })}
+        />
+      </div>
+      <div className="select-options">
+        <div className="select">
+          <label htmlFor="period">Período</label>
+          <select
+            id="period"
+            aria-label="Selecione o período"
+            {...register("period", { required: true })}
+          >
+            <option value="7day">Últimos 7 dias</option>
+            <option value="1month">Último mês</option>
+            <option value="3month">Últimos 3 meses</option>
+            <option value="6month">Últimos 6 meses</option>
+            <option value="12month">Último ano</option>
+            <option value="overall">Geral</option>
+          </select>
+        </div>
+        <div className="select">
+          <label htmlFor="limit">Tamanho</label>
+          <select
+            aria-label="Selecione o tamanho do grid"
+            {...register("limit", { required: true })}
+          >
+            <option value="3">3x3</option>
+            <option value="4">4x4</option>
+            <option value="5">5x5</option>
+            <option value="6">6x6</option>
+            <option value="7">7x7</option>
+            <option value="8">8x8</option>
+            <option value="9">9x9</option>
+            <option value="10">10x10</option>
+          </select>
+        </div>
+        <div className="select">
+          <label htmlFor="type">Tipo</label>
+          <select
+            aria-label="Selecione o tipo de imagem"
+            {...register("type", { required: true })}
+          >
+            <option value="album">Álbums</option>
+            <option value="artist">Artistas</option>
+          </select>
+        </div>
+      </div>
       <div className="optionals">
         <label htmlFor="showAlbum">Exibir nome do album/artista</label>
         <input type="checkbox" id="showAlbum" {...register("showAlbum")} />
@@ -121,6 +134,7 @@ const UserInput = () => {
           id="showPlays"
           {...register("showPlays")}
         />
+        <button type="submit">Gerar</button>
       </div>
       {userInput && (
         <>
