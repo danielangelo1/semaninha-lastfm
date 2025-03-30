@@ -1,4 +1,4 @@
-import { getArtistImageScraper } from "../services/scraper";
+import { getArtistImage } from "../services/SpotifyService";
 import { AlbumApiResponse, ArtistApiResponse } from "../types/apiResponse";
 import { UserRequest } from "../types/userRequest";
 import { drawTextOnCanvas, processImages } from "./canvasUtils";
@@ -9,7 +9,7 @@ export const createSpotifyImage = async (
 ) => {
   const imgs = await Promise.all(
     data.topartists.artist.map((artist) =>
-      getArtistImageScraper(artist.url).then((image) => image),
+      getArtistImage(artist.name).then((res) => res?.url ?? ""),
     ),
   );
 

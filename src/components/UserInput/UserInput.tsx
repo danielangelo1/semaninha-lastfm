@@ -32,6 +32,8 @@ const UserInput = () => {
     } catch (error) {
       toast.error("Usuário não encontrado");
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
