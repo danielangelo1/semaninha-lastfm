@@ -70,8 +70,6 @@ export const getArtistImage = async (artistName: string): Promise<Image> => {
     .find(
       (artist) => artist.name.toLowerCase() === formatArtistName(artistName),
     );
-  console.log(artistName.toLowerCase());
-  console.log(found, response.data.artists.items[0]);
   const spotifyObject = found || response.data.artists.items[0];
   return spotifyObject.images[0];
 };
@@ -80,8 +78,6 @@ export const getSpotifyIdFromMBID = async (mbid: string): Promise<string> => {
   const response = await musicBrainzApi.get(
     `/artist/${mbid}?fmt=json&inc=url-rels`,
   );
-
-  console.log(response.data);
 
   const spotifyId = response.data.relations.find(
     (relation: { type: string }) => relation.type === "streamingmusic",
