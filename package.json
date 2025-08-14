@@ -7,7 +7,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "lint:fix": "eslint . --fix",
+    "type-check": "tsc --noEmit",
+    "preview": "vite preview",
+    "test": "echo 'No tests specified yet' && exit 0",
+    "test:build": "npm run type-check && npm run build",
+    "ci": "npm run lint && npm run type-check && npm run build"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
