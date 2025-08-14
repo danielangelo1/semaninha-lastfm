@@ -48,16 +48,29 @@ const ImageRenderer = ({
   return (
     <>
       {loading && (
-        <Audio
-          height={80}
-          width={80}
-          color="red"
-          ariaLabel="loading"
-          wrapperClass="loading"
-        />
+        <div 
+          role="status" 
+          aria-live="polite"
+          aria-label="Gerando colagem de álbuns"
+        >
+          <Audio
+            height={80}
+            width={80}
+            color="red"
+            ariaLabel="Carregando colagem de álbuns do Last.fm"
+            wrapperClass="loading"
+          />
+        </div>
       )}
       {!loading && imageSrc && (
-        <img src={imageSrc} alt="Album collage" style={{ maxWidth: "100%" }} />
+        <img 
+          src={imageSrc} 
+          alt={`Colagem de ${userInput.limit}x${userInput.limit} álbuns mais escutados de ${userInput.user} no período de ${userInput.period}`}
+          loading="lazy"
+          decoding="async"
+          role="img"
+          style={{ maxWidth: "100%" }} 
+        />
       )}
     </>
   );

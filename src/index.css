@@ -10,24 +10,91 @@
   box-sizing: border-box;
 }
 
+/* CSS Variables for better theming */
+:root {
+  --primary-color: #1a1a1a;
+  --background-color: #f7f7f7;
+  --text-color: #333333;
+  --border-color: #e0e0e0;
+  --focus-color: #0066cc;
+  --error-color: #d32f2f;
+}
+
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-feature-settings: "cv11", "salt", "ss01", "ss03", "cv01", "cv02", "cv03",
     "cv04", "cv05", "cv06", "cv09", "cv10";
-  font-family: Arial, sans-serif;
+  font-family: "Poppins", Arial, sans-serif;
   margin: 0 auto;
   padding: 20px;
   max-width: 960px;
-  background-color: #f7f7f7;
-  font-family: "Poppins", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
   min-height: 92vh;
   display: flex;
   flex-direction: column;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 5px;
+  }
+}
+
+/* Accessibility improvements */
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--focus-color);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Focus styles */
+*:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: #000000;
+    --focus-color: #ff0000;
+  }
 }
 
 a {
