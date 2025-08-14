@@ -8,7 +8,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
-    setupFiles: "/Users/danielangelo/Desktop/projetos/semaninha-lastfm/tests/setup.ts",
+    setupFiles: ["tests/setup.ts"],
     css: true,
     coverage: {
       provider: "v8",
