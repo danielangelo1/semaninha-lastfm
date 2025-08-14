@@ -4,37 +4,19 @@ import "./UserInput.css";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import Canvas from "../Canvas/Canvas";
-import { AlbumApiResponse, ArtistApiResponse } from "../../types/apiResponse";
 import useLocalStorage from "../../hooks/useLocalStorage";
-import { getTopAlbums, getTopArtists } from "../../services/LastFMService";
+import { useLastFmData } from "../../hooks/useLastFmData";
+import { TIME_PERIODS, CONTENT_TYPES, GRID_SIZES, DEFAULT_VALUES, ERROR_MESSAGES } from "../../constants";
 
 const UserInput = () => {
-  const [albumData, setAlbumData] = useState<AlbumApiResponse | null>(null);
-  const [artistData, setArtistData] = useState<ArtistApiResponse | null>(null);
   const [userInput, setUserInput] = useState<UserRequest | null>(null);
-  const [loading, setLoading] = useState(false);
   const { getLocalStorage, setLocalStorage } = useLocalStorage();
+  const { albumData, artistData, fetchData } = useLastFmData();
 
   const onSubmit: SubmitHandler<UserRequest> = async (data: UserRequest) => {
-    try {
-      setUserInput(data);
-      setLocalStorage(data);
-      setLoading(true);
-      if (data.type === "album") {
-        setArtistData(null);
-        const response = await getTopAlbums(data);
-        setAlbumData(response);
-      } else {
-        setAlbumData(null);
-        const response = await getTopArtists(data);
-        setArtistData(response);
-      }
-    } catch (error) {
-      toast.error("Usuário não encontrado");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    setUserInput(data);
+    setLocalStorage(data);
+    await fetchData(data);
   };
 
   const {
@@ -46,11 +28,11 @@ const UserInput = () => {
   } = useForm<UserRequest>({
     defaultValues: {
       user: getLocalStorage().user || "",
-      period: getLocalStorage().period || "1month",
-      limit: parseInt(getLocalStorage().limit || "5"),
+      period: getLocalStorage().period || DEFAULT_VALUES.PERIOD,
+      limit: parseInt(getLocalStorage().limit || DEFAULT_VALUES.LIMIT.toString()),
       showAlbum: getLocalStorage().showAlbum === "true",
       showPlays: getLocalStorage().showPlays === "false",
-      type: getLocalStorage().type || "album",
+      type: getLocalStorage().type || DEFAULT_VALUES.TYPE,
     },
   });
 
@@ -64,10 +46,10 @@ const UserInput = () => {
 
   useEffect(() => {
     if (errors.user) {
-      toast.error("Usuário é obrigatório");
+      toast.error(ERROR_MESSAGES.USER_REQUIRED);
     }
     if (errors.period) {
-      toast.error("Período é obrigatório");
+      toast.error(ERROR_MESSAGES.PERIOD_REQUIRED);
     }
   }, [errors]);
 
@@ -90,12 +72,11 @@ const UserInput = () => {
             aria-label="Selecione o período"
             {...register("period", { required: true })}
           >
-            <option value="7day">Últimos 7 dias</option>
-            <option value="1month">Último mês</option>
-            <option value="3month">Últimos 3 meses</option>
-            <option value="6month">Últimos 6 meses</option>
-            <option value="12month">Último ano</option>
-            <option value="overall">Geral</option>
+            {TIME_PERIODS.map((period) => (
+              <option key={period.value} value={period.value}>
+                {period.label}
+              </option>
+            ))}
           </select>
         </div>
         <div className="select">
@@ -104,14 +85,11 @@ const UserInput = () => {
             aria-label="Selecione o tamanho do grid"
             {...register("limit", { required: true })}
           >
-            <option value="3">3x3</option>
-            <option value="4">4x4</option>
-            <option value="5">5x5</option>
-            <option value="6">6x6</option>
-            <option value="7">7x7</option>
-            <option value="8">8x8</option>
-            <option value="9">9x9</option>
-            <option value="10">10x10</option>
+            {GRID_SIZES.map((size) => (
+              <option key={size.value} value={size.value}>
+                {size.label}
+              </option>
+            ))}
           </select>
         </div>
         <div className="select">
@@ -120,8 +98,11 @@ const UserInput = () => {
             aria-label="Selecione o tipo de imagem"
             {...register("type", { required: true })}
           >
-            <option value="album">Álbums</option>
-            <option value="artist">Artistas</option>
+            {CONTENT_TYPES.map((type) => (
+              <option key={type.value} value={type.value}>
+                {type.label}
+              </option>
+            ))}
           </select>
         </div>
       </div>
@@ -144,15 +125,11 @@ const UserInput = () => {
             <Canvas
               data={albumData}
               userInput={userInput}
-              loading={loading}
-              loadingHandler={setLoading}
             />
           ) : artistData ? (
             <Canvas
               data={artistData}
               userInput={userInput}
-              loading={loading}
-              loadingHandler={setLoading}
             />
           ) : null}
         </>

@@ -1,5 +1,6 @@
 import { Image, SpotifyArtistResponse } from "../types/spotifyResponse";
 import { musicBrainzApi, spotifyApi } from "./api";
+import { API_CONFIG } from "../constants";
 
 let spotifyToken: string | null = null;
 let tokenExpirationTime: number | null = null;
@@ -37,7 +38,7 @@ const getToken = async () => {
 
   const data = await response.json();
   spotifyToken = data.access_token;
-  tokenExpirationTime = currentTime + data.expires_in * 1000 - 60000;
+  tokenExpirationTime = currentTime + data.expires_in * 1000 - API_CONFIG.SPOTIFY_TOKEN_BUFFER_MS;
   return data.access_token;
 };
 

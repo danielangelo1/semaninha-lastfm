@@ -7,19 +7,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-      rel="stylesheet"
-    />
-    <title>Gerador de Semaninha</title>
+    <!-- Optimized font loading - only essential weights -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"></noscript>
+    <title>Gerador de Semaninha - Colagem Last.fm</title>
     <meta
       name="description"
-      content="Gerador de colagem dos albuns mais escutados na semaninha do LAST FM"
+      content="Crie colagens personalizadas dos seus álbuns e artistas mais escutados no Last.fm. Gerador gratuito de semaninha com diferentes períodos e tamanhos."
     />
     <meta
       name="keywords"
-      content="lastfm, last.fm, collage, semaninha, colagem, gerador, generator, music, musica, album, artista, artist, collage"
+      content="lastfm, last.fm, collage, semaninha, colagem, gerador, generator, music, musica, album, artista, artist, collage, música, weekly, mensal"
     />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Gerador de Semaninha - Colagem Last.fm" />
+    <meta property="og:description" content="Crie colagens personalizadas dos seus álbuns e artistas mais escutados no Last.fm" />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:url" content="https://semaninha-lastfm.vercel.app" />
+    <meta property="og:site_name" content="Gerador de Semaninha" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Gerador de Semaninha - Last.fm" />
+    <meta name="twitter:description" content="Crie colagens dos seus álbuns favoritos do Last.fm" />
+    <meta name="twitter:image" content="/twitter-image.png" />
+
+    <!-- Additional SEO -->
+    <meta name="author" content="Gerador de Semaninha" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://semaninha-lastfm.vercel.app" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Gerador de Semaninha",
+      "description": "Crie colagens personalizadas dos seus álbuns e artistas mais escutados no Last.fm",
+      "url": "https://semaninha-lastfm.vercel.app",
+      "applicationCategory": "MusicApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "BRL"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "Gerador de Semaninha"
+      }
+    }
+    </script>
+    
     <script
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3536268514682786"

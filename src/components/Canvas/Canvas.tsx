@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { UserRequest } from "../../types/userRequest";
 import { Audio } from "react-loader-spinner";
 import "./canvas.css";
@@ -13,20 +13,18 @@ import {
 interface ImageRendererProps {
   data: ArtistApiResponse | AlbumApiResponse;
   userInput: UserRequest;
-  loading: boolean;
-  loadingHandler: (loading: boolean) => void;
 }
 
 const ImageRenderer = ({
   data,
   userInput,
-  loading,
-  loadingHandler,
 }: ImageRendererProps) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    loadingHandler(true);
+    setLoading(true);
+    setImageSrc(null);
 
     const fetchData = async () => {
       try {
@@ -40,29 +38,42 @@ const ImageRenderer = ({
           toast.error(error.message);
         }
       } finally {
-        loadingHandler(false);
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [data]);
+  }, [data, userInput]);
 
   return (
     <>
       {loading && (
-        <Audio
-          height={80}
-          width={80}
-          color="red"
-          ariaLabel="loading"
-          wrapperClass="loading"
-        />
+        <div 
+          role="status" 
+          aria-live="polite"
+          aria-label="Gerando colagem de álbuns"
+        >
+          <Audio
+            height={80}
+            width={80}
+            color="red"
+            ariaLabel="Carregando colagem de álbuns do Last.fm"
+            wrapperClass="loading"
+          />
+        </div>
       )}
       {!loading && imageSrc && (
-        <img src={imageSrc} alt="Album collage" style={{ maxWidth: "100%" }} />
+        <img 
+          src={imageSrc} 
+          alt={`Colagem de ${userInput.limit}x${userInput.limit} álbuns mais escutados de ${userInput.user} no período de ${userInput.period}`}
+          loading="lazy"
+          decoding="async"
+          role="img"
+          style={{ maxWidth: "100%" }} 
+        />
       )}
     </>
   );
 };
 
-export default ImageRenderer;
+export default memo(ImageRenderer);
