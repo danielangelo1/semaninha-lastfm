@@ -36,14 +36,8 @@ jobs:
     - name: Build project
       run: npm run build
       
-    - name: Run tests (if available)
-      run: |
-        if [ -f "package.json" ] && grep -q '"test"' package.json; then
-          npm test
-        else
-          echo "No tests found, skipping test step"
-        fi
-      continue-on-error: true
+    - name: Run tests
+      run: npm run test:run
 
   build-and-deploy:
     needs: test
