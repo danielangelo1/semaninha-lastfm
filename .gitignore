@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 .env
 coverage
+
+# TypeScript build info files
+*.tsbuildinfo
