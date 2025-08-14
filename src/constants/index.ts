@@ -8,7 +8,7 @@ export const CANVAS_CONFIG = {
 
 // Grid Configuration
 export const GRID_CONFIG = {
-  MIN_SIZE: 3,
+  MIN_SIZE: 2,
   MAX_SIZE: 10,
   DEFAULT_SIZE: 5,
 } as const;
