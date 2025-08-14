@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, memo } from "react";
 import { UserRequest } from "../../types/userRequest";
 import { Audio } from "react-loader-spinner";
