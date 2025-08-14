@@ -27,7 +27,7 @@ export const TIME_PERIODS = [
 export const CONTENT_TYPES = [
   { value: 'album', label: 'Álbums' },
   { value: 'artist', label: 'Artistas' },
-  { value: 'track', label: 'Músicas' },
+  // { value: 'track', label: 'Músicas' },
 ] as const;
 
 // Grid Size Options
