@@ -30,3 +30,18 @@ export interface ArtistApiResponse {
     artist: Artist[];
   };
 }
+
+interface Track {
+  artist: Artist;
+  image: Image[];
+  mbid: string;
+  name: string;
+  playcount: string;
+  url: string;
+}
+
+export interface TrackApiResponse {
+  toptracks: {
+    track: Track[];
+  };
+}

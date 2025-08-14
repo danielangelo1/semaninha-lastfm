@@ -1,3 +1,4 @@
+import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { UserRequest } from "../../types/userRequest";
 import "./UserInput.css";
@@ -11,7 +12,7 @@ import { TIME_PERIODS, CONTENT_TYPES, GRID_SIZES, DEFAULT_VALUES, ERROR_MESSAGES
 const UserInput = () => {
   const [userInput, setUserInput] = useState<UserRequest | null>(null);
   const { getLocalStorage, setLocalStorage } = useLocalStorage();
-  const { albumData, artistData, fetchData } = useLastFmData();
+  const { albumData, artistData, trackData, fetchData } = useLastFmData();
 
   const onSubmit: SubmitHandler<UserRequest> = async (data: UserRequest) => {
     setUserInput(data);
@@ -129,6 +130,11 @@ const UserInput = () => {
           ) : artistData ? (
             <Canvas
               data={artistData}
+              userInput={userInput}
+            />
+          ) : trackData ? (
+            <Canvas
+              data={trackData}
               userInput={userInput}
             />
           ) : null}

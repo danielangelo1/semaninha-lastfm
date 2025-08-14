@@ -1,16 +1,17 @@
-import { useEffect, useState, memo } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { UserRequest } from "../../types/userRequest";
 import { Audio } from "react-loader-spinner";
 import "./canvas.css";
 import { toast } from "react-toastify";
-import { AlbumApiResponse, ArtistApiResponse } from "../../types/apiResponse";
+import { AlbumApiResponse, ArtistApiResponse, TrackApiResponse } from "../../types/apiResponse";
 import {
   createAlbumImage,
   createSpotifyImage,
+  createTrackImage,
 } from "../../utils/generateCanvas";
 
 interface ImageRendererProps {
-  data: ArtistApiResponse | AlbumApiResponse;
+  data: ArtistApiResponse | AlbumApiResponse | TrackApiResponse;
   userInput: UserRequest;
 }
 
@@ -29,8 +30,10 @@ const ImageRenderer = ({
       try {
         if ("topalbums" in data) {
           setImageSrc(await createAlbumImage(data, userInput));
-        } else {
+        } else if ("topartists" in data) {
           setImageSrc(await createSpotifyImage(data, userInput));
+        } else if ("toptracks" in data) {
+          setImageSrc(await createTrackImage(data, userInput));
         }
       } catch (error) {
         if (error instanceof Error) {
