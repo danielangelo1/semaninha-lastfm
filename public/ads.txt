@@ -1,5 +1,6 @@
 OWNERDOMAIN=semaninha.net
 MANAGERDOMAIN=themoneytizer.com
+google.com, pub-3536268514682786, DIRECT, f08c47fec0942fa0
 themoneytizer.com,122756,DIRECT
 smartadserver.com, 1097, DIRECT, 060d053dcf45cbf3
 pubmatic.com, 156439, RESELLER, 5d62403b186f2ace
