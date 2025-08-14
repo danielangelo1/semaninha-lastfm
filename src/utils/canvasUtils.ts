@@ -1,17 +1,18 @@
 import { UserRequest } from "../types/userRequest";
 import { setFont } from "./FontHandler";
+import { CANVAS_CONFIG, ERROR_MESSAGES } from "../constants";
 
 export const createCanvasContext = () => {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
 
   if (!context) {
-    throw new Error("Canvas context not found");
+    throw new Error(ERROR_MESSAGES.CANVAS_CONTEXT_ERROR);
   }
 
-  canvas.width = 1300;
-  canvas.height = 1300;
-  context.fillStyle = "#f5f5f5";
+  canvas.width = CANVAS_CONFIG.WIDTH;
+  canvas.height = CANVAS_CONFIG.HEIGHT;
+  context.fillStyle = CANVAS_CONFIG.BACKGROUND_COLOR;
   context.fillRect(0, 0, canvas.width, canvas.height);
 
   return { canvas, context };
@@ -69,9 +70,7 @@ export const processImages = async <T>(
   ) => void,
 ) => {
   if (dataItems.length < userInput.limit * userInput.limit) {
-    throw new Error(
-      "Você não tem dados suficientes para gerar a imagem :(, tente diminuir o tamanho",
-    );
+    throw new Error(ERROR_MESSAGES.INSUFFICIENT_DATA);
   }
 
   const { canvas, context } = createCanvasContext();

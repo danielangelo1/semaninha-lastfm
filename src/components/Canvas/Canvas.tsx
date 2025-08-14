@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { UserRequest } from "../../types/userRequest";
 import { Audio } from "react-loader-spinner";
 import "./canvas.css";
@@ -13,20 +13,18 @@ import {
 interface ImageRendererProps {
   data: ArtistApiResponse | AlbumApiResponse;
   userInput: UserRequest;
-  loading: boolean;
-  loadingHandler: (loading: boolean) => void;
 }
 
 const ImageRenderer = ({
   data,
   userInput,
-  loading,
-  loadingHandler,
 }: ImageRendererProps) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    loadingHandler(true);
+    setLoading(true);
+    setImageSrc(null);
 
     const fetchData = async () => {
       try {
@@ -40,12 +38,12 @@ const ImageRenderer = ({
           toast.error(error.message);
         }
       } finally {
-        loadingHandler(false);
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [data]);
+  }, [data, userInput]);
 
   return (
     <>
@@ -65,4 +63,4 @@ const ImageRenderer = ({
   );
 };
 
-export default ImageRenderer;
+export default memo(ImageRenderer);
