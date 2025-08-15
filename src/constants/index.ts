@@ -8,7 +8,7 @@ export const CANVAS_CONFIG = {
 
 // Grid Configuration
 export const GRID_CONFIG = {
-  MIN_SIZE: 3,
+  MIN_SIZE: 2,
   MAX_SIZE: 10,
   DEFAULT_SIZE: 5,
 } as const;
@@ -27,6 +27,7 @@ export const TIME_PERIODS = [
 export const CONTENT_TYPES = [
   { value: 'album', label: 'Álbums' },
   { value: 'artist', label: 'Artistas' },
+  // { value: 'track', label: 'Músicas' },
 ] as const;
 
 // Grid Size Options

@@ -1,5 +1,6 @@
 export default function fontHandler(gridSize: number) {
   const fontSizes: { [key: number]: number[] } = {
+    2: [24, 32, 38],
     3: [18, 18, 20],
     4: [16, 14, 14],
     5: [14, 12, 12],

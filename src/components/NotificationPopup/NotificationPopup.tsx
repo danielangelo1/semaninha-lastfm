@@ -44,7 +44,7 @@ const NotificationPopup = ({ onClose }: NotificationPopupProps) => {
 
         <div className="notification-header">
           <Heart size={20} className="notification-icon" />
-          <h3 id="notification-title">Obrigado por usar o Semaninha! 🎵</h3>
+          <h2 id="notification-title">Obrigado por usar o Semaninha! 🎵</h2>
         </div>
 
         <p id="notification-description">

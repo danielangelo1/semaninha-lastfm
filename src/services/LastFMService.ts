@@ -1,4 +1,4 @@
-import { AlbumApiResponse, ArtistApiResponse } from "../types/apiResponse";
+import { AlbumApiResponse, ArtistApiResponse, TrackApiResponse } from "../types/apiResponse";
 import { UserRequest } from "../types/userRequest";
 import { api } from "./api";
 import { ERROR_MESSAGES } from "../constants";
@@ -70,17 +70,28 @@ export const getTopArtists = async (
   }
 };
 
-export const getTopTracks = async (data: UserRequest) => {
-  const gridSize = data.limit * data.limit;
+export const getTopTracks = async (
+  data: UserRequest,
+): Promise<TrackApiResponse> => {
+  try {
+    const gridSize = data.limit * data.limit;
+    const url = buildLastFmUrl(ENDPOINTS.TOP_TRACKS, data.user, data.period, gridSize);
+    const response = await api.get(url);
 
-  const response = await api.get(
-    `?method=user.gettoptracks&user=${data.user}&period=${
-      data.period
-    }&limit=${gridSize}&api_key=${import.meta.env.VITE_API_KEY}&format=json`,
-  );
-
-  if (response.status !== 200) {
-    throw new Error("Erro na requisição");
+    if (response.status !== 200) {
+      throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
+    }
+    
+    // Check if the response contains an error from Last.fm API
+    if (response.data.error) {
+      throw new Error(response.data.message || ERROR_MESSAGES.USER_NOT_FOUND);
+    }
+    
+    return response.data as TrackApiResponse;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
   }
-  return response.data;
 };
