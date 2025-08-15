@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useLastFmData } from '../useLastFmData';
 import { UserRequest } from '../../types/userRequest';
+import { TrackApiResponse } from '../../types/apiResponse';
 
 // Mock the LastFM service
 vi.mock('../../services/LastFMService', () => ({
@@ -126,8 +127,8 @@ describe('useLastFmData Hook', () => {
     const { getTopTracks } = await import('../../services/LastFMService');
     
     // Create a promise that we can control
-    let resolvePromise: (value: any) => void;
-    const controlledPromise = new Promise((resolve) => {
+    let resolvePromise: (value: TrackApiResponse) => void;
+    const controlledPromise = new Promise<TrackApiResponse>((resolve) => {
       resolvePromise = resolve;
     });
     

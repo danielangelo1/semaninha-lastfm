@@ -1,4 +1,4 @@
-import React from "react";
+
 import { SubmitHandler, useForm } from "react-hook-form";
 import { UserRequest } from "../../types/userRequest";
 import "./UserInput.css";

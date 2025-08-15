@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from "react";
+import  { useEffect, useState, memo } from "react";
 import { UserRequest } from "../../types/userRequest";
 import { Audio } from "react-loader-spinner";
 import "./canvas.css";
