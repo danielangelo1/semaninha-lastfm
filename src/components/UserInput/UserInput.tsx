@@ -17,8 +17,7 @@ import {
 const UserInput = () => {
   const [userInput, setUserInput] = useState<UserRequest | null>(null);
   const { getLocalStorage, setLocalStorage } = useLocalStorage();
-  const { albumData, artistData, trackData, loading, fetchData } =
-    useLastFmData();
+  const { albumData, artistData, trackData, fetchData } = useLastFmData();
 
   const defaultFormValues = useMemo(() => {
     const storage = getLocalStorage();
