@@ -1,24 +1,45 @@
-
 import { SubmitHandler, useForm } from "react-hook-form";
 import { UserRequest } from "../../types/userRequest";
 import "./UserInput.css";
 import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, memo, useCallback } from "react";
 import Canvas from "../Canvas/Canvas";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { useLastFmData } from "../../hooks/useLastFmData";
-import { TIME_PERIODS, CONTENT_TYPES, GRID_SIZES, DEFAULT_VALUES, ERROR_MESSAGES } from "../../constants";
+import {
+  TIME_PERIODS,
+  CONTENT_TYPES,
+  GRID_SIZES,
+  DEFAULT_VALUES,
+  ERROR_MESSAGES,
+} from "../../constants";
 
 const UserInput = () => {
   const [userInput, setUserInput] = useState<UserRequest | null>(null);
   const { getLocalStorage, setLocalStorage } = useLocalStorage();
-  const { albumData, artistData, trackData, fetchData } = useLastFmData();
+  const { albumData, artistData, trackData, loading, fetchData } =
+    useLastFmData();
 
-  const onSubmit: SubmitHandler<UserRequest> = async (data: UserRequest) => {
-    setUserInput(data);
-    setLocalStorage(data);
-    await fetchData(data);
-  };
+  const defaultFormValues = useMemo(() => {
+    const storage = getLocalStorage();
+    return {
+      user: storage.user || "",
+      period: storage.period || DEFAULT_VALUES.PERIOD,
+      limit: parseInt(storage.limit || DEFAULT_VALUES.LIMIT.toString()),
+      showAlbum: storage.showAlbum === "true",
+      showPlays: storage.showPlays === "false",
+      type: storage.type || DEFAULT_VALUES.TYPE,
+    };
+  }, [getLocalStorage]);
+
+  const onSubmit: SubmitHandler<UserRequest> = useCallback(
+    async (data: UserRequest) => {
+      setUserInput(data);
+      setLocalStorage(data);
+      await fetchData(data);
+    },
+    [fetchData, setLocalStorage],
+  );
 
   const {
     register,
@@ -27,14 +48,8 @@ const UserInput = () => {
     setValue,
     formState: { errors },
   } = useForm<UserRequest>({
-    defaultValues: {
-      user: getLocalStorage().user || "",
-      period: getLocalStorage().period || DEFAULT_VALUES.PERIOD,
-      limit: parseInt(getLocalStorage().limit || DEFAULT_VALUES.LIMIT.toString()),
-      showAlbum: getLocalStorage().showAlbum === "true",
-      showPlays: getLocalStorage().showPlays === "false",
-      type: getLocalStorage().type || DEFAULT_VALUES.TYPE,
-    },
+    defaultValues: defaultFormValues,
+    mode: "onBlur",
   });
 
   const showAlbum = watch("showAlbum");
@@ -53,6 +68,13 @@ const UserInput = () => {
       toast.error(ERROR_MESSAGES.PERIOD_REQUIRED);
     }
   }, [errors]);
+
+  const currentData = useMemo(() => {
+    if (albumData) return albumData;
+    if (artistData) return artistData;
+    if (trackData) return trackData;
+    return null;
+  }, [albumData, artistData, trackData]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -120,28 +142,11 @@ const UserInput = () => {
         />
         <button type="submit">Gerar</button>
       </div>
-      {userInput && (
-        <>
-          {albumData ? (
-            <Canvas
-              data={albumData}
-              userInput={userInput}
-            />
-          ) : artistData ? (
-            <Canvas
-              data={artistData}
-              userInput={userInput}
-            />
-          ) : trackData ? (
-            <Canvas
-              data={trackData}
-              userInput={userInput}
-            />
-          ) : null}
-        </>
+      {userInput && currentData && (
+        <Canvas data={currentData} userInput={userInput} />
       )}
     </form>
   );
 };
 
-export default UserInput;
+export default memo(UserInput);
