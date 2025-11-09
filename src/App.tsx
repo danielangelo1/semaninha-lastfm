@@ -6,15 +6,15 @@ import { useNotification } from "./hooks/useNotification";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const { shouldShowNotification, dismissNotification } = useNotification();
+  // const { shouldShowNotification, dismissNotification } = useNotification();
 
   return (
     <ErrorBoundary>
       <Router />
       <ToastContainer autoClose={2000} />
-      {shouldShowNotification && (
+      {/* {shouldShowNotification && (
         <NotificationPopup onClose={dismissNotification} />
-      )}
+      )} */}
     </ErrorBoundary>
   );
 }
