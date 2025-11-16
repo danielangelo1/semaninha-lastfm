@@ -25,7 +25,7 @@ export const TIME_PERIODS = [
 
 // Content Types
 export const CONTENT_TYPES = [
-  { value: 'album', label: 'Álbums' },
+  { value: 'album', label: 'Álbuns' },
   { value: 'artist', label: 'Artistas' },
   // { value: 'track', label: 'Músicas' },
 ] as const;
