@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { WrappedData } from '../types/wrapped';
 import { UserRequest } from '../types/userRequest';
-import { getTopAlbums, getTopArtists, getTopTracks, getTopTags } from '../services/LastFMService';
+import { getTopAlbums, getTopArtists, getTopTracks, getTopTags, getTotalScrobblesForPeriod } from '../services/LastFMService';
 import { WRAPPED_API_CONFIG, WRAPPED_MESSAGES } from '../constants/wrapped';
 import { ERROR_MESSAGES } from '../constants';
 
@@ -34,19 +34,19 @@ export const useWrappedData = (): UseWrappedDataReturn => {
         period: WRAPPED_API_CONFIG.PERIOD,
         limit: WRAPPED_API_CONFIG.LIMIT,
         showAlbum: false,
-        showPlays: false,
-        type: 'album',
       };
 
-      const [artistsResponse, tracksResponse, albumsResponse, tagsResponse] = await Promise.all([
+      const [artistsResponse, tracksResponse, albumsResponse, tagsResponse, totalScrobbles] = await Promise.all([
         getTopArtists(userRequest),
         getTopTracks(userRequest),
         getTopAlbums(userRequest),
         getTopTags(userRequest),
+        getTotalScrobblesForPeriod(username.trim(), WRAPPED_API_CONFIG.PERIOD),
       ]);
 
       const wrapped: WrappedData = {
         username: username.trim(),
+        totalScrobbles,
         artists: artistsResponse.topartists.artist.slice(0, WRAPPED_API_CONFIG.TOP_COUNT),
         tracks: tracksResponse.toptracks.track.slice(0, WRAPPED_API_CONFIG.TOP_COUNT),
         albums: albumsResponse.topalbums.album.slice(0, WRAPPED_API_CONFIG.TOP_COUNT),

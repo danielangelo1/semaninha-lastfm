@@ -56,3 +56,13 @@ export interface TagApiResponse {
     tag: Tag[];
   };
 }
+
+export interface UserInfoApiResponse {
+  user: {
+    name: string;
+    playcount: string;
+    registered: {
+      unixtime: string;
+    };
+  };
+}

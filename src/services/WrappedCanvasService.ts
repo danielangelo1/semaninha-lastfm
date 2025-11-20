@@ -254,8 +254,6 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   ctx.textAlign = 'center';
   ctx.fillText(data.username, WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
   currentY += 60;
-
-  const totalScrobbles = data.artists.reduce((sum, artist) => sum + parseInt(artist.playcount), 0);
   
   ctx.font = `600 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = '#e07b7b';
@@ -264,7 +262,7 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   
   ctx.font = `900 80px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
-  ctx.fillText(totalScrobbles.toLocaleString(), WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY + 60);
+  ctx.fillText(data.totalScrobbles.toLocaleString(), WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY + 60);
   currentY += 200;
 
   ctx.textAlign = 'left';
