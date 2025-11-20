@@ -155,51 +155,87 @@ export const getUserInfo = async (username: string): Promise<UserInfoApiResponse
  * Calculate total scrobbles for a period by fetching paginated tracks
  * This gives a more accurate count than just summing top tracks
  */
+/**
+ * Helper function to retry API calls with exponential backoff
+ */
+const retryWithBackoff = async <T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3
+): Promise<T> => {
+  let lastError: any;
+  
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error: any) {
+      lastError = error;
+      const isLastAttempt = attempt === maxRetries - 1;
+      
+      if (isLastAttempt) {
+        throw error;
+      }
+      
+      // Wait 1 second between retries
+      const waitTime = 1000;
+      console.log(`Tentativa ${attempt + 1}/${maxRetries} falhou, tentando novamente...`);
+      await new Promise(resolve => setTimeout(resolve, waitTime));
+    }
+  }
+  
+  throw lastError;
+};
+
+/**
+ * Calculate total scrobbles for a period by fetching paginated tracks
+ * Tries 3 times and throws error if fails
+ */
 export const getTotalScrobblesForPeriod = async (
   username: string,
   period: string
 ): Promise<number> => {
-  try {
-    const apiKey = import.meta.env.VITE_API_KEY;
-    if (!apiKey) {
-      throw new Error("Last.fm API key is not configured");
-    }
+  const apiKey = import.meta.env.VITE_API_KEY;
+  if (!apiKey) {
+    throw new Error("Last.fm API key is not configured");
+  }
 
-    let totalScrobbles = 0;
-    let page = 1;
-    const limit = 1000; // Max allowed by API
-    const maxPages = 3; // Fetch up to 3000 tracks to get accurate total
+  let totalScrobbles = 0;
+  const limit = 1000;
+  const maxPages = 3;
 
-    for (let i = 0; i < maxPages; i++) {
+  for (let page = 1; page <= maxPages; page++) {
+    const fetchPage = async () => {
       const url = `${ENDPOINTS.TOP_TRACKS}user=${encodeURIComponent(username)}&period=${period}&limit=${limit}&page=${page}&api_key=${apiKey}&format=json`;
       const response = await api.get(url);
 
-      if (response.status !== 200 || response.data.error) {
-        break; 
+      if (response.status !== 200) {
+        throw new Error(`Erro HTTP ${response.status}`);
       }
 
-      const tracks = response.data.toptracks?.track || [];
-      if (tracks.length === 0) {
-        break;
+      if (response.data.error) {
+        throw new Error(response.data.message || 'Erro na API do Last.fm');
       }
 
-      const pageTotal = tracks.reduce((sum: number, track: { playcount: string }) => {
-        return sum + parseInt(track.playcount);
-      }, 0);
+      return response.data;
+    };
 
-      totalScrobbles += pageTotal;
-
-      if (tracks.length < limit) {
-        break;
-      }
-
-      page++;
+    // Try 3 times with 1s delay between attempts
+    const data = await retryWithBackoff(fetchPage, 3);
+    
+    const tracks = data.toptracks?.track || [];
+    if (tracks.length === 0) {
+      break;
     }
 
-    return totalScrobbles;
-  } catch (error) {
-    console.error('Error calculating total scrobbles:', error);
-    // Return 0 if error, don't break the whole Wrapped
-    return 0;
+    const pageTotal = tracks.reduce((sum: number, track: { playcount: string }) => {
+      return sum + parseInt(track.playcount || '0');
+    }, 0);
+
+    totalScrobbles += pageTotal;
+
+    if (tracks.length < limit) {
+      break;
+    }
   }
+
+  return totalScrobbles;
 };
