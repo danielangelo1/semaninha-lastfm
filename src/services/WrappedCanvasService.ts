@@ -190,20 +190,20 @@ const drawCompactList = (
   y: number,
   color: string
 ): void => {
-  ctx.font = `700 32px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.font = `700 34px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = color;
   ctx.fillText(title, x, y);
   
   let currentY = y + 50;  
   
   items.forEach((item) => {
-    ctx.font = `600 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+    ctx.font = `600 32px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
     ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
     const truncated = truncateText(ctx, item.name, 420);
     ctx.fillText(truncated, x, currentY);
     
     if (item.detail) {
-      ctx.font = `400 20px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+      ctx.font = `400 24px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
       ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
       const truncatedDetail = truncateText(ctx, item.detail, 420);
       ctx.fillText(truncatedDetail, x, currentY + 28);
@@ -249,18 +249,18 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
 
   currentY += 20;
 
-  ctx.font = `700 64px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.font = `700 72px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
   ctx.textAlign = 'center';
   ctx.fillText(data.username, WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
   currentY += 60;
   
-  ctx.font = `600 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.font = `600 32px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = '#e07b7b';
   ctx.fillText('SCROBBLES', WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
   currentY += 20;
   
-  ctx.font = `900 80px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.font = `900 84px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
   ctx.fillText(data.totalScrobbles.toLocaleString(), WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY + 60);
   currentY += 200;
@@ -300,11 +300,11 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   drawCompactList(ctx, 'TAGS MAIS OUVIDAS', tagItems, rightX, listsY + 320, '#e07b7b');
 
   ctx.textAlign = 'center';
-  ctx.font = `900 64px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.font = `900 72px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
   ctx.fillText('2025', WRAPPED_CANVAS_CONFIG.WIDTH / 2, WRAPPED_CANVAS_CONFIG.HEIGHT - 80);
 
-  ctx.font = `600 20px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.font = `600 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
   ctx.fillText('semaninha.net', WRAPPED_CANVAS_CONFIG.WIDTH / 2, WRAPPED_CANVAS_CONFIG.HEIGHT - 40);
 
