@@ -285,7 +285,7 @@ const drawSectionImages = async (
     );
 
     let currentX = startX;
-    loadedImages.forEach((result, index) => {
+    loadedImages.forEach((result) => {
       if (result.status === 'fulfilled') {
         const img = result.value;
         
@@ -367,8 +367,6 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
       return '';
     }
   });
-
-  const albumImageUrls = data.albums.slice(0, 3).map(album => album.image[2]?.['#text'] || '').filter(url => url);
 
   const [artistImages] = await Promise.all([
     Promise.all(artistImagePromises),
