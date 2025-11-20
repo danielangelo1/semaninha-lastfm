@@ -241,7 +241,7 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   const artistImages = await Promise.all(artistImagePromises);
   const validArtistImages = artistImages.filter(url => url);
 
-  let currentY = 90;
+  let currentY = 110;
 
   if (validArtistImages.length > 0) {
     currentY = await drawHighlightedArtistImages(ctx, validArtistImages, currentY);
@@ -263,7 +263,53 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   ctx.font = `900 84px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
   ctx.fillText(data.totalScrobbles.toLocaleString(), WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY + 60);
-  currentY += 200;
+  currentY += 120;
+
+  // Draw stats circles section
+  ctx.font = `700 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.fillStyle = '#e07b7b';
+  ctx.textAlign = 'center';
+  
+  const circleY = currentY + 80;
+  const circleRadius = 65;
+  const circleSpacing = 280;
+  const startX = WRAPPED_CANVAS_CONFIG.WIDTH / 2 - circleSpacing;
+  
+  const stats = [
+    { value: data.stats.totalArtists, label: 'Artistas' },
+    { value: data.stats.totalAlbums, label: 'Álbuns' },
+    { value: data.stats.totalTracks, label: 'Músicas' }
+  ];
+  
+  stats.forEach((stat, index) => {
+    const x = startX + index * circleSpacing;
+    
+    const gradient = ctx.createRadialGradient(x, circleY, 0, x, circleY, circleRadius);
+    gradient.addColorStop(0, 'rgba(224, 123, 123, 0.3)');
+    gradient.addColorStop(1, 'rgba(224, 123, 123, 0.1)');
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(x, circleY, circleRadius, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.fillStyle = 'rgba(224, 123, 123, 0.2)';
+    ctx.beginPath();
+    ctx.arc(x, circleY, circleRadius - 10, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.font = `900 34px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+    ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(stat.value.toLocaleString(), x, circleY);
+    
+    ctx.font = `600 24px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+    ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
+    ctx.textBaseline = 'top';
+    ctx.fillText(stat.label, x, circleY + circleRadius + 15);
+  });
+
+  currentY = circleY + circleRadius + 80;
 
   ctx.textAlign = 'left';
 
@@ -292,21 +338,14 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   
   drawCompactList(ctx, 'ÁLBUNS MAIS OUVIDOS', albumItems, rightX, listsY, '#e07b7b');
 
-  const tagItems = data.tags.map(tag => ({
-    name: tag.name,
-    detail: undefined,
-  }));
-  
-  drawCompactList(ctx, 'TAGS MAIS OUVIDAS', tagItems, rightX, listsY + 320, '#e07b7b');
-
   ctx.textAlign = 'center';
   ctx.font = `900 72px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
-  ctx.fillText('2025', WRAPPED_CANVAS_CONFIG.WIDTH / 2, WRAPPED_CANVAS_CONFIG.HEIGHT - 80);
+  ctx.fillText('2025', WRAPPED_CANVAS_CONFIG.WIDTH / 2, WRAPPED_CANVAS_CONFIG.HEIGHT - 140);
 
   ctx.font = `600 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
-  ctx.fillText('semaninha.net', WRAPPED_CANVAS_CONFIG.WIDTH / 2, WRAPPED_CANVAS_CONFIG.HEIGHT - 40);
+  ctx.fillText('semaninha.net', WRAPPED_CANVAS_CONFIG.WIDTH / 2, WRAPPED_CANVAS_CONFIG.HEIGHT - 80);
 
   return canvas;
 };
