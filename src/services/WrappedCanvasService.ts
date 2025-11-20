@@ -4,7 +4,6 @@ import {
   WRAPPED_COLORS,
   WRAPPED_TYPOGRAPHY,
   WRAPPED_LAYOUT,
-  WRAPPED_SECTIONS,
 } from '../constants/wrapped';
 import { getArtistImage } from './SpotifyService';
 
@@ -74,23 +73,19 @@ const truncateText = (
  * Draw the background with gradient and decorative elements
  */
 const drawBackground = (ctx: CanvasRenderingContext2D): void => {
-  const { WIDTH, HEIGHT, BACKGROUND_GRADIENT, DECORATIVE_CIRCLES } = WRAPPED_CANVAS_CONFIG;
+  const { WIDTH, HEIGHT } = WRAPPED_CANVAS_CONFIG;
 
-  // Create gradient background
-  const gradient = ctx.createLinearGradient(0, 0, 0, HEIGHT);
-  gradient.addColorStop(0, BACKGROUND_GRADIENT.START);
-  gradient.addColorStop(0.5, BACKGROUND_GRADIENT.MIDDLE);
-  gradient.addColorStop(1, BACKGROUND_GRADIENT.END);
-  ctx.fillStyle = gradient;
+  // Create solid dark background
+  ctx.fillStyle = '#3d2626';
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-  // Add decorative circles
-  DECORATIVE_CIRCLES.forEach(circle => {
-    ctx.fillStyle = circle.color;
-    ctx.beginPath();
-    ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
-    ctx.fill();
-  });
+  // Add subtle texture/noise effect
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+  for (let i = 0; i < 1000; i++) {
+    const x = Math.random() * WIDTH;
+    const y = Math.random() * HEIGHT;
+    ctx.fillRect(x, y, 1, 1);
+  }
 };
 
 /**
@@ -267,63 +262,86 @@ const drawSection = (
 };
 
 /**
- * Draw circular images at the top of a section
+ * Draw stacked/overlapping images at the top (like cards)
  */
-const drawSectionImages = async (
+const drawStackedImages = async (
   ctx: CanvasRenderingContext2D,
   images: string[],
   startY: number
 ): Promise<number> => {
-  const imageSize = 80;
-  const spacing = 20;
-  const totalWidth = images.length * imageSize + (images.length - 1) * spacing;
-  const startX = (WRAPPED_CANVAS_CONFIG.WIDTH - totalWidth) / 2;
+  const imageWidth = 280;
+  const imageHeight = 200;
+  const borderRadius = 20;
+  const overlap = 60;
+  const centerX = WRAPPED_CANVAS_CONFIG.WIDTH / 2;
   
   try {
     const loadedImages = await Promise.allSettled(
       images.map(src => loadImage(src))
     );
 
-    let currentX = startX;
-    loadedImages.forEach((result) => {
-      if (result.status === 'fulfilled') {
-        const img = result.value;
-        
-        // Save context
-        ctx.save();
-        
-        // Create circular clipping path
-        ctx.beginPath();
-        ctx.arc(currentX + imageSize / 2, startY + imageSize / 2, imageSize / 2, 0, Math.PI * 2);
-        ctx.closePath();
-        ctx.clip();
-        
-        // Draw image
-        ctx.drawImage(img, currentX, startY, imageSize, imageSize);
-        
-        // Restore context
-        ctx.restore();
-        
-        // Draw border
-        ctx.strokeStyle = WRAPPED_COLORS.TEXT_SECONDARY;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(currentX + imageSize / 2, startY + imageSize / 2, imageSize / 2, 0, Math.PI * 2);
-        ctx.stroke();
-      }
+    const validImages = loadedImages
+      .filter(result => result.status === 'fulfilled')
+      .map(result => (result as PromiseFulfilledResult<HTMLImageElement>).value);
+
+    if (validImages.length === 0) return startY;
+
+    const totalWidth = imageWidth + (validImages.length - 1) * overlap;
+    let currentX = centerX - totalWidth / 2;
+
+    validImages.forEach((img, index) => {
+      ctx.save();
       
-      currentX += imageSize + spacing;
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+      ctx.shadowBlur = 20;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 10;
+      
+      const x = currentX;
+      const y = startY + index * 10;
+      
+      ctx.beginPath();
+      ctx.moveTo(x + borderRadius, y);
+      ctx.lineTo(x + imageWidth - borderRadius, y);
+      ctx.quadraticCurveTo(x + imageWidth, y, x + imageWidth, y + borderRadius);
+      ctx.lineTo(x + imageWidth, y + imageHeight - borderRadius);
+      ctx.quadraticCurveTo(x + imageWidth, y + imageHeight, x + imageWidth - borderRadius, y + imageHeight);
+      ctx.lineTo(x + borderRadius, y + imageHeight);
+      ctx.quadraticCurveTo(x, y + imageHeight, x, y + imageHeight - borderRadius);
+      ctx.lineTo(x, y + borderRadius);
+      ctx.quadraticCurveTo(x, y, x + borderRadius, y);
+      ctx.closePath();
+      ctx.clip();
+      
+      ctx.drawImage(img, x, y, imageWidth, imageHeight);
+      
+      ctx.restore();
+      
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(x + borderRadius, y);
+      ctx.lineTo(x + imageWidth - borderRadius, y);
+      ctx.quadraticCurveTo(x + imageWidth, y, x + imageWidth, y + borderRadius);
+      ctx.lineTo(x + imageWidth, y + imageHeight - borderRadius);
+      ctx.quadraticCurveTo(x + imageWidth, y + imageHeight, x + imageWidth - borderRadius, y + imageHeight);
+      ctx.lineTo(x + borderRadius, y + imageHeight);
+      ctx.quadraticCurveTo(x, y + imageHeight, x, y + imageHeight - borderRadius);
+      ctx.lineTo(x, y + borderRadius);
+      ctx.quadraticCurveTo(x, y, x + borderRadius, y);
+      ctx.closePath();
+      ctx.stroke();
+      
+      currentX += overlap;
     });
+    
+    return startY + imageHeight + 60;
   } catch (error) {
-    console.warn('Error loading section images:', error);
+    console.warn('Error loading stacked images:', error);
+    return startY;
   }
-  
-  return startY + imageSize + 40; // Return new Y position after images
 };
 
-/**
- * Draw the footer
- */
 const drawFooter = (ctx: CanvasRenderingContext2D): void => {
   const { WIDTH, HEIGHT } = WRAPPED_CANVAS_CONFIG;
   const footerY = HEIGHT - 100;
@@ -340,7 +358,43 @@ const drawFooter = (ctx: CanvasRenderingContext2D): void => {
 };
 
 /**
- * Generate the Wrapped canvas
+ * Draw a compact list in a column
+ */
+const drawCompactList = (
+  ctx: CanvasRenderingContext2D,
+  title: string,
+  items: Array<{ name: string; detail?: string }>,
+  x: number,
+  y: number,
+  color: string
+): void => {
+  ctx.font = `700 24px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.fillStyle = color;
+  ctx.fillText(title, x, y);
+  
+  let currentY = y + 40;  
+  
+  items.forEach((item, index) => {
+    ctx.font = `600 20px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+    ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
+    const truncated = truncateText(ctx, item.name, 400);
+    ctx.fillText(truncated, x, currentY);
+    
+    // Detail (if exists)
+    if (item.detail) {
+      ctx.font = `400 16px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+      ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
+      const truncatedDetail = truncateText(ctx, item.detail, 400);
+      ctx.fillText(truncatedDetail, x, currentY + 22);
+      currentY += 50;
+    } else {
+      currentY += 35;
+    }
+  });
+};
+
+/**
+ * Generate the Wrapped canvas with compact layout
  */
 export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanvasElement> => {
   const canvas = document.createElement('canvas');
@@ -352,13 +406,8 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
     throw new Error('Canvas context not found');
   }
 
-  // Draw background
   drawBackground(ctx);
 
-  // Draw header
-  let currentY = drawHeader(ctx, data.username);
-
-  // Fetch images for artists and albums
   const artistImagePromises = data.artists.slice(0, 3).map(async (artist) => {
     try {
       const img = await getArtistImage(artist.name);
@@ -368,66 +417,70 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
     }
   });
 
-  const [artistImages] = await Promise.all([
-    Promise.all(artistImagePromises),
-  ]);
-
-  // Draw Artists Section
-  const artistItems = data.artists.map(artist => ({
-    name: artist.name,
-    detail: `${artist.playcount} plays`,
-  }));
-
-  // Draw section title
-  drawTextWithShadow(
-    ctx,
-    WRAPPED_SECTIONS[0].title,
-    WRAPPED_LAYOUT.PADDING.HORIZONTAL,
-    currentY,
-    WRAPPED_TYPOGRAPHY.SECTION.TITLE_SIZE,
-    WRAPPED_COLORS.TEXT_PRIMARY,
-    WRAPPED_TYPOGRAPHY.SECTION.TITLE_WEIGHT
-  );
-  currentY += 60;
-
-  // Draw artist images
+  const artistImages = await Promise.all(artistImagePromises);
   const validArtistImages = artistImages.filter(url => url);
+
+  let currentY = 80;
+
   if (validArtistImages.length > 0) {
-    currentY = await drawSectionImages(ctx, validArtistImages, currentY);
+    currentY = await drawStackedImages(ctx, validArtistImages, currentY);
   }
 
-  // Draw artist items
-  artistItems.forEach((item, index) => {
-    currentY = drawItem(
-      ctx,
-      index + 1,
-      item.name,
-      item.detail,
-      WRAPPED_LAYOUT.PADDING.HORIZONTAL,
-      currentY,
-      WRAPPED_SECTIONS[0].color
-    );
-  });
-  currentY += WRAPPED_LAYOUT.SPACING.BETWEEN_SECTIONS;
+  ctx.font = `700 48px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
+  ctx.textAlign = 'center';
+  ctx.fillText(data.username, WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
+  currentY += 80;
 
-  // Draw Tracks Section
+  const totalScrobbles = data.artists.reduce((sum, artist) => sum + parseInt(artist.playcount), 0);
+  
+  ctx.font = `400 20px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.fillStyle = '#e07b7b';
+  ctx.fillText('SCROBBLES', WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
+  currentY += 10;
+  
+  ctx.font = `900 72px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
+  ctx.fillText(totalScrobbles.toLocaleString(), WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY + 60);
+  currentY += 120;
+
+  ctx.textAlign = 'left';
+
+  const leftX = 80;
+  const rightX = 560;
+  const listsY = currentY;
+
+  // Left column: Artists and Tracks
+  const artistItems = data.artists.map(artist => ({
+    name: artist.name,
+    detail: undefined,
+  }));
+  
+  drawCompactList(ctx, 'ARTISTAS MAIS OUVIDOS', artistItems, leftX, listsY, '#e07b7b');
+  
   const trackItems = data.tracks.map(track => ({
     name: track.name,
-    detail: track.artist.name,
+    detail: undefined,
   }));
+  
+  drawCompactList(ctx, 'MÚSICAS MAIS OUVIDAS', trackItems, leftX, listsY + 350, '#e07b7b');
 
-  currentY = drawSection(ctx, WRAPPED_SECTIONS[1].title, trackItems, currentY, WRAPPED_SECTIONS[1].color);
-
-  // Draw Albums Section
+  // Right column: Albums
   const albumItems = data.albums.map(album => ({
     name: album.name,
-    detail: album.artist.name,
+    detail: undefined,
   }));
+  
+  drawCompactList(ctx, 'ÁLBUNS MAIS OUVIDOS', albumItems, rightX, listsY, '#e07b7b');
 
-  currentY = drawSection(ctx, WRAPPED_SECTIONS[2].title, albumItems, currentY, WRAPPED_SECTIONS[2].color);
+  ctx.textAlign = 'center';
+  ctx.font = `900 64px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
+  ctx.fillText('2025', WRAPPED_CANVAS_CONFIG.WIDTH / 2, WRAPPED_CANVAS_CONFIG.HEIGHT - 80);
 
-  // Draw footer
-  drawFooter(ctx);
+  ctx.font = `600 20px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
+  ctx.fillText('semaninha.net', WRAPPED_CANVAS_CONFIG.WIDTH / 2, WRAPPED_CANVAS_CONFIG.HEIGHT - 40);
 
   return canvas;
 };
