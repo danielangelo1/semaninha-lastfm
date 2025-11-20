@@ -31,14 +31,14 @@ const Wrapped = () => {
     }
   }, [wrappedData]);
 
-  const handleDownload = useCallback(() => {
-    if (!imageUrl) return;
+  // const handleDownload = useCallback(() => {
+  //   if (!imageUrl) return;
 
-    const link = document.createElement("a");
-    link.download = `${username}-wrapped-2025.png`;
-    link.href = imageUrl;
-    link.click();
-  }, [imageUrl, username]);
+  //   const link = document.createElement("a");
+  //   link.download = `${username}-wrapped-2025.png`;
+  //   link.href = imageUrl;
+  //   link.click();
+  // }, [imageUrl, username]);
 
   return (
     <main className="wrapped">
@@ -62,7 +62,6 @@ const Wrapped = () => {
         <WrappedResult
           imageUrl={imageUrl}
           username={username}
-          onDownload={handleDownload}
         />
       )}
 

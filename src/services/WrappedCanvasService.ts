@@ -3,7 +3,6 @@ import {
   WRAPPED_CANVAS_CONFIG,
   WRAPPED_COLORS,
   WRAPPED_TYPOGRAPHY,
-  WRAPPED_LAYOUT,
 } from '../constants/wrapped';
 import { getArtistImage } from './SpotifyService';
 
@@ -21,30 +20,6 @@ const loadImage = (src: string): Promise<HTMLImageElement> => {
     };
     img.src = src;
   });
-};
-
-/**
- * Draw text with shadow effect
- */
-const drawTextWithShadow = (
-  ctx: CanvasRenderingContext2D,
-  text: string,
-  x: number,
-  y: number,
-  fontSize: number,
-  color: string,
-  fontWeight: string = '600',
-  maxWidth?: number
-): void => {
-  ctx.font = `${fontWeight} ${fontSize}px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
-  
-  // Shadow
-  ctx.fillStyle = WRAPPED_COLORS.TEXT_SHADOW;
-  ctx.fillText(text, x + 2, y + 2, maxWidth);
-  
-  // Main text
-  ctx.fillStyle = color;
-  ctx.fillText(text, x, y, maxWidth);
 };
 
 /**
@@ -86,89 +61,6 @@ const drawBackground = (ctx: CanvasRenderingContext2D): void => {
     const y = Math.random() * HEIGHT;
     ctx.fillRect(x, y, 1, 1);
   }
-};
-
-
-/**
- * Draw a rank circle with centered text
- */
-const drawRankCircle = (
-  ctx: CanvasRenderingContext2D,
-  rank: number,
-  x: number,
-  y: number,
-  color: string
-): void => {
-  const { RADIUS, OFFSET_Y } = WRAPPED_LAYOUT.RANK_CIRCLE;
-  const centerY = y + OFFSET_Y;
-
-  // Draw circle
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.arc(x, centerY, RADIUS, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Draw rank number centered
-  const rankText = `#${rank}`;
-  ctx.font = `${WRAPPED_TYPOGRAPHY.ITEM.RANK_WEIGHT} ${WRAPPED_TYPOGRAPHY.ITEM.RANK_SIZE}px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
-  const textMetrics = ctx.measureText(rankText);
-  const textX = x - textMetrics.width / 2;
-  const textY = centerY + WRAPPED_TYPOGRAPHY.ITEM.RANK_SIZE / 3; // Adjust for vertical centering
-  
-  // Shadow
-  ctx.fillStyle = WRAPPED_COLORS.TEXT_SHADOW;
-  ctx.fillText(rankText, textX + 1, textY + 1);
-  
-  // Main text
-  ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
-  ctx.fillText(rankText, textX, textY);
-};
-
-/**
- * Draw a single item (artist, track, or album)
- */
-const drawItem = (
-  ctx: CanvasRenderingContext2D,
-  rank: number,
-  name: string,
-  detail: string,
-  x: number,
-  y: number,
-  color: string
-): number => {
-  const { RANK_CIRCLE, TEXT_OFFSET, MAX_TEXT_WIDTH } = WRAPPED_LAYOUT;
-
-  // Draw rank circle
-  drawRankCircle(ctx, rank, x + RANK_CIRCLE.OFFSET_X, y, color);
-
-  // Draw item name
-  const textX = x + TEXT_OFFSET.FROM_RANK;
-  const truncatedName = truncateText(ctx, name, MAX_TEXT_WIDTH);
-  drawTextWithShadow(
-    ctx,
-    truncatedName,
-    textX,
-    y,
-    WRAPPED_TYPOGRAPHY.ITEM.NAME_SIZE,
-    WRAPPED_COLORS.TEXT_PRIMARY,
-    WRAPPED_TYPOGRAPHY.ITEM.NAME_WEIGHT,
-    MAX_TEXT_WIDTH
-  );
-
-  // Draw detail (artist name or play count)
-  const truncatedDetail = truncateText(ctx, detail, MAX_TEXT_WIDTH);
-  drawTextWithShadow(
-    ctx,
-    truncatedDetail,
-    textX,
-    y + TEXT_OFFSET.DETAIL_Y,
-    WRAPPED_TYPOGRAPHY.ITEM.DETAIL_SIZE,
-    WRAPPED_COLORS.TEXT_TERTIARY,
-    WRAPPED_TYPOGRAPHY.ITEM.DETAIL_WEIGHT,
-    MAX_TEXT_WIDTH
-  );
-
-  return y + WRAPPED_LAYOUT.SPACING.ITEM;
 };
 
 /**
