@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LayoutDefault from "../layouts/LayoutDefault";
 import Home from "../pages/Home/Home";
 import Privacy from "../pages/Privacy/Privacy";
+import Wrapped from "../pages/Wrapped/Wrapped";
 
 const Router = () => {
   return (
@@ -10,6 +11,7 @@ const Router = () => {
         <Route element={<LayoutDefault />}>
           <Route path="/" element={<Home />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/wrapped" element={<Wrapped />} />
           <Route path="*" element={<Home />} />
         </Route>
       </Routes>
