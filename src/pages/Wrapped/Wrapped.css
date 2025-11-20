@@ -30,14 +30,37 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .wrapped {
-    padding: 1rem;
+    padding: 0.75rem 0.5rem;
+  }
+
+  .wrapped-header {
+    margin-bottom: 0.5rem;
+    h1 {
+      display: none;
+    }
   }
 
   .wrapped-header h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
   }
 
   .wrapped-header p {
-    font-size: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrapped {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .wrapped-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .wrapped-header p {
+    font-size: 0.85rem;
   }
 }
