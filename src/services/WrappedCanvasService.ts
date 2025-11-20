@@ -241,11 +241,13 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   const artistImages = await Promise.all(artistImagePromises);
   const validArtistImages = artistImages.filter(url => url);
 
-  let currentY = 80;
+  let currentY = 90;
 
   if (validArtistImages.length > 0) {
     currentY = await drawHighlightedArtistImages(ctx, validArtistImages, currentY);
   }
+
+  currentY += 20;
 
   ctx.font = `700 64px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
@@ -291,6 +293,13 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   }));
   
   drawCompactList(ctx, 'ÁLBUNS MAIS OUVIDOS', albumItems, rightX, listsY, '#e07b7b');
+
+  const tagItems = data.tags.map(tag => ({
+    name: tag.name,
+    detail: undefined,
+  }));
+  
+  drawCompactList(ctx, 'TAGS MAIS OUVIDAS', tagItems, rightX, listsY + 320, '#e07b7b');
 
   ctx.textAlign = 'center';
   ctx.font = `900 64px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;

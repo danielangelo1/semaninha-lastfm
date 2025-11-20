@@ -17,7 +17,6 @@ const Wrapped = () => {
     await fetchWrappedData(username);
   }, [username, fetchWrappedData]);
 
-  // Generate canvas when wrapped data is available
   useMemo(() => {
     if (wrappedData) {
       generateWrappedCanvas(wrappedData)

@@ -8,6 +8,7 @@ export interface WrappedData {
     playcount: string; 
     image: Array<{ "#text": string }> 
   }>;
+  tags: Array<{ name: string; count: string; url: string }>;
 }
 
 export interface WrappedRequest {
