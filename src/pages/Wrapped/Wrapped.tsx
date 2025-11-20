@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useEffect } from "react";
 import "./Wrapped.css";
 import { useWrappedData } from "../../hooks/useWrappedData";
 import { generateWrappedCanvas } from "../../services/WrappedCanvasService";
@@ -17,7 +17,7 @@ const Wrapped = () => {
     await fetchWrappedData(username);
   }, [username, fetchWrappedData]);
 
-  useMemo(() => {
+  useEffect(() => {
     if (wrappedData) {
       generateWrappedCanvas(wrappedData)
         .then((canvas) => {
