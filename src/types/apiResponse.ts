@@ -45,3 +45,14 @@ export interface TrackApiResponse {
     track: Track[];
   };
 }
+
+interface Tag {
+  name: string;
+  count: string;
+  url: string;  
+}
+export interface TagApiResponse {
+  toptags: {
+    tag: Tag[];
+  };
+}
