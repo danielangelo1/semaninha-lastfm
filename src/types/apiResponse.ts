@@ -22,12 +22,18 @@ interface Album {
 export interface AlbumApiResponse {
   topalbums: {
     album: Album[];
+    '@attr'?: {
+      total: string;
+    };
   };
 }
 
 export interface ArtistApiResponse {
   topartists: {
     artist: Artist[];
+    '@attr'?: {
+      total: string;
+    };
   };
 }
 
@@ -43,6 +49,9 @@ interface Track {
 export interface TrackApiResponse {
   toptracks: {
     track: Track[];
+    '@attr'?: {
+      total: string;
+    };
   };
 }
 
