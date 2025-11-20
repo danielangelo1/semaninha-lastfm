@@ -88,53 +88,6 @@ const drawBackground = (ctx: CanvasRenderingContext2D): void => {
   }
 };
 
-/**
- * Draw the header section
- */
-const drawHeader = (ctx: CanvasRenderingContext2D, username: string): number => {
-  const { HORIZONTAL, VERTICAL } = WRAPPED_LAYOUT.PADDING;
-  const { HEADER } = WRAPPED_LAYOUT.SPACING;
-  let currentY = VERTICAL;
-
-  // Title
-  drawTextWithShadow(
-    ctx,
-    'SEU WRAPPED',
-    HORIZONTAL,
-    currentY,
-    WRAPPED_TYPOGRAPHY.HEADER.TITLE_SIZE,
-    WRAPPED_COLORS.TEXT_PRIMARY,
-    WRAPPED_TYPOGRAPHY.HEADER.TITLE_WEIGHT
-  );
-
-  currentY += HEADER;
-
-  // Year
-  drawTextWithShadow(
-    ctx,
-    '2025',
-    HORIZONTAL,
-    currentY,
-    WRAPPED_TYPOGRAPHY.HEADER.YEAR_SIZE,
-    WRAPPED_COLORS.PRIMARY,
-    WRAPPED_TYPOGRAPHY.HEADER.YEAR_WEIGHT
-  );
-
-  currentY += HEADER + 20;
-
-  // Username
-  drawTextWithShadow(
-    ctx,
-    `@${username}`,
-    HORIZONTAL,
-    currentY,
-    WRAPPED_TYPOGRAPHY.HEADER.USERNAME_SIZE,
-    WRAPPED_COLORS.TEXT_SECONDARY,
-    WRAPPED_TYPOGRAPHY.HEADER.USERNAME_WEIGHT
-  );
-
-  return currentY + WRAPPED_LAYOUT.SPACING.SECTION;
-};
 
 /**
  * Draw a rank circle with centered text
@@ -219,49 +172,6 @@ const drawItem = (
 };
 
 /**
- * Draw a section (artists, tracks, or albums)
- */
-const drawSection = (
-  ctx: CanvasRenderingContext2D,
-  title: string,
-  items: Array<{ name: string; detail: string }>,
-  startY: number,
-  color: string
-): number => {
-  const { HORIZONTAL } = WRAPPED_LAYOUT.PADDING;
-  const { SECTION, BETWEEN_SECTIONS } = WRAPPED_LAYOUT.SPACING;
-  let currentY = startY;
-
-  // Section title
-  drawTextWithShadow(
-    ctx,
-    title,
-    HORIZONTAL,
-    currentY,
-    WRAPPED_TYPOGRAPHY.SECTION.TITLE_SIZE,
-    WRAPPED_COLORS.TEXT_PRIMARY,
-    WRAPPED_TYPOGRAPHY.SECTION.TITLE_WEIGHT
-  );
-
-  currentY += SECTION;
-
-  // Draw items
-  items.forEach((item, index) => {
-    currentY = drawItem(
-      ctx,
-      index + 1,
-      item.name,
-      item.detail,
-      HORIZONTAL,
-      currentY,
-      color
-    );
-  });
-
-  return currentY + BETWEEN_SECTIONS;
-};
-
-/**
  * Draw stacked/overlapping images at the top (like cards)
  */
 const drawStackedImages = async (
@@ -342,21 +252,6 @@ const drawStackedImages = async (
   }
 };
 
-const drawFooter = (ctx: CanvasRenderingContext2D): void => {
-  const { WIDTH, HEIGHT } = WRAPPED_CANVAS_CONFIG;
-  const footerY = HEIGHT - 100;
-
-  drawTextWithShadow(
-    ctx,
-    'semaninha.net',
-    WIDTH / 2 - 250,
-    footerY,
-    WRAPPED_TYPOGRAPHY.FOOTER.SIZE,
-    WRAPPED_COLORS.FOOTER,
-    WRAPPED_TYPOGRAPHY.FOOTER.WEIGHT
-  );
-};
-
 /**
  * Draw a compact list in a column
  */
@@ -374,7 +269,7 @@ const drawCompactList = (
   
   let currentY = y + 40;  
   
-  items.forEach((item, index) => {
+  items.forEach((item) => {
     ctx.font = `600 20px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
     ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
     const truncated = truncateText(ctx, item.name, 400);
