@@ -46,8 +46,6 @@ const Wrapped = () => {
         <h1>🎵 Semaninha Wrapped</h1>
         <p>
           Descubra seus artistas, músicas e álbuns mais ouvidos do ano!
-          <br />
-          Gere uma imagem no estilo story do Instagram com seu top 5 de cada categoria.
         </p>
       </div>
 

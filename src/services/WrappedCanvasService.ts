@@ -50,31 +50,51 @@ const truncateText = (
 const drawBackground = (ctx: CanvasRenderingContext2D): void => {
   const { WIDTH, HEIGHT } = WRAPPED_CANVAS_CONFIG;
 
-  // Create solid dark background
-  ctx.fillStyle = '#3d2626';
+  // Create gradient background
+  const gradient = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
+  gradient.addColorStop(0, '#2d1b1b');
+  gradient.addColorStop(0.3, '#3d2626');
+  gradient.addColorStop(0.6, '#4a2c2c');
+  gradient.addColorStop(1, '#2d1b1b');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+  // Add decorative circles with gradient
+  const circle1 = ctx.createRadialGradient(200, 300, 0, 200, 300, 400);
+  circle1.addColorStop(0, 'rgba(195, 0, 13, 0.15)');
+  circle1.addColorStop(1, 'rgba(195, 0, 13, 0)');
+  ctx.fillStyle = circle1;
+  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+  const circle2 = ctx.createRadialGradient(WIDTH - 200, HEIGHT - 400, 0, WIDTH - 200, HEIGHT - 400, 500);
+  circle2.addColorStop(0, 'rgba(255, 107, 107, 0.12)');
+  circle2.addColorStop(1, 'rgba(255, 107, 107, 0)');
+  ctx.fillStyle = circle2;
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
   // Add subtle texture/noise effect
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-  for (let i = 0; i < 1000; i++) {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+  for (let i = 0; i < 1500; i++) {
     const x = Math.random() * WIDTH;
     const y = Math.random() * HEIGHT;
-    ctx.fillRect(x, y, 1, 1);
+    const size = Math.random() * 2;
+    ctx.fillRect(x, y, size, size);
   }
 };
 
 /**
- * Draw stacked/overlapping images at the top (like cards)
+ * Draw artist images with #1 in center (large) and others behind (smaller)
  */
-const drawStackedImages = async (
+const drawHighlightedArtistImages = async (
   ctx: CanvasRenderingContext2D,
   images: string[],
   startY: number
 ): Promise<number> => {
-  const imageWidth = 280;
-  const imageHeight = 200;
+  const centerImageWidth = 320;
+  const centerImageHeight = 320;
+  const sideImageWidth = 240;
+  const sideImageHeight = 240;
   const borderRadius = 20;
-  const overlap = 60;
   const centerX = WRAPPED_CANVAS_CONFIG.WIDTH / 2;
   
   try {
@@ -88,58 +108,73 @@ const drawStackedImages = async (
 
     if (validImages.length === 0) return startY;
 
-    const totalWidth = imageWidth + (validImages.length - 1) * overlap;
-    let currentX = centerX - totalWidth / 2;
-
-    validImages.forEach((img, index) => {
+    const drawRoundedImage = (img: HTMLImageElement, x: number, y: number, width: number, height: number, opacity: number = 1) => {
       ctx.save();
       
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-      ctx.shadowBlur = 20;
+      ctx.globalAlpha = opacity;
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+      ctx.shadowBlur = 25;
       ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 10;
-      
-      const x = currentX;
-      const y = startY + index * 10;
+      ctx.shadowOffsetY = 15;
       
       ctx.beginPath();
       ctx.moveTo(x + borderRadius, y);
-      ctx.lineTo(x + imageWidth - borderRadius, y);
-      ctx.quadraticCurveTo(x + imageWidth, y, x + imageWidth, y + borderRadius);
-      ctx.lineTo(x + imageWidth, y + imageHeight - borderRadius);
-      ctx.quadraticCurveTo(x + imageWidth, y + imageHeight, x + imageWidth - borderRadius, y + imageHeight);
-      ctx.lineTo(x + borderRadius, y + imageHeight);
-      ctx.quadraticCurveTo(x, y + imageHeight, x, y + imageHeight - borderRadius);
+      ctx.lineTo(x + width - borderRadius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + borderRadius);
+      ctx.lineTo(x + width, y + height - borderRadius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - borderRadius, y + height);
+      ctx.lineTo(x + borderRadius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - borderRadius);
       ctx.lineTo(x, y + borderRadius);
       ctx.quadraticCurveTo(x, y, x + borderRadius, y);
       ctx.closePath();
       ctx.clip();
       
-      ctx.drawImage(img, x, y, imageWidth, imageHeight);
+      ctx.drawImage(img, x, y, width, height);
       
       ctx.restore();
       
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-      ctx.lineWidth = 3;
+      ctx.globalAlpha = opacity;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+      ctx.lineWidth = 4;
       ctx.beginPath();
       ctx.moveTo(x + borderRadius, y);
-      ctx.lineTo(x + imageWidth - borderRadius, y);
-      ctx.quadraticCurveTo(x + imageWidth, y, x + imageWidth, y + borderRadius);
-      ctx.lineTo(x + imageWidth, y + imageHeight - borderRadius);
-      ctx.quadraticCurveTo(x + imageWidth, y + imageHeight, x + imageWidth - borderRadius, y + imageHeight);
-      ctx.lineTo(x + borderRadius, y + imageHeight);
-      ctx.quadraticCurveTo(x, y + imageHeight, x, y + imageHeight - borderRadius);
+      ctx.lineTo(x + width - borderRadius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + borderRadius);
+      ctx.lineTo(x + width, y + height - borderRadius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - borderRadius, y + height);
+      ctx.lineTo(x + borderRadius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - borderRadius);
       ctx.lineTo(x, y + borderRadius);
       ctx.quadraticCurveTo(x, y, x + borderRadius, y);
       ctx.closePath();
       ctx.stroke();
-      
-      currentX += overlap;
-    });
+      ctx.globalAlpha = 1;
+    };
+
+    // Draw side images first (behind)
+    if (validImages.length > 1) {
+      // Left image (#2)
+      const leftX = centerX - centerImageWidth / 2 - sideImageWidth + 40;
+      const leftY = startY + 40;
+      drawRoundedImage(validImages[1], leftX, leftY, sideImageWidth, sideImageHeight, 0.7);
+    }
+
+    if (validImages.length > 2) {
+      // Right image (#3)
+      const rightX = centerX + centerImageWidth / 2 - 40;
+      const rightY = startY + 40;
+      drawRoundedImage(validImages[2], rightX, rightY, sideImageWidth, sideImageHeight, 0.7);
+    }
+
+    // Draw center image (#1) on top
+    const centerImgX = centerX - centerImageWidth / 2;
+    const centerImgY = startY;
+    drawRoundedImage(validImages[0], centerImgX, centerImgY, centerImageWidth, centerImageHeight, 1);
     
-    return startY + imageHeight + 60;
+    return startY + centerImageHeight + 40;
   } catch (error) {
-    console.warn('Error loading stacked images:', error);
+    console.warn('Error loading artist images:', error);
     return startY;
   }
 };
@@ -155,27 +190,26 @@ const drawCompactList = (
   y: number,
   color: string
 ): void => {
-  ctx.font = `700 24px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.font = `700 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = color;
   ctx.fillText(title, x, y);
   
-  let currentY = y + 40;  
+  let currentY = y + 50;  
   
   items.forEach((item) => {
-    ctx.font = `600 20px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+    ctx.font = `600 26px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
     ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
-    const truncated = truncateText(ctx, item.name, 400);
+    const truncated = truncateText(ctx, item.name, 420);
     ctx.fillText(truncated, x, currentY);
     
-    // Detail (if exists)
     if (item.detail) {
-      ctx.font = `400 16px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+      ctx.font = `400 20px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
       ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
-      const truncatedDetail = truncateText(ctx, item.detail, 400);
-      ctx.fillText(truncatedDetail, x, currentY + 22);
-      currentY += 50;
+      const truncatedDetail = truncateText(ctx, item.detail, 420);
+      ctx.fillText(truncatedDetail, x, currentY + 28);
+      currentY += 60;
     } else {
-      currentY += 35;
+      currentY += 45;
     }
   });
 };
@@ -207,29 +241,29 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   const artistImages = await Promise.all(artistImagePromises);
   const validArtistImages = artistImages.filter(url => url);
 
-  let currentY = 80;
+  let currentY = 60;
 
   if (validArtistImages.length > 0) {
-    currentY = await drawStackedImages(ctx, validArtistImages, currentY);
+    currentY = await drawHighlightedArtistImages(ctx, validArtistImages, currentY);
   }
 
-  ctx.font = `700 48px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.font = `700 56px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
   ctx.textAlign = 'center';
   ctx.fillText(data.username, WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
-  currentY += 80;
+  currentY += 60;
 
   const totalScrobbles = data.artists.reduce((sum, artist) => sum + parseInt(artist.playcount), 0);
   
-  ctx.font = `400 20px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.font = `600 24px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = '#e07b7b';
   ctx.fillText('SCROBBLES', WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
-  currentY += 10;
+  currentY += 15;
   
-  ctx.font = `900 72px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.font = `900 80px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
   ctx.fillText(totalScrobbles.toLocaleString(), WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY + 60);
-  currentY += 120;
+  currentY += 100;
 
   ctx.textAlign = 'left';
 
@@ -237,7 +271,6 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   const rightX = 560;
   const listsY = currentY;
 
-  // Left column: Artists and Tracks
   const artistItems = data.artists.map(artist => ({
     name: artist.name,
     detail: undefined,
@@ -250,9 +283,8 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
     detail: undefined,
   }));
   
-  drawCompactList(ctx, 'MÚSICAS MAIS OUVIDAS', trackItems, leftX, listsY + 350, '#e07b7b');
+  drawCompactList(ctx, 'MÚSICAS MAIS OUVIDAS', trackItems, leftX, listsY + 320, '#e07b7b');
 
-  // Right column: Albums
   const albumItems = data.albums.map(album => ({
     name: album.name,
     detail: undefined,
