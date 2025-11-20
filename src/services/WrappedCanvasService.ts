@@ -90,10 +90,10 @@ const drawHighlightedArtistImages = async (
   images: string[],
   startY: number
 ): Promise<number> => {
-  const centerImageWidth = 320;
-  const centerImageHeight = 320;
-  const sideImageWidth = 240;
-  const sideImageHeight = 240;
+  const centerImageWidth = 400;
+  const centerImageHeight = 400;
+  const sideImageWidth = 320;
+  const sideImageHeight = 320;
   const borderRadius = 20;
   const centerX = WRAPPED_CANVAS_CONFIG.WIDTH / 2;
   
@@ -190,14 +190,14 @@ const drawCompactList = (
   y: number,
   color: string
 ): void => {
-  ctx.font = `700 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.font = `700 32px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = color;
   ctx.fillText(title, x, y);
   
   let currentY = y + 50;  
   
   items.forEach((item) => {
-    ctx.font = `600 26px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+    ctx.font = `600 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
     ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
     const truncated = truncateText(ctx, item.name, 420);
     ctx.fillText(truncated, x, currentY);
@@ -241,13 +241,13 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   const artistImages = await Promise.all(artistImagePromises);
   const validArtistImages = artistImages.filter(url => url);
 
-  let currentY = 60;
+  let currentY = 80;
 
   if (validArtistImages.length > 0) {
     currentY = await drawHighlightedArtistImages(ctx, validArtistImages, currentY);
   }
 
-  ctx.font = `700 56px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.font = `700 64px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
   ctx.textAlign = 'center';
   ctx.fillText(data.username, WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
@@ -255,15 +255,15 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
 
   const totalScrobbles = data.artists.reduce((sum, artist) => sum + parseInt(artist.playcount), 0);
   
-  ctx.font = `600 24px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
+  ctx.font = `600 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = '#e07b7b';
   ctx.fillText('SCROBBLES', WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
-  currentY += 15;
+  currentY += 20;
   
   ctx.font = `900 80px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
   ctx.fillText(totalScrobbles.toLocaleString(), WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY + 60);
-  currentY += 100;
+  currentY += 200;
 
   ctx.textAlign = 'left';
 
