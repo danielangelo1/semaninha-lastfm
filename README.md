@@ -24,7 +24,7 @@ O Site **Semaninha** é um gerador de colagem dos albuns mais escutados pelo usu
 
 https://user-images.githubusercontent.com/84107769/233744746-765e816b-ef9b-4f62-969d-b49b7f5276e9.mp4
 
-Você pode acessar o projeto clicando [aqui](https://semaninha-lastfm.vercel.app/).
+Você pode acessar o projeto clicando [aqui](https://www.semaninha.net/).
 
 ---
 

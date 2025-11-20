@@ -1,0 +1,26 @@
+import { memo } from 'react';
+import './WrappedResult.css';
+
+interface WrappedResultProps {
+  imageUrl: string;
+  username: string;
+}
+
+const WrappedResult = ({ imageUrl, username }: WrappedResultProps) => {
+  return (
+    <div className="wrapped-result">
+      <div className="wrapped-image-container">
+        <img src={imageUrl} alt={`Wrapped 2025 - ${username}`} />
+      </div>
+      {/* <button 
+        className="download-button" 
+        onClick={onDownload}
+        aria-label="Baixar imagem do Wrapped"
+      >
+         Baixar Imagem
+      </button> */}
+    </div>
+  );
+};
+
+export default memo(WrappedResult);
