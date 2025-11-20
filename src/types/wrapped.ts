@@ -9,7 +9,11 @@ export interface WrappedData {
     playcount: string; 
     image: Array<{ "#text": string }> 
   }>;
-  tags: Array<{ name: string; count: string; url: string }>;
+  stats: {
+    totalArtists: number;
+    totalAlbums: number;
+    totalTracks: number;
+  };
 }
 
 export interface WrappedRequest {

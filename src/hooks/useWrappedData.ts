@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { WrappedData } from '../types/wrapped';
 import { UserRequest } from '../types/userRequest';
-import { getTopAlbums, getTopArtists, getTopTracks, getTopTags, getTotalScrobblesForPeriod } from '../services/LastFMService';
+import { getTopAlbums, getTopArtists, getTopTracks, getTotalScrobblesForPeriod } from '../services/LastFMService';
 import { WRAPPED_API_CONFIG, WRAPPED_MESSAGES } from '../constants/wrapped';
 import { ERROR_MESSAGES } from '../constants';
 
@@ -36,11 +36,10 @@ export const useWrappedData = (): UseWrappedDataReturn => {
         showAlbum: false,
       };
 
-      const [artistsResponse, tracksResponse, albumsResponse, tagsResponse, totalScrobbles] = await Promise.all([
+      const [artistsResponse, tracksResponse, albumsResponse, totalScrobbles] = await Promise.all([
         getTopArtists(userRequest),
         getTopTracks(userRequest),
         getTopAlbums(userRequest),
-        getTopTags(userRequest),
         getTotalScrobblesForPeriod(username.trim(), WRAPPED_API_CONFIG.PERIOD),
       ]);
 
@@ -50,7 +49,11 @@ export const useWrappedData = (): UseWrappedDataReturn => {
         artists: artistsResponse.topartists.artist.slice(0, WRAPPED_API_CONFIG.TOP_COUNT),
         tracks: tracksResponse.toptracks.track.slice(0, WRAPPED_API_CONFIG.TOP_COUNT),
         albums: albumsResponse.topalbums.album.slice(0, WRAPPED_API_CONFIG.TOP_COUNT),
-        tags: tagsResponse.toptags.tag.slice(0, WRAPPED_API_CONFIG.TOP_COUNT),
+        stats: {
+          totalArtists: artistsResponse.topartists['@attr']?.total ? parseInt(artistsResponse.topartists['@attr'].total) : artistsResponse.topartists.artist.length,
+          totalAlbums: albumsResponse.topalbums['@attr']?.total ? parseInt(albumsResponse.topalbums['@attr'].total) : albumsResponse.topalbums.album.length,
+          totalTracks: tracksResponse.toptracks['@attr']?.total ? parseInt(tracksResponse.toptracks['@attr'].total) : tracksResponse.toptracks.track.length,
+        },
       };
 
       setWrappedData(wrapped);
