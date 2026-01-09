@@ -25,7 +25,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",
     "react-loader-spinner": "^6.1.6",
-    "react-router-dom": "^6.27.0",
+    "react-router-dom": "^6.30.3",
     "react-toastify": "^10.0.6"
   },
   "devDependencies": {
