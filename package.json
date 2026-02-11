@@ -20,7 +20,7 @@
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
     "@sentry/react": "^10.38.0",
-    "axios": "^1.8.2",
+    "axios": "^1.13.5",
     "cheerio": "^1.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
