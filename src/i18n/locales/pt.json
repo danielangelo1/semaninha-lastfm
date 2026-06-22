@@ -1,0 +1,64 @@
+{
+  "home": {
+    "description": "Mostre que você tem o melhor gosto músical do mundo! Use o semaninha para gerar colagens com os seus albuns mais ouvidos do Last.fm"
+  },
+  "form": {
+    "username": "Nome do usuário",
+    "usernamePlaceholder": "Digite o nome do LastFM",
+    "period": "Período",
+    "periodSelect": "Selecione o período",
+    "size": "Tamanho",
+    "sizeSelect": "Selecione o tamanho do grid",
+    "type": "Tipo",
+    "typeSelect": "Selecione o tipo de imagem",
+    "showAlbumName": "Exibir nome do album/artista",
+    "showPlayCount": "Exibir quantidade de plays",
+    "generate": "Gerar"
+  },
+  "periods": {
+    "7day": "Últimos 7 dias",
+    "1month": "Último mês",
+    "3month": "Últimos 3 meses",
+    "6month": "Últimos 6 meses",
+    "12month": "Último ano",
+    "overall": "Geral"
+  },
+  "types": {
+    "album": "Álbuns",
+    "artist": "Artistas",
+    "track": "Músicas"
+  },
+  "errors": {
+    "userNotFound": "Usuário não encontrado",
+    "insufficientData": "Você não tem dados suficientes para gerar a imagem :(, tente diminuir o tamanho",
+    "apiError": "Erro na requisição",
+    "userRequired": "Usuário é obrigatório",
+    "periodRequired": "Período é obrigatório"
+  },
+  "errorBoundary": {
+    "title": "Oops! Algo deu errado",
+    "message": "Ocorreu um erro inesperado. Tente recarregar a página ou entre em contato conosco se o problema persistir.",
+    "details": "Detalhes técnicos",
+    "retry": "Tentar Novamente"
+  },
+  "canvas": {
+    "loading": "Gerando colagem de álbuns",
+    "loadingAria": "Carregando colagem de álbuns do Last.fm",
+    "altText": "Colagem de {{size}}x{{size}} álbuns mais escutados de {{user}} no período de {{period}}"
+  },
+  "footer": {
+    "developedBy": "Desenvolvido por",
+    "privacy": "Política de Privacidade"
+  },
+  "privacy": {
+    "title": "Política de Privacidade - Semaninha",
+    "intro": "Seus dados são coletados apenas para a geração da colagem e não são armazenados em nenhum servidor. O site utiliza a API do Last.FM para obter os dados do usuário e os albuns mais ouvidos.",
+    "dataCollected": "Os dados coletados são:",
+    "dataUsername": "Nome do usuário",
+    "dataPeriod": "Período de tempo",
+    "dataSize": "Tamanho da colagem",
+    "dataDisplay": "Se o nome do album/artista e a quantidade de plays devem ser exibidos",
+    "noSharing": "Os dados coletados não são compartilhados com terceiros.",
+    "contact": "Para mais informações, entre em contato pelo email:"
+  }
+}

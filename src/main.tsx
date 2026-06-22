@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import "./index.css";
 import "./assets/FiraSans-Italic.ttf";
+import "./i18n";
 import { initSentry } from "./config/sentry.config";
 import { initWebVitals } from "./config/webVitals";
 

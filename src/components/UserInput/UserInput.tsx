@@ -1,4 +1,5 @@
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { UserRequest } from "../../types/userRequest";
 import "./UserInput.css";
 import { toast } from "react-toastify";
@@ -15,6 +16,7 @@ import {
 } from "../../constants";
 
 const UserInput = () => {
+  const { t } = useTranslation();
   const [userInput, setUserInput] = useState<UserRequest | null>(null);
   const { getLocalStorage, setLocalStorage } = useLocalStorage();
   const { albumData, artistData, trackData, fetchData } = useLastFmData();
@@ -78,33 +80,33 @@ const UserInput = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="user-input">
-        <label htmlFor="user">Nome do usuário</label>
+        <label htmlFor="user">{t("form.username")}</label>
         <input
           id="user"
           type="text"
-          placeholder="Digite o nome do LastFM"
+          placeholder={t("form.usernamePlaceholder")}
           {...register("user", { required: true })}
         />
       </div>
       <div className="select-options">
         <div className="select">
-          <label htmlFor="period">Período</label>
+          <label htmlFor="period">{t("form.period")}</label>
           <select
             id="period"
-            aria-label="Selecione o período"
+            aria-label={t("form.periodSelect")}
             {...register("period", { required: true })}
           >
             {TIME_PERIODS.map((period) => (
               <option key={period.value} value={period.value}>
-                {period.label}
+                {t(`periods.${period.value}`)}
               </option>
             ))}
           </select>
         </div>
         <div className="select">
-          <label htmlFor="limit">Tamanho</label>
+          <label htmlFor="limit">{t("form.size")}</label>
           <select
-            aria-label="Selecione o tamanho do grid"
+            aria-label={t("form.sizeSelect")}
             {...register("limit", { required: true })}
           >
             {GRID_SIZES.map((size) => (
@@ -115,23 +117,23 @@ const UserInput = () => {
           </select>
         </div>
         <div className="select">
-          <label htmlFor="type">Tipo</label>
+          <label htmlFor="type">{t("form.type")}</label>
           <select
-            aria-label="Selecione o tipo de imagem"
+            aria-label={t("form.typeSelect")}
             {...register("type", { required: true })}
           >
             {CONTENT_TYPES.map((type) => (
               <option key={type.value} value={type.value}>
-                {type.label}
+                {t(`types.${type.value}`)}
               </option>
             ))}
           </select>
         </div>
       </div>
       <div className="optionals">
-        <label htmlFor="showAlbum">Exibir nome do album/artista</label>
+        <label htmlFor="showAlbum">{t("form.showAlbumName")}</label>
         <input type="checkbox" id="showAlbum" {...register("showAlbum")} />
-        <label htmlFor="showPlays">Exibir quantidade de plays</label>
+        <label htmlFor="showPlays">{t("form.showPlayCount")}</label>
         <input
           disabled={!watch("showAlbum")}
           checked={watch("showAlbum") && watch("showPlays")}
@@ -139,7 +141,7 @@ const UserInput = () => {
           id="showPlays"
           {...register("showPlays")}
         />
-        <button type="submit">Gerar</button>
+        <button type="submit">{t("form.generate")}</button>
       </div>
       {userInput && currentData && (
         <Canvas data={currentData} userInput={userInput} />

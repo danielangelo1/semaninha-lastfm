@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 import "./Header.css";
 
 const Header = () => {
@@ -8,9 +9,8 @@ const Header = () => {
         <Link to="/" className="logo-link">
           <h1>SEMANINHA.NET</h1>
         </Link>
-        <nav className="header-nav" aria-label="Navegação principal">
-          {/* <Link to="/" className="nav-link">Colagens</Link> */}
-          {/* <Link to="/wrapped" className="nav-link wrapped-link">🎵 Wrapped 2025</Link> */}
+        <nav className="header-nav" aria-label="Navigation">
+          <LanguageSwitcher />
         </nav>
       </div>
     </header>

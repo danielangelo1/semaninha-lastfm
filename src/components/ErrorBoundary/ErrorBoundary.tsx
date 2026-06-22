@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import * as Sentry from "@sentry/react";
 import "./ErrorBoundary.css";
 
@@ -8,6 +9,8 @@ interface Props {
 }
 
 function ErrorBoundary({ children, fallback }: Props) {
+  const { t } = useTranslation();
+
   return (
     <Sentry.ErrorBoundary
       fallback={({ error, resetError }) => {
@@ -18,17 +21,16 @@ function ErrorBoundary({ children, fallback }: Props) {
         return (
           <div className="error-boundary">
             <div className="error-boundary-content">
-              <h2>Oops! Algo deu errado</h2>
-              <p>
-                Ocorreu um erro inesperado. Tente recarregar a página ou entre
-                em contato conosco se o problema persistir.
-              </p>
+              <h2>{t("errorBoundary.title")}</h2>
+              <p>{t("errorBoundary.message")}</p>
               <details className="error-details">
-                <summary>Detalhes técnicos</summary>
-                <pre>{error instanceof Error ? error.message : String(error)}</pre>
+                <summary>{t("errorBoundary.details")}</summary>
+                <pre>
+                  {error instanceof Error ? error.message : String(error)}
+                </pre>
               </details>
               <button onClick={resetError} className="error-reload-button">
-                Tentar Novamente
+                {t("errorBoundary.retry")}
               </button>
             </div>
           </div>
