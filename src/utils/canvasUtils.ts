@@ -18,6 +18,30 @@ export const createCanvasContext = () => {
   return { canvas, context };
 };
 
+const imageCache = new Map<string, HTMLImageElement>();
+
+export const clearImageCache = () => imageCache.clear();
+
+const loadImage = (src: string): Promise<HTMLImageElement> => {
+  const cached = imageCache.get(src);
+  if (cached) {
+    imageCache.delete(src);
+    imageCache.set(src, cached);
+    return Promise.resolve(cached);
+  }
+
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      imageCache.set(src, img);
+      resolve(img);
+    };
+    img.onerror = () => reject(new Error(`Failed to load: ${src}`));
+    img.src = src;
+  });
+};
+
 export const drawImageOnCanvas = (
   context: CanvasRenderingContext2D,
   imgSrc: string,
@@ -27,21 +51,15 @@ export const drawImageOnCanvas = (
   height: number,
   errorFill = "black",
 ) => {
-  return new Promise<void>((resolve) => {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = imgSrc;
-    img.onload = () => {
+  return loadImage(imgSrc)
+    .then((img) => {
       context.drawImage(img, x, y, width, height);
-      resolve();
-    };
-    img.onerror = () => {
+    })
+    .catch(() => {
       console.log("Error loading image", imgSrc);
       context.fillStyle = errorFill;
       context.fillRect(x, y, width, height);
-      resolve();
-    };
-  });
+    });
 };
 
 export const drawTextOnCanvas = (
