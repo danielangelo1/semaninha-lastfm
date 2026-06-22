@@ -1,6 +1,7 @@
 import { Image, SpotifyArtistResponse } from "../types/spotifyResponse";
 import { musicBrainzApi, spotifyApi } from "./api";
 import { API_CONFIG } from "../constants";
+import { env } from "../config/env";
 
 let spotifyToken: string | null = null;
 let tokenExpirationTime: number | null = null;
@@ -28,9 +29,7 @@ const getToken = async () => {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       Authorization: `Basic ${btoa(
-        `${import.meta.env.VITE_SPOTIFY_CLIENT_ID}:${
-          import.meta.env.VITE_SPOTIFY_CLIENT_SECRET
-        }`,
+        `${env.VITE_SPOTIFY_CLIENT_ID}:${env.VITE_SPOTIFY_CLIENT_SECRET}`,
       )}`,
     },
     body: "grant_type=client_credentials",
@@ -38,7 +37,8 @@ const getToken = async () => {
 
   const data = await response.json();
   spotifyToken = data.access_token;
-  tokenExpirationTime = currentTime + data.expires_in * 1000 - API_CONFIG.SPOTIFY_TOKEN_BUFFER_MS;
+  tokenExpirationTime =
+    currentTime + data.expires_in * 1000 - API_CONFIG.SPOTIFY_TOKEN_BUFFER_MS;
   return data.access_token;
 };
 
@@ -47,7 +47,9 @@ const SpotifyTokenSingleton = (() => {
 
   return {
     getInstance: async () => {
-      if (!instance) {
+      const isExpired =
+        tokenExpirationTime && Date.now() >= tokenExpirationTime;
+      if (!instance || isExpired) {
         instance = getToken();
       }
       return await instance;
