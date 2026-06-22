@@ -19,7 +19,7 @@ const Privacy = () => {
       <div className="contact">
         <p>
           {t("privacy.contact")}{" "}
-          <a href="mailto:danielangelo12334@gmail.com">
+          <a href="mailto:danielangelo1234@gmail.com">
             danielangelo1234@gmail.com
           </a>
         </p>
