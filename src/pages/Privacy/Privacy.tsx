@@ -1,28 +1,25 @@
+import { useTranslation } from "react-i18next";
 import "./Privacy.css";
 
 const Privacy = () => {
+  const { t } = useTranslation();
+
   return (
     <main className="privacy-container">
-      <h2>Política de Privacidade - Semaninha</h2>
-      <p>
-        Seus dados são coletados apenas para a geração da colagem e não são
-        armazenados em nenhum servidor. O site utiliza a API do Last.FM para
-        obter os dados do usuário e os albuns mais ouvidos.
-      </p>
-      <p>Os dados coletados são:</p>
+      <h2>{t("privacy.title")}</h2>
+      <p>{t("privacy.intro")}</p>
+      <p>{t("privacy.dataCollected")}</p>
       <ul>
-        <li>Nome do usuário</li>
-        <li>Período de tempo</li>
-        <li>Tamanho da colagem</li>
-        <li>
-          Se o nome do album/artista e a quantidade de plays devem ser exibidos
-        </li>
+        <li>{t("privacy.dataUsername")}</li>
+        <li>{t("privacy.dataPeriod")}</li>
+        <li>{t("privacy.dataSize")}</li>
+        <li>{t("privacy.dataDisplay")}</li>
       </ul>
-      <p>Os dados coletados não são compartilhados com terceiros.</p>
+      <p>{t("privacy.noSharing")}</p>
       <div className="contact">
         <p>
-          Para mais informações, entre em contato pelo email:{" "}
-          <a href="mailto:danielangelo12334@gmail.com">
+          {t("privacy.contact")}{" "}
+          <a href="mailto:danielangelo1234@gmail.com">
             danielangelo1234@gmail.com
           </a>
         </p>

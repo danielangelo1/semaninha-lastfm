@@ -1,8 +1,28 @@
-import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import "@testing-library/jest-dom";
+import { vi } from "vitest";
 
-// Mock environment variables
-Object.defineProperty(window, 'matchMedia', {
+// Mock environment variables for import.meta.env
+vi.stubEnv("VITE_API_KEY", "test-api-key");
+vi.stubEnv("VITE_LASTFM_URL", "http://ws.audioscrobbler.com/2.0/");
+vi.stubEnv("VITE_SPOTIFY_URL", "https://api.spotify.com/v1");
+vi.stubEnv("VITE_SPOTIFY_CLIENT_ID", "test-client-id");
+vi.stubEnv("VITE_SPOTIFY_CLIENT_SECRET", "test-client-secret");
+vi.stubEnv("VITE_MUSICBRAINZ_URL", "https://musicbrainz.org/ws/2");
+
+// Mock validated env config
+vi.mock("../src/config/env", () => ({
+  env: {
+    VITE_API_KEY: "test-api-key",
+    VITE_LASTFM_URL: "http://ws.audioscrobbler.com/2.0/",
+    VITE_SPOTIFY_URL: "https://api.spotify.com/v1",
+    VITE_SPOTIFY_CLIENT_ID: "test-client-id",
+    VITE_SPOTIFY_CLIENT_SECRET: "test-client-secret",
+    VITE_MUSICBRAINZ_URL: "https://musicbrainz.org/ws/2",
+  },
+}));
+
+// Mock matchMedia
+Object.defineProperty(window, "matchMedia", {
   writable: true,
   value: vi.fn().mockImplementation((query: string) => ({
     matches: false,
@@ -49,9 +69,9 @@ HTMLCanvasElement.prototype.getContext = vi.fn().mockReturnValue({
 (globalThis as any).Image = class {
   onload: (() => void) | null = null;
   onerror: (() => void) | null = null;
-  src = '';
-  alt = '';
-  
+  src = "";
+  alt = "";
+
   constructor() {
     setTimeout(() => {
       if (this.onload) {
@@ -63,6 +83,6 @@ HTMLCanvasElement.prototype.getContext = vi.fn().mockReturnValue({
 
 // Mock URL.createObjectURL and revokeObjectURL
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-(globalThis as any).URL.createObjectURL = vi.fn(() => 'mocked-url');
+(globalThis as any).URL.createObjectURL = vi.fn(() => "mocked-url");
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 (globalThis as any).URL.revokeObjectURL = vi.fn();

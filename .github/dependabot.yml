@@ -5,22 +5,19 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-    groups:
-      all-dependencies:
-        patterns:
-          - "*"
+    # Only allow security updates (version updates disabled)
+    open-pull-requests-limit: 0
     commit-message:
       prefix: "chore(deps):"
-    open-pull-requests-limit: 5
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: "monthly"
     groups:
       all-actions:
         patterns:
           - "*"
     commit-message:
       prefix: "chore(ci):"
+    open-pull-requests-limit: 3

@@ -1,14 +1,17 @@
 import { GithubLogo, LastfmLogo, TwitterLogo } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import "./Footer.css";
 
 const actualYear = new Date().getFullYear();
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <footer>
       <p>
-        Desenvolvido por{" "}
+        {t("footer.developedBy")}{" "}
         <Link
           to={"https://github.com/danielangelo1"}
           target="_blank"
@@ -46,7 +49,7 @@ const Footer = () => {
         </Link>
       </div>
       <div className="link-pages">
-        <Link to="/privacy">Política de Privacidade</Link>
+        <Link to="/privacy">{t("footer.privacy")}</Link>
       </div>
     </footer>
   );

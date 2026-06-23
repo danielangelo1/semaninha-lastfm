@@ -1,0 +1,17 @@
+.language-switcher {
+  background: transparent;
+  border: 1.5px solid #c3000d;
+  color: #c3000d;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.language-switcher:hover {
+  background-color: #c3000d;
+  color: white;
+}

@@ -1,0 +1,64 @@
+{
+  "home": {
+    "description": "Show the world you have the best music taste! Use semaninha to generate collages of your most listened albums on Last.fm"
+  },
+  "form": {
+    "username": "Username",
+    "usernamePlaceholder": "Enter your Last.fm username",
+    "period": "Period",
+    "periodSelect": "Select the period",
+    "size": "Size",
+    "sizeSelect": "Select grid size",
+    "type": "Type",
+    "typeSelect": "Select image type",
+    "showAlbumName": "Show album/artist name",
+    "showPlayCount": "Show play count",
+    "generate": "Generate"
+  },
+  "periods": {
+    "7day": "Last 7 days",
+    "1month": "Last month",
+    "3month": "Last 3 months",
+    "6month": "Last 6 months",
+    "12month": "Last year",
+    "overall": "Overall"
+  },
+  "types": {
+    "album": "Albums",
+    "artist": "Artists",
+    "track": "Tracks"
+  },
+  "errors": {
+    "userNotFound": "User not found",
+    "insufficientData": "You don't have enough data to generate the image :(, try a smaller size",
+    "apiError": "Request error",
+    "userRequired": "Username is required",
+    "periodRequired": "Period is required"
+  },
+  "errorBoundary": {
+    "title": "Oops! Something went wrong",
+    "message": "An unexpected error occurred. Try reloading the page or contact us if the problem persists.",
+    "details": "Technical details",
+    "retry": "Try Again"
+  },
+  "canvas": {
+    "loading": "Generating album collage",
+    "loadingAria": "Loading Last.fm album collage",
+    "altText": "Collage of {{size}}x{{size}} most listened albums by {{user}} in the {{period}} period"
+  },
+  "footer": {
+    "developedBy": "Developed by",
+    "privacy": "Privacy Policy"
+  },
+  "privacy": {
+    "title": "Privacy Policy - Semaninha",
+    "intro": "Your data is collected only for collage generation and is not stored on any server. The site uses the Last.FM API to fetch user data and most listened albums.",
+    "dataCollected": "Data collected:",
+    "dataUsername": "Username",
+    "dataPeriod": "Time period",
+    "dataSize": "Collage size",
+    "dataDisplay": "Whether album/artist name and play count should be displayed",
+    "noSharing": "Collected data is not shared with third parties.",
+    "contact": "For more information, contact us at:"
+  }
+}
