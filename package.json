@@ -55,5 +55,8 @@
     "vite": "^6.4.2",
     "vite-plugin-checker": "^0.8.0",
     "vitest": "^4.1.8"
+  },
+  "overrides": {
+    "styled-components": "^6.4.2"
   }
 }
