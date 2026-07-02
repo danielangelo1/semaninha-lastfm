@@ -73,6 +73,35 @@ export const drawTextOnCanvas = (
   context.fillText(text, x, y);
 };
 
+export interface GeneratedImage {
+  dataURL: string;
+  isPartial: boolean;
+}
+
+const drawPlaceholderCell = async (
+  context: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+) => {
+  context.fillStyle = "#1a1a1a";
+  context.fillRect(x, y, size, size);
+
+  try {
+    const img = await loadImage(CANVAS_CONFIG.PLACEHOLDER_IMAGE);
+    const iconSize = size * 0.4;
+    context.drawImage(
+      img,
+      x + (size - iconSize) / 2,
+      y + (size - iconSize) / 2,
+      iconSize,
+      iconSize,
+    );
+  } catch {
+    // célula fica apenas com o fundo escuro
+  }
+};
+
 export const processImages = async <T>(
   dataItems: T[],
   userInput: UserRequest,
@@ -86,8 +115,8 @@ export const processImages = async <T>(
     albumSize: number,
     especialPlays: number,
   ) => void,
-) => {
-  if (dataItems.length < userInput.limit * userInput.limit) {
+): Promise<GeneratedImage> => {
+  if (dataItems.length === 0) {
     throw new Error(ERROR_MESSAGES.INSUFFICIENT_DATA);
   }
 
@@ -97,25 +126,31 @@ export const processImages = async <T>(
     userInput.limit,
   );
 
-  const imagePromises = dataItems.map(async (item, index) => {
-    const x = (index % userInput.limit) * (canvas.width / userInput.limit);
-    const y =
-      Math.floor(index / userInput.limit) * (canvas.height / userInput.limit);
-    const imgSrc = getImageSrc(item);
+  const totalCells = userInput.limit * userInput.limit;
+  const cellSize = canvas.width / userInput.limit;
 
-    await drawImageOnCanvas(
-      context,
-      imgSrc,
-      x,
-      y,
-      canvas.width / userInput.limit,
-      canvas.height / userInput.limit,
-    );
+  const cellPromises = Array.from({ length: totalCells }, async (_, index) => {
+    const x = (index % userInput.limit) * cellSize;
+    const y = Math.floor(index / userInput.limit) * cellSize;
+    const item = dataItems[index];
+
+    if (!item) {
+      await drawPlaceholderCell(context, x, y, cellSize);
+      return;
+    }
+
+    await drawImageOnCanvas(context, getImageSrc(item), x, y, cellSize, cellSize);
 
     drawExtraDetails(context, item, x, y, artistSize, albumSize, especialPlays);
   });
 
-  await Promise.all(imagePromises);
+  await Promise.all(cellPromises);
 
-  return canvas.toDataURL("image/png");
+  return {
+    dataURL: canvas.toDataURL(
+      CANVAS_CONFIG.IMAGE_FORMAT,
+      CANVAS_CONFIG.IMAGE_QUALITY,
+    ),
+    isPartial: dataItems.length < totalCells,
+  };
 };

@@ -13,7 +13,8 @@
     "typeSelect": "Selecione o tipo de imagem",
     "showAlbumName": "Exibir nome do album/artista",
     "showPlayCount": "Exibir quantidade de plays",
-    "generate": "Gerar"
+    "generate": "Gerar",
+    "generating": "Gerando..."
   },
   "periods": {
     "7day": "Últimos 7 dias",
@@ -44,7 +45,9 @@
   "canvas": {
     "loading": "Gerando colagem de álbuns",
     "loadingAria": "Carregando colagem de álbuns do Last.fm",
-    "altText": "Colagem de {{size}}x{{size}} álbuns mais escutados de {{user}} no período de {{period}}"
+    "altText": "Colagem de {{size}}x{{size}} álbuns mais escutados de {{user}} no período de {{period}}",
+    "download": "Baixar imagem",
+    "partialGrid": "Você não tem itens suficientes para preencher toda a grade — as células restantes receberam um espaço reservado"
   },
   "footer": {
     "developedBy": "Desenvolvido por",

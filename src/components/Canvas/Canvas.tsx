@@ -1,9 +1,11 @@
-import  { useEffect, useState, memo } from "react";
+import { useEffect, useRef, useState, memo } from "react";
+import { useTranslation } from "react-i18next";
 import { UserRequest } from "../../types/userRequest";
 import { Audio } from "react-loader-spinner";
 import "./canvas.css";
 import { toast } from "react-toastify";
 import { AlbumApiResponse, ArtistApiResponse, TrackApiResponse } from "../../types/apiResponse";
+import { GeneratedImage } from "../../utils/canvasUtils";
 import {
   createAlbumImage,
   createSpotifyImage,
@@ -19,39 +21,65 @@ const ImageRenderer = ({
   data,
   userInput,
 }: ImageRendererProps) => {
+  const { t } = useTranslation();
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    let cancelled = false;
     setLoading(true);
     setImageSrc(null);
 
-    const fetchData = async () => {
+    const generateImage = async () => {
       try {
+        let result: GeneratedImage | null = null;
+
         if ("topalbums" in data) {
-          setImageSrc(await createAlbumImage(data, userInput));
+          result = await createAlbumImage(data, userInput);
         } else if ("topartists" in data) {
-          setImageSrc(await createSpotifyImage(data, userInput));
+          result = await createSpotifyImage(data, userInput);
         } else if ("toptracks" in data) {
-          setImageSrc(await createTrackImage(data, userInput));
+          result = await createTrackImage(data, userInput);
+        }
+
+        if (!cancelled && result) {
+          setImageSrc(result.dataURL);
+          if (result.isPartial) {
+            toast.info(t("canvas.partialGrid"), { toastId: "partial-grid" });
+          }
         }
       } catch (error) {
-        if (error instanceof Error) {
+        if (!cancelled && error instanceof Error) {
           toast.error(error.message);
         }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
 
-    fetchData();
-  }, [data, userInput]);
+    generateImage();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [data, userInput, t]);
+
+  useEffect(() => {
+    if (imageSrc) {
+      containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [imageSrc]);
+
+  const downloadName = `semaninha-${userInput.user}-${userInput.type}-${userInput.limit}x${userInput.limit}.jpg`;
 
   return (
-    <>
+    <div className="canvas-result" ref={containerRef}>
       {loading && (
-        <div 
-          role="status" 
+        <div
+          role="status"
           aria-live="polite"
           aria-label="Gerando colagem de álbuns"
         >
@@ -65,16 +93,25 @@ const ImageRenderer = ({
         </div>
       )}
       {!loading && imageSrc && (
-        <img 
-          src={imageSrc} 
-          alt={`Colagem de ${userInput.limit}x${userInput.limit} álbuns mais escutados de ${userInput.user} no período de ${userInput.period}`}
-          loading="lazy"
-          decoding="async"
-          role="img"
-          style={{ maxWidth: "100%" }} 
-        />
+        <>
+          <img
+            src={imageSrc}
+            alt={`Colagem de ${userInput.limit}x${userInput.limit} álbuns mais escutados de ${userInput.user} no período de ${userInput.period}`}
+            loading="lazy"
+            decoding="async"
+            role="img"
+            style={{ maxWidth: "100%" }}
+          />
+          <a
+            className="download-button"
+            href={imageSrc}
+            download={downloadName}
+          >
+            {t("canvas.download")}
+          </a>
+        </>
       )}
-    </>
+    </div>
   );
 };
 

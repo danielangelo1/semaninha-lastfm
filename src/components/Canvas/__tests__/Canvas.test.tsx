@@ -6,8 +6,15 @@ import { UserRequest } from "../../../types/userRequest";
 
 // Mock the generateCanvas utils
 vi.mock("../../../utils/generateCanvas", () => ({
-  createAlbumImage: vi.fn().mockResolvedValue("data:image/png;base64,mock"),
-  createSpotifyImage: vi.fn().mockResolvedValue("data:image/png;base64,mock"),
+  createAlbumImage: vi
+    .fn()
+    .mockResolvedValue({ dataURL: "data:image/png;base64,mock", isPartial: false }),
+  createSpotifyImage: vi
+    .fn()
+    .mockResolvedValue({ dataURL: "data:image/png;base64,mock", isPartial: false }),
+  createTrackImage: vi
+    .fn()
+    .mockResolvedValue({ dataURL: "data:image/png;base64,mock", isPartial: false }),
 }));
 
 describe("Canvas Component", () => {
@@ -32,7 +39,7 @@ describe("Canvas Component", () => {
     limit: 3,
     showAlbum: true,
     showPlays: true,
-    type: "albums",
+    type: "album",
   };
 
   it("renders canvas component with loading state", () => {

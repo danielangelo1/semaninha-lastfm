@@ -32,6 +32,16 @@ Object.defineProperty(window, "matchMedia", {
   })),
 });
 
+// jsdom does not implement scrollIntoView, document.fonts or toDataURL
+Element.prototype.scrollIntoView = vi.fn();
+Object.defineProperty(document, "fonts", {
+  writable: true,
+  value: { load: vi.fn().mockResolvedValue([]) },
+});
+HTMLCanvasElement.prototype.toDataURL = vi
+  .fn()
+  .mockReturnValue("data:image/jpeg;base64,mock");
+
 // Mock canvas methods for canvas tests
 HTMLCanvasElement.prototype.getContext = vi.fn().mockReturnValue({
   fillRect: vi.fn(),

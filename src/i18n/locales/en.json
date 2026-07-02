@@ -13,7 +13,8 @@
     "typeSelect": "Select image type",
     "showAlbumName": "Show album/artist name",
     "showPlayCount": "Show play count",
-    "generate": "Generate"
+    "generate": "Generate",
+    "generating": "Generating..."
   },
   "periods": {
     "7day": "Last 7 days",
@@ -44,7 +45,9 @@
   "canvas": {
     "loading": "Generating album collage",
     "loadingAria": "Loading Last.fm album collage",
-    "altText": "Collage of {{size}}x{{size}} most listened albums by {{user}} in the {{period}} period"
+    "altText": "Collage of {{size}}x{{size}} most listened albums by {{user}} in the {{period}} period",
+    "download": "Download image",
+    "partialGrid": "You don't have enough items to fill the whole grid — the remaining cells use a placeholder"
   },
   "footer": {
     "developedBy": "Developed by",

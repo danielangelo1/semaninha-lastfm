@@ -3,7 +3,9 @@ export const CANVAS_CONFIG = {
   WIDTH: 1300,
   HEIGHT: 1300,
   BACKGROUND_COLOR: '#f5f5f5',
-  IMAGE_FORMAT: 'image/png',
+  IMAGE_FORMAT: 'image/jpeg',
+  IMAGE_QUALITY: 0.92,
+  PLACEHOLDER_IMAGE: '/music.png',
 } as const;
 
 // Grid Configuration
@@ -27,7 +29,7 @@ export const TIME_PERIODS = [
 export const CONTENT_TYPES = [
   { value: 'album', label: 'Álbuns' },
   { value: 'artist', label: 'Artistas' },
-  // { value: 'track', label: 'Músicas' },
+  { value: 'track', label: 'Músicas' },
 ] as const;
 
 // Grid Size Options

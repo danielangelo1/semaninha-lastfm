@@ -19,7 +19,8 @@ const UserInput = () => {
   const { t } = useTranslation();
   const [userInput, setUserInput] = useState<UserRequest | null>(null);
   const { getLocalStorage, setLocalStorage } = useLocalStorage();
-  const { albumData, artistData, trackData, fetchData } = useLastFmData();
+  const { albumData, artistData, trackData, loading, fetchData } =
+    useLastFmData();
 
   const defaultFormValues = useMemo(() => {
     const storage = getLocalStorage();
@@ -143,7 +144,9 @@ const UserInput = () => {
           id="showPlays"
           {...register("showPlays")}
         />
-        <button type="submit">{t("form.generate")}</button>
+        <button type="submit" disabled={loading}>
+          {loading ? t("form.generating") : t("form.generate")}
+        </button>
       </div>
       {userInput && currentData && (
         <Canvas data={currentData} userInput={userInput} />
