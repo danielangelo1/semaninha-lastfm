@@ -5,8 +5,6 @@ import { vi } from "vitest";
 vi.stubEnv("VITE_API_KEY", "test-api-key");
 vi.stubEnv("VITE_LASTFM_URL", "http://ws.audioscrobbler.com/2.0/");
 vi.stubEnv("VITE_SPOTIFY_URL", "https://api.spotify.com/v1");
-vi.stubEnv("VITE_SPOTIFY_CLIENT_ID", "test-client-id");
-vi.stubEnv("VITE_SPOTIFY_CLIENT_SECRET", "test-client-secret");
 vi.stubEnv("VITE_MUSICBRAINZ_URL", "https://musicbrainz.org/ws/2");
 
 // Mock validated env config
@@ -15,8 +13,6 @@ vi.mock("../src/config/env", () => ({
     VITE_API_KEY: "test-api-key",
     VITE_LASTFM_URL: "http://ws.audioscrobbler.com/2.0/",
     VITE_SPOTIFY_URL: "https://api.spotify.com/v1",
-    VITE_SPOTIFY_CLIENT_ID: "test-client-id",
-    VITE_SPOTIFY_CLIENT_SECRET: "test-client-secret",
     VITE_MUSICBRAINZ_URL: "https://musicbrainz.org/ws/2",
   },
 }));

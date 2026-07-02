@@ -1,10 +1,11 @@
 import { Image, SpotifyArtistResponse } from "../types/spotifyResponse";
 import { musicBrainzApi, spotifyApi } from "./api";
 import { API_CONFIG } from "../constants";
-import { env } from "../config/env";
 
-let spotifyToken: string | null = null;
-let tokenExpirationTime: number | null = null;
+const TOKEN_ENDPOINT = "/api/spotify-token";
+
+let tokenPromise: Promise<string> | null = null;
+let tokenExpiresAt = 0;
 
 const formatArtistName = (artistName: string) => {
   return artistName
@@ -14,51 +15,39 @@ const formatArtistName = (artistName: string) => {
     .trim();
 };
 
-const getToken = async () => {
-  const currentTime = Date.now();
-  if (
-    spotifyToken &&
-    tokenExpirationTime &&
-    currentTime < tokenExpirationTime
-  ) {
-    return spotifyToken;
+const fetchToken = async (): Promise<string> => {
+  const response = await fetch(TOKEN_ENDPOINT);
+  if (!response.ok) {
+    throw new Error(`Spotify token request failed: ${response.status}`);
   }
 
-  const response = await fetch("https://accounts.spotify.com/api/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: `Basic ${btoa(
-        `${env.VITE_SPOTIFY_CLIENT_ID}:${env.VITE_SPOTIFY_CLIENT_SECRET}`,
-      )}`,
-    },
-    body: "grant_type=client_credentials",
-  });
+  const data: { access_token: string; expires_in: number } =
+    await response.json();
 
-  const data = await response.json();
-  spotifyToken = data.access_token;
-  tokenExpirationTime =
-    currentTime + data.expires_in * 1000 - API_CONFIG.SPOTIFY_TOKEN_BUFFER_MS;
+  tokenExpiresAt =
+    Date.now() + data.expires_in * 1000 - API_CONFIG.SPOTIFY_TOKEN_BUFFER_MS;
   return data.access_token;
 };
 
-const SpotifyTokenSingleton = (() => {
-  let instance: Promise<string> | null = null;
+const getToken = (): Promise<string> => {
+  if (tokenPromise && Date.now() < tokenExpiresAt) {
+    return tokenPromise;
+  }
 
-  return {
-    getInstance: async () => {
-      const isExpired =
-        tokenExpirationTime && Date.now() >= tokenExpirationTime;
-      if (!instance || isExpired) {
-        instance = getToken();
-      }
-      return await instance;
-    },
-  };
-})();
+  // Enquanto o fetch está pendente, chamadas concorrentes reusam a mesma Promise;
+  // o valor real de expiração é definido quando o fetch resolve
+  tokenExpiresAt = Number.MAX_SAFE_INTEGER;
+  tokenPromise = fetchToken().catch((error) => {
+    tokenPromise = null;
+    tokenExpiresAt = 0;
+    throw error;
+  });
+
+  return tokenPromise;
+};
 
 export const getArtistImage = async (artistName: string): Promise<Image> => {
-  const token = await SpotifyTokenSingleton.getInstance();
+  const token = await getToken();
   const response = await spotifyApi.get<SpotifyArtistResponse>(
     `/search?q=${encodeURIComponent(artistName)}&type=artist&limit=5`,
     {
