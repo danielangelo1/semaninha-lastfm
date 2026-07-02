@@ -1,5 +1,5 @@
-import { memo } from 'react';
-import './WrappedResult.css';
+import { memo } from "react";
+import "./WrappedResult.css";
 
 interface WrappedResultProps {
   imageUrl: string;

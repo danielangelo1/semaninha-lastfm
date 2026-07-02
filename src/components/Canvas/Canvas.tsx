@@ -4,7 +4,11 @@ import { UserRequest } from "../../types/userRequest";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import "./canvas.css";
 import { toast } from "react-toastify";
-import { AlbumApiResponse, ArtistApiResponse, TrackApiResponse } from "../../types/apiResponse";
+import {
+  AlbumApiResponse,
+  ArtistApiResponse,
+  TrackApiResponse,
+} from "../../types/apiResponse";
 import { GeneratedImage } from "../../utils/canvasUtils";
 import {
   createAlbumImage,
@@ -17,10 +21,7 @@ interface ImageRendererProps {
   userInput: UserRequest;
 }
 
-const ImageRenderer = ({
-  data,
-  userInput,
-}: ImageRendererProps) => {
+const ImageRenderer = ({ data, userInput }: ImageRendererProps) => {
   const { t } = useTranslation();
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -69,7 +70,10 @@ const ImageRenderer = ({
 
   useEffect(() => {
     if (imageSrc) {
-      containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      containerRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   }, [imageSrc]);
 

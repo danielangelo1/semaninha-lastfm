@@ -149,7 +149,14 @@ export const processImages = async <T>(
       return;
     }
 
-    await drawImageOnCanvas(context, getImageSrc(item), x, y, cellSize, cellSize);
+    await drawImageOnCanvas(
+      context,
+      getImageSrc(item),
+      x,
+      y,
+      cellSize,
+      cellSize,
+    );
 
     drawExtraDetails(context, item, x, y, artistSize, albumSize, especialPlays);
   });

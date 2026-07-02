@@ -109,9 +109,9 @@ describe("api/spotify-token", () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(second.statusCode).toBe(200);
-    expect(
-      (second.body as { access_token: string }).access_token,
-    ).toBe("spotify-token");
+    expect((second.body as { access_token: string }).access_token).toBe(
+      "spotify-token",
+    );
   });
 
   it("returns 502 when Spotify responds with an error", async () => {

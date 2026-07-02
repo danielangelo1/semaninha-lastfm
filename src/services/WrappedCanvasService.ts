@@ -1,10 +1,10 @@
-import { WrappedData } from '../types/wrapped';
+import { WrappedData } from "../types/wrapped";
 import {
   WRAPPED_CANVAS_CONFIG,
   WRAPPED_COLORS,
   WRAPPED_TYPOGRAPHY,
-} from '../constants/wrapped';
-import { getArtistImage } from './SpotifyService';
+} from "../constants/wrapped";
+import { getArtistImage } from "./SpotifyService";
 
 /**
  * Load an image from a URL
@@ -12,10 +12,10 @@ import { getArtistImage } from './SpotifyService';
 const loadImage = (src: string): Promise<HTMLImageElement> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = 'anonymous';
+    img.crossOrigin = "anonymous";
     img.onload = () => resolve(img);
     img.onerror = (error) => {
-      console.warn('Failed to load image:', src, error);
+      console.warn("Failed to load image:", src, error);
       reject(error);
     };
     img.src = src;
@@ -28,9 +28,9 @@ const loadImage = (src: string): Promise<HTMLImageElement> => {
 const truncateText = (
   ctx: CanvasRenderingContext2D,
   text: string,
-  maxWidth: number
+  maxWidth: number,
 ): string => {
-  const ellipsis = '...';
+  const ellipsis = "...";
   let truncated = text;
 
   while (ctx.measureText(truncated).width > maxWidth && truncated.length > 0) {
@@ -52,28 +52,35 @@ const drawBackground = (ctx: CanvasRenderingContext2D): void => {
 
   // Create gradient background
   const gradient = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
-  gradient.addColorStop(0, '#2d1b1b');
-  gradient.addColorStop(0.3, '#3d2626');
-  gradient.addColorStop(0.6, '#4a2c2c');
-  gradient.addColorStop(1, '#2d1b1b');
+  gradient.addColorStop(0, "#2d1b1b");
+  gradient.addColorStop(0.3, "#3d2626");
+  gradient.addColorStop(0.6, "#4a2c2c");
+  gradient.addColorStop(1, "#2d1b1b");
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
   // Add decorative circles with gradient
   const circle1 = ctx.createRadialGradient(200, 300, 0, 200, 300, 400);
-  circle1.addColorStop(0, 'rgba(195, 0, 13, 0.15)');
-  circle1.addColorStop(1, 'rgba(195, 0, 13, 0)');
+  circle1.addColorStop(0, "rgba(195, 0, 13, 0.15)");
+  circle1.addColorStop(1, "rgba(195, 0, 13, 0)");
   ctx.fillStyle = circle1;
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-  const circle2 = ctx.createRadialGradient(WIDTH - 200, HEIGHT - 400, 0, WIDTH - 200, HEIGHT - 400, 500);
-  circle2.addColorStop(0, 'rgba(255, 107, 107, 0.12)');
-  circle2.addColorStop(1, 'rgba(255, 107, 107, 0)');
+  const circle2 = ctx.createRadialGradient(
+    WIDTH - 200,
+    HEIGHT - 400,
+    0,
+    WIDTH - 200,
+    HEIGHT - 400,
+    500,
+  );
+  circle2.addColorStop(0, "rgba(255, 107, 107, 0.12)");
+  circle2.addColorStop(1, "rgba(255, 107, 107, 0)");
   ctx.fillStyle = circle2;
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
   // Add subtle texture/noise effect
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+  ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
   for (let i = 0; i < 1500; i++) {
     const x = Math.random() * WIDTH;
     const y = Math.random() * HEIGHT;
@@ -88,7 +95,7 @@ const drawBackground = (ctx: CanvasRenderingContext2D): void => {
 const drawHighlightedArtistImages = async (
   ctx: CanvasRenderingContext2D,
   images: string[],
-  startY: number
+  startY: number,
 ): Promise<number> => {
   const centerImageWidth = 400;
   const centerImageHeight = 400;
@@ -96,53 +103,72 @@ const drawHighlightedArtistImages = async (
   const sideImageHeight = 320;
   const borderRadius = 20;
   const centerX = WRAPPED_CANVAS_CONFIG.WIDTH / 2;
-  
+
   try {
     const loadedImages = await Promise.allSettled(
-      images.map(src => loadImage(src))
+      images.map((src) => loadImage(src)),
     );
 
     const validImages = loadedImages
-      .filter(result => result.status === 'fulfilled')
-      .map(result => (result as PromiseFulfilledResult<HTMLImageElement>).value);
+      .filter((result) => result.status === "fulfilled")
+      .map(
+        (result) => (result as PromiseFulfilledResult<HTMLImageElement>).value,
+      );
 
     if (validImages.length === 0) return startY;
 
-    const drawRoundedImage = (img: HTMLImageElement, x: number, y: number, width: number, height: number, opacity: number = 1) => {
+    const drawRoundedImage = (
+      img: HTMLImageElement,
+      x: number,
+      y: number,
+      width: number,
+      height: number,
+      opacity: number = 1,
+    ) => {
       ctx.save();
-      
+
       ctx.globalAlpha = opacity;
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+      ctx.shadowColor = "rgba(0, 0, 0, 0.6)";
       ctx.shadowBlur = 25;
       ctx.shadowOffsetX = 0;
       ctx.shadowOffsetY = 15;
-      
+
       ctx.beginPath();
       ctx.moveTo(x + borderRadius, y);
       ctx.lineTo(x + width - borderRadius, y);
       ctx.quadraticCurveTo(x + width, y, x + width, y + borderRadius);
       ctx.lineTo(x + width, y + height - borderRadius);
-      ctx.quadraticCurveTo(x + width, y + height, x + width - borderRadius, y + height);
+      ctx.quadraticCurveTo(
+        x + width,
+        y + height,
+        x + width - borderRadius,
+        y + height,
+      );
       ctx.lineTo(x + borderRadius, y + height);
       ctx.quadraticCurveTo(x, y + height, x, y + height - borderRadius);
       ctx.lineTo(x, y + borderRadius);
       ctx.quadraticCurveTo(x, y, x + borderRadius, y);
       ctx.closePath();
       ctx.clip();
-      
+
       ctx.drawImage(img, x, y, width, height);
-      
+
       ctx.restore();
-      
+
       ctx.globalAlpha = opacity;
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
       ctx.lineWidth = 4;
       ctx.beginPath();
       ctx.moveTo(x + borderRadius, y);
       ctx.lineTo(x + width - borderRadius, y);
       ctx.quadraticCurveTo(x + width, y, x + width, y + borderRadius);
       ctx.lineTo(x + width, y + height - borderRadius);
-      ctx.quadraticCurveTo(x + width, y + height, x + width - borderRadius, y + height);
+      ctx.quadraticCurveTo(
+        x + width,
+        y + height,
+        x + width - borderRadius,
+        y + height,
+      );
       ctx.lineTo(x + borderRadius, y + height);
       ctx.quadraticCurveTo(x, y + height, x, y + height - borderRadius);
       ctx.lineTo(x, y + borderRadius);
@@ -157,24 +183,45 @@ const drawHighlightedArtistImages = async (
       // Left image (#2)
       const leftX = centerX - centerImageWidth / 2 - sideImageWidth + 40;
       const leftY = startY + 40;
-      drawRoundedImage(validImages[1], leftX, leftY, sideImageWidth, sideImageHeight, 0.7);
+      drawRoundedImage(
+        validImages[1],
+        leftX,
+        leftY,
+        sideImageWidth,
+        sideImageHeight,
+        0.7,
+      );
     }
 
     if (validImages.length > 2) {
       // Right image (#3)
       const rightX = centerX + centerImageWidth / 2 - 40;
       const rightY = startY + 40;
-      drawRoundedImage(validImages[2], rightX, rightY, sideImageWidth, sideImageHeight, 0.7);
+      drawRoundedImage(
+        validImages[2],
+        rightX,
+        rightY,
+        sideImageWidth,
+        sideImageHeight,
+        0.7,
+      );
     }
 
     // Draw center image (#1) on top
     const centerImgX = centerX - centerImageWidth / 2;
     const centerImgY = startY;
-    drawRoundedImage(validImages[0], centerImgX, centerImgY, centerImageWidth, centerImageHeight, 1);
-    
+    drawRoundedImage(
+      validImages[0],
+      centerImgX,
+      centerImgY,
+      centerImageWidth,
+      centerImageHeight,
+      1,
+    );
+
     return startY + centerImageHeight + 40;
   } catch (error) {
-    console.warn('Error loading artist images:', error);
+    console.warn("Error loading artist images:", error);
     return startY;
   }
 };
@@ -188,20 +235,20 @@ const drawCompactList = (
   items: Array<{ name: string; detail?: string }>,
   x: number,
   y: number,
-  color: string
+  color: string,
 ): void => {
   ctx.font = `700 34px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = color;
   ctx.fillText(title, x, y);
-  
-  let currentY = y + 50;  
-  
+
+  let currentY = y + 50;
+
   items.forEach((item) => {
     ctx.font = `600 32px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
     ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
     const truncated = truncateText(ctx, item.name, 420);
     ctx.fillText(truncated, x, currentY);
-    
+
     if (item.detail) {
       ctx.font = `400 24px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
       ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
@@ -217,14 +264,16 @@ const drawCompactList = (
 /**
  * Generate the Wrapped canvas with compact layout
  */
-export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanvasElement> => {
-  const canvas = document.createElement('canvas');
+export const generateWrappedCanvas = async (
+  data: WrappedData,
+): Promise<HTMLCanvasElement> => {
+  const canvas = document.createElement("canvas");
   canvas.width = WRAPPED_CANVAS_CONFIG.WIDTH;
   canvas.height = WRAPPED_CANVAS_CONFIG.HEIGHT;
 
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
   if (!ctx) {
-    throw new Error('Canvas context not found');
+    throw new Error("Canvas context not found");
   }
 
   drawBackground(ctx);
@@ -234,118 +283,162 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
       const img = await getArtistImage(artist.name);
       return img.url;
     } catch {
-      return '';
+      return "";
     }
   });
 
   const artistImages = await Promise.all(artistImagePromises);
-  const validArtistImages = artistImages.filter(url => url);
+  const validArtistImages = artistImages.filter((url) => url);
 
   let currentY = 110;
 
   if (validArtistImages.length > 0) {
-    currentY = await drawHighlightedArtistImages(ctx, validArtistImages, currentY);
+    currentY = await drawHighlightedArtistImages(
+      ctx,
+      validArtistImages,
+      currentY,
+    );
   }
 
   currentY += 20;
 
   ctx.font = `700 72px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
-  ctx.textAlign = 'center';
+  ctx.textAlign = "center";
   ctx.fillText(data.username, WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
   currentY += 60;
-  
+
   ctx.font = `600 32px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
-  ctx.fillStyle = '#e07b7b';
-  ctx.fillText('SCROBBLES', WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
+  ctx.fillStyle = "#e07b7b";
+  ctx.fillText("SCROBBLES", WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
   currentY += 20;
-  
+
   ctx.font = `900 84px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
-  ctx.fillText(data.totalScrobbles.toLocaleString(), WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY + 60);
+  ctx.fillText(
+    data.totalScrobbles.toLocaleString(),
+    WRAPPED_CANVAS_CONFIG.WIDTH / 2,
+    currentY + 60,
+  );
   currentY += 120;
 
   // Draw stats circles section
   ctx.font = `700 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
-  ctx.fillStyle = '#e07b7b';
-  ctx.textAlign = 'center';
-  
+  ctx.fillStyle = "#e07b7b";
+  ctx.textAlign = "center";
+
   const circleY = currentY + 80;
   const circleRadius = 65;
   const circleSpacing = 280;
   const startX = WRAPPED_CANVAS_CONFIG.WIDTH / 2 - circleSpacing;
-  
+
   const stats = [
-    { value: data.stats.totalArtists, label: 'Artistas' },
-    { value: data.stats.totalAlbums, label: 'Álbuns' },
-    { value: data.stats.totalTracks, label: 'Músicas' }
+    { value: data.stats.totalArtists, label: "Artistas" },
+    { value: data.stats.totalAlbums, label: "Álbuns" },
+    { value: data.stats.totalTracks, label: "Músicas" },
   ];
-  
+
   stats.forEach((stat, index) => {
     const x = startX + index * circleSpacing;
-    
-    const gradient = ctx.createRadialGradient(x, circleY, 0, x, circleY, circleRadius);
-    gradient.addColorStop(0, 'rgba(224, 123, 123, 0.3)');
-    gradient.addColorStop(1, 'rgba(224, 123, 123, 0.1)');
+
+    const gradient = ctx.createRadialGradient(
+      x,
+      circleY,
+      0,
+      x,
+      circleY,
+      circleRadius,
+    );
+    gradient.addColorStop(0, "rgba(224, 123, 123, 0.3)");
+    gradient.addColorStop(1, "rgba(224, 123, 123, 0.1)");
     ctx.fillStyle = gradient;
     ctx.beginPath();
     ctx.arc(x, circleY, circleRadius, 0, Math.PI * 2);
     ctx.fill();
-    
-    ctx.fillStyle = 'rgba(224, 123, 123, 0.2)';
+
+    ctx.fillStyle = "rgba(224, 123, 123, 0.2)";
     ctx.beginPath();
     ctx.arc(x, circleY, circleRadius - 10, 0, Math.PI * 2);
     ctx.fill();
-    
+
     ctx.font = `900 34px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
     ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
     ctx.fillText(stat.value.toLocaleString(), x, circleY);
-    
+
     ctx.font = `600 24px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
     ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
-    ctx.textBaseline = 'top';
+    ctx.textBaseline = "top";
     ctx.fillText(stat.label, x, circleY + circleRadius + 15);
   });
 
   currentY = circleY + circleRadius + 80;
 
-  ctx.textAlign = 'left';
+  ctx.textAlign = "left";
 
   const leftX = 80;
   const rightX = 560;
   const listsY = currentY;
 
-  const artistItems = data.artists.map(artist => ({
+  const artistItems = data.artists.map((artist) => ({
     name: artist.name,
     detail: undefined,
   }));
-  
-  drawCompactList(ctx, 'ARTISTAS MAIS OUVIDOS', artistItems, leftX, listsY, '#e07b7b');
-  
-  const trackItems = data.tracks.map(track => ({
+
+  drawCompactList(
+    ctx,
+    "ARTISTAS MAIS OUVIDOS",
+    artistItems,
+    leftX,
+    listsY,
+    "#e07b7b",
+  );
+
+  const trackItems = data.tracks.map((track) => ({
     name: track.name,
     detail: undefined,
   }));
-  
-  drawCompactList(ctx, 'MÚSICAS MAIS OUVIDAS', trackItems, leftX, listsY + 320, '#e07b7b');
 
-  const albumItems = data.albums.map(album => ({
+  drawCompactList(
+    ctx,
+    "MÚSICAS MAIS OUVIDAS",
+    trackItems,
+    leftX,
+    listsY + 320,
+    "#e07b7b",
+  );
+
+  const albumItems = data.albums.map((album) => ({
     name: album.name,
     detail: undefined,
   }));
-  
-  drawCompactList(ctx, 'ÁLBUNS MAIS OUVIDOS', albumItems, rightX, listsY, '#e07b7b');
 
-  ctx.textAlign = 'center';
+  drawCompactList(
+    ctx,
+    "ÁLBUNS MAIS OUVIDOS",
+    albumItems,
+    rightX,
+    listsY,
+    "#e07b7b",
+  );
+
+  ctx.textAlign = "center";
   ctx.font = `900 72px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
-  ctx.fillText('2025', WRAPPED_CANVAS_CONFIG.WIDTH / 2, WRAPPED_CANVAS_CONFIG.HEIGHT - 140);
+  ctx.fillText(
+    "2025",
+    WRAPPED_CANVAS_CONFIG.WIDTH / 2,
+    WRAPPED_CANVAS_CONFIG.HEIGHT - 140,
+  );
 
   ctx.font = `600 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
-  ctx.fillText('semaninha.net', WRAPPED_CANVAS_CONFIG.WIDTH / 2, WRAPPED_CANVAS_CONFIG.HEIGHT - 80);
+  ctx.fillText(
+    "semaninha.net",
+    WRAPPED_CANVAS_CONFIG.WIDTH / 2,
+    WRAPPED_CANVAS_CONFIG.HEIGHT - 80,
+  );
 
   return canvas;
 };

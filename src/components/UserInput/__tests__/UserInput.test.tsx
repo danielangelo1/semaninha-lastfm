@@ -52,8 +52,14 @@ describe("UserInput", () => {
     const user = userEvent.setup();
     render(<UserInput />);
 
-    await user.type(document.getElementById("user") as HTMLInputElement, "dandowski");
-    await user.selectOptions(document.getElementById("limit") as HTMLSelectElement, "3");
+    await user.type(
+      document.getElementById("user") as HTMLInputElement,
+      "dandowski",
+    );
+    await user.selectOptions(
+      document.getElementById("limit") as HTMLSelectElement,
+      "3",
+    );
     await user.click(screen.getByRole("button"));
 
     await waitFor(() => expect(fetchDataMock).toHaveBeenCalledTimes(1));

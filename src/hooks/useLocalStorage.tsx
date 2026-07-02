@@ -13,7 +13,7 @@ interface LocalStorageData {
 export default function useLocalStorage() {
   const isLocalStorageAvailable = (): boolean => {
     try {
-      const test = '__localStorage_test__';
+      const test = "__localStorage_test__";
       localStorage.setItem(test, test);
       localStorage.removeItem(test);
       return true;
@@ -24,7 +24,7 @@ export default function useLocalStorage() {
 
   const setLocalStorage = (values: UserRequest): boolean => {
     if (!isLocalStorageAvailable()) {
-      console.warn('localStorage is not available');
+      console.warn("localStorage is not available");
       return false;
     }
 
@@ -32,19 +32,28 @@ export default function useLocalStorage() {
       localStorage.setItem(STORAGE_KEYS.USER, values.user);
       localStorage.setItem(STORAGE_KEYS.PERIOD, values.period);
       localStorage.setItem(STORAGE_KEYS.LIMIT, values.limit.toString());
-      localStorage.setItem(STORAGE_KEYS.SHOW_ALBUM, values.showAlbum?.toString() || "false");
-      localStorage.setItem(STORAGE_KEYS.SHOW_PLAYS, values.showPlays?.toString() || "false");
-      localStorage.setItem(STORAGE_KEYS.TYPE, values.type || DEFAULT_VALUES.TYPE);
+      localStorage.setItem(
+        STORAGE_KEYS.SHOW_ALBUM,
+        values.showAlbum?.toString() || "false",
+      );
+      localStorage.setItem(
+        STORAGE_KEYS.SHOW_PLAYS,
+        values.showPlays?.toString() || "false",
+      );
+      localStorage.setItem(
+        STORAGE_KEYS.TYPE,
+        values.type || DEFAULT_VALUES.TYPE,
+      );
       return true;
     } catch (error) {
-      console.error('Failed to save to localStorage:', error);
+      console.error("Failed to save to localStorage:", error);
       return false;
     }
   };
 
   const getLocalStorage = (): LocalStorageData => {
     if (!isLocalStorageAvailable()) {
-      console.warn('localStorage is not available, using default values');
+      console.warn("localStorage is not available, using default values");
       return {
         user: null,
         period: null,
@@ -65,7 +74,7 @@ export default function useLocalStorage() {
         type: localStorage.getItem(STORAGE_KEYS.TYPE),
       };
     } catch (error) {
-      console.error('Failed to read from localStorage:', error);
+      console.error("Failed to read from localStorage:", error);
       return {
         user: null,
         period: null,
@@ -83,20 +92,20 @@ export default function useLocalStorage() {
     }
 
     try {
-      Object.values(STORAGE_KEYS).forEach(key => {
+      Object.values(STORAGE_KEYS).forEach((key) => {
         localStorage.removeItem(key);
       });
       return true;
     } catch (error) {
-      console.error('Failed to clear localStorage:', error);
+      console.error("Failed to clear localStorage:", error);
       return false;
     }
   };
 
-  return { 
-    setLocalStorage, 
-    getLocalStorage, 
+  return {
+    setLocalStorage,
+    getLocalStorage,
     clearLocalStorage,
-    isLocalStorageAvailable 
+    isLocalStorageAvailable,
   };
 }

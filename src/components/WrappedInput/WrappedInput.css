@@ -25,7 +25,7 @@
   border: 2px solid #ddd;
   border-radius: 8px;
   font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   transition: border-color 0.3s ease;
 }
 
@@ -48,8 +48,10 @@
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  font-family: 'Poppins', sans-serif;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  font-family: "Poppins", sans-serif;
 }
 
 .generate-button:hover:not(:disabled) {

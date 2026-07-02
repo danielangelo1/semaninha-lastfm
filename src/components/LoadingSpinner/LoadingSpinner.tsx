@@ -1,6 +1,6 @@
-import { memo } from 'react';
-import { useTranslation } from 'react-i18next';
-import './LoadingSpinner.css';
+import { memo } from "react";
+import { useTranslation } from "react-i18next";
+import "./LoadingSpinner.css";
 
 interface LoadingSpinnerProps {
   message?: string;
@@ -8,7 +8,7 @@ interface LoadingSpinnerProps {
 
 const LoadingSpinner = ({ message }: LoadingSpinnerProps) => {
   const { t } = useTranslation();
-  const text = message ?? t('common.loading');
+  const text = message ?? t("common.loading");
 
   return (
     <div className="loading-message">

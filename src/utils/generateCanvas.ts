@@ -1,5 +1,9 @@
 import { getArtistImage } from "../services/SpotifyService";
-import { AlbumApiResponse, ArtistApiResponse, TrackApiResponse } from "../types/apiResponse";
+import {
+  AlbumApiResponse,
+  ArtistApiResponse,
+  TrackApiResponse,
+} from "../types/apiResponse";
 import { UserRequest } from "../types/userRequest";
 import { drawTextOnCanvas, processImages } from "./canvasUtils";
 

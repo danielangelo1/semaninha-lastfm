@@ -7,12 +7,13 @@ import {
 } from "react-router-dom";
 import { useEffect } from "react";
 
-const SENTRY_DSN = "https://cf8686780338d6ac0370478a9b857330@o4510807613833216.ingest.us.sentry.io/4510807614881792";
+const SENTRY_DSN =
+  "https://cf8686780338d6ac0370478a9b857330@o4510807613833216.ingest.us.sentry.io/4510807614881792";
 
 export function initSentry() {
   Sentry.init({
     dsn: SENTRY_DSN,
-        
+
     // Integração com React Router para rastreamento de navegação
     integrations: [
       Sentry.reactRouterV6BrowserTracingIntegration({
@@ -23,15 +24,14 @@ export function initSentry() {
         matchRoutes,
       }),
       Sentry.browserTracingIntegration(),
-        Sentry.breadcrumbsIntegration({
-        console: true, 
-        dom: true, 
-        fetch: true, 
-        history: true, 
-        xhr: true, 
+      Sentry.breadcrumbsIntegration({
+        console: true,
+        dom: true,
+        fetch: true,
+        history: true,
+        xhr: true,
       }),
     ],
-
 
     beforeSend(event, hint) {
       if (hint.originalException instanceof Error) {
@@ -56,11 +56,7 @@ export function initSentry() {
       "AbortError",
       "The user aborted a request",
     ],
-    denyUrls: [
-      /extensions\//i,
-      /^chrome:\/\//i,
-      /^moz-extension:\/\//i,
-    ],
+    denyUrls: [/extensions\//i, /^chrome:\/\//i, /^moz-extension:\/\//i],
   });
 
   // Captura erros não tratados em promises

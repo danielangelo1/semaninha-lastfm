@@ -6,15 +6,18 @@ import { UserRequest } from "../../../types/userRequest";
 
 // Mock the generateCanvas utils
 vi.mock("../../../utils/generateCanvas", () => ({
-  createAlbumImage: vi
-    .fn()
-    .mockResolvedValue({ dataURL: "data:image/png;base64,mock", isPartial: false }),
-  createSpotifyImage: vi
-    .fn()
-    .mockResolvedValue({ dataURL: "data:image/png;base64,mock", isPartial: false }),
-  createTrackImage: vi
-    .fn()
-    .mockResolvedValue({ dataURL: "data:image/png;base64,mock", isPartial: false }),
+  createAlbumImage: vi.fn().mockResolvedValue({
+    dataURL: "data:image/png;base64,mock",
+    isPartial: false,
+  }),
+  createSpotifyImage: vi.fn().mockResolvedValue({
+    dataURL: "data:image/png;base64,mock",
+    isPartial: false,
+  }),
+  createTrackImage: vi.fn().mockResolvedValue({
+    dataURL: "data:image/png;base64,mock",
+    isPartial: false,
+  }),
 }));
 
 describe("Canvas Component", () => {
@@ -64,6 +67,9 @@ describe("Canvas Component", () => {
 
     const link = await screen.findByRole("link", { name: "Baixar imagem" });
     expect(link).toHaveAttribute("href", "data:image/png;base64,mock");
-    expect(link).toHaveAttribute("download", "semaninha-dandowski-album-3x3.jpg");
+    expect(link).toHaveAttribute(
+      "download",
+      "semaninha-dandowski-album-3x3.jpg",
+    );
   });
 });

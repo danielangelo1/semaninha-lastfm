@@ -18,8 +18,8 @@ export default defineConfig({
         "tests/",
         "**/*.d.ts",
         "**/*.config.*",
-        "**/coverage/**"
-      ]
-    }
+        "**/coverage/**",
+      ],
+    },
   },
 });

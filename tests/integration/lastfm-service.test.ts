@@ -1,7 +1,12 @@
 import { describe, it, expect, beforeAll, afterAll, afterEach } from "vitest";
 import { http, HttpResponse } from "msw";
 import { server } from "../mocks/server";
-import { getTopAlbums, getTopArtists, getTopTracks, getUserInfo } from "../../src/services/LastFMService";
+import {
+  getTopAlbums,
+  getTopArtists,
+  getTopTracks,
+  getUserInfo,
+} from "../../src/services/LastFMService";
 import { UserRequest } from "../../src/types/userRequest";
 
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
@@ -37,7 +42,7 @@ describe("LastFM Service (MSW Integration)", () => {
       server.use(
         http.get("http://ws.audioscrobbler.com/2.0/", () => {
           return HttpResponse.error();
-        })
+        }),
       );
 
       await expect(getTopAlbums(baseRequest)).rejects.toThrow();
@@ -47,7 +52,7 @@ describe("LastFM Service (MSW Integration)", () => {
       server.use(
         http.get("http://ws.audioscrobbler.com/2.0/", () => {
           return HttpResponse.json({ error: "server" }, { status: 500 });
-        })
+        }),
       );
 
       await expect(getTopAlbums(baseRequest)).rejects.toThrow();
@@ -87,7 +92,9 @@ describe("LastFM Service (MSW Integration)", () => {
     });
 
     it("should throw error for non-existent user", async () => {
-      await expect(getUserInfo("nonexistent")).rejects.toThrow("User not found");
+      await expect(getUserInfo("nonexistent")).rejects.toThrow(
+        "User not found",
+      );
     });
   });
 
@@ -96,7 +103,7 @@ describe("LastFM Service (MSW Integration)", () => {
       server.use(
         http.get("http://ws.audioscrobbler.com/2.0/", () => {
           return HttpResponse.json({ topalbums: { album: [] } });
-        })
+        }),
       );
 
       const result = await getTopAlbums(baseRequest);
@@ -108,7 +115,7 @@ describe("LastFM Service (MSW Integration)", () => {
         http.get("http://ws.audioscrobbler.com/2.0/", async () => {
           await new Promise((resolve) => setTimeout(resolve, 100));
           return HttpResponse.json({ topalbums: { album: [] } });
-        })
+        }),
       );
 
       const result = await getTopAlbums(baseRequest);

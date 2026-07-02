@@ -43,9 +43,7 @@ const Wrapped = () => {
     <main className="wrapped">
       <div className="wrapped-header">
         <h1>🎵 Semaninha Wrapped</h1>
-        <p>
-          Descubra seus artistas, músicas e álbuns mais ouvidos do ano!
-        </p>
+        <p>Descubra seus artistas, músicas e álbuns mais ouvidos do ano!</p>
       </div>
 
       <WrappedInput
@@ -55,12 +53,7 @@ const Wrapped = () => {
         onGenerate={handleGenerateWrapped}
       />
 
-      {imageUrl && (
-        <WrappedResult
-          imageUrl={imageUrl}
-          username={username}
-        />
-      )}
+      {imageUrl && <WrappedResult imageUrl={imageUrl} username={username} />}
 
       {loading && <LoadingSpinner message={WRAPPED_MESSAGES.LOADING} />}
     </main>

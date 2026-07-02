@@ -48,18 +48,18 @@ npm run dev
 
 ## 📜 Scripts
 
-| Script                  | Descrição                                    |
-| ----------------------- | -------------------------------------------- |
-| `npm run dev`           | Servidor de desenvolvimento (Vite)           |
-| `npm run build`         | Build de produção (tsc + Vite)               |
-| `npm run preview`       | Preview do build                             |
-| `npm test`              | Testes em watch mode (Vitest)                |
-| `npm run test:run`      | Testes uma vez (CI)                          |
-| `npm run test:coverage` | Testes com cobertura                         |
-| `npm run lint`          | ESLint                                       |
-| `npm run format`        | Prettier (escreve)                           |
-| `npm run type-check`    | Checagem de tipos                            |
-| `npm run ci`            | lint + format:check + type-check + build     |
+| Script                  | Descrição                                |
+| ----------------------- | ---------------------------------------- |
+| `npm run dev`           | Servidor de desenvolvimento (Vite)       |
+| `npm run build`         | Build de produção (tsc + Vite)           |
+| `npm run preview`       | Preview do build                         |
+| `npm test`              | Testes em watch mode (Vitest)            |
+| `npm run test:run`      | Testes uma vez (CI)                      |
+| `npm run test:coverage` | Testes com cobertura                     |
+| `npm run lint`          | ESLint                                   |
+| `npm run format`        | Prettier (escreve)                       |
+| `npm run type-check`    | Checagem de tipos                        |
+| `npm run ci`            | lint + format:check + type-check + build |
 
 ## 📁 Estrutura
 
@@ -81,12 +81,12 @@ tests/          Setup, mocks (MSW) e testes de integração
 O deploy é feito automaticamente pela integração da Vercel. Variáveis de
 ambiente necessárias no dashboard:
 
-| Variável                | Escopo                                    |
-| ----------------------- | ----------------------------------------- |
-| `VITE_API_KEY`          | Build (API key do Last.fm)                |
+| Variável                | Escopo                                       |
+| ----------------------- | -------------------------------------------- |
+| `VITE_API_KEY`          | Build (API key do Last.fm)                   |
 | `VITE_LASTFM_URL`       | Build (`https://ws.audioscrobbler.com/2.0/`) |
-| `SPOTIFY_CLIENT_ID`     | Runtime da function (server-side)         |
-| `SPOTIFY_CLIENT_SECRET` | Runtime da function (server-side)         |
+| `SPOTIFY_CLIENT_ID`     | Runtime da function (server-side)            |
+| `SPOTIFY_CLIENT_SECRET` | Runtime da function (server-side)            |
 
 ---
 
