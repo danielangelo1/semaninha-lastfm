@@ -1,6 +1,6 @@
 import { UserRequest } from "../types/userRequest";
 import { setFont } from "./FontHandler";
-import { CANVAS_CONFIG, ERROR_MESSAGES } from "../constants";
+import { CANVAS_CONFIG, ERROR_KEYS, ERROR_MESSAGES } from "../constants";
 
 export const createCanvasContext = () => {
   const canvas = document.createElement("canvas");
@@ -117,7 +117,7 @@ export const processImages = async <T>(
   ) => void,
 ): Promise<GeneratedImage> => {
   if (dataItems.length === 0) {
-    throw new Error(ERROR_MESSAGES.INSUFFICIENT_DATA);
+    throw new Error(ERROR_KEYS.INSUFFICIENT_DATA);
   }
 
   const { canvas, context } = createCanvasContext();

@@ -43,11 +43,14 @@
     "retry": "Try Again"
   },
   "canvas": {
-    "loading": "Generating album collage",
-    "loadingAria": "Loading Last.fm album collage",
-    "altText": "Collage of {{size}}x{{size}} most listened albums by {{user}} in the {{period}} period",
+    "loading": "Generating collage",
+    "loadingAria": "Loading Last.fm collage",
+    "altText": "{{size}}x{{size}} collage of {{user}}'s top {{type}} for the period: {{period}}",
     "download": "Download image",
     "partialGrid": "You don't have enough items to fill the whole grid — the remaining cells use a placeholder"
+  },
+  "common": {
+    "loading": "Loading..."
   },
   "footer": {
     "developedBy": "Developed by",

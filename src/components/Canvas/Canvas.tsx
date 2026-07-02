@@ -51,7 +51,7 @@ const ImageRenderer = ({
         }
       } catch (error) {
         if (!cancelled && error instanceof Error) {
-          toast.error(error.message);
+          toast.error(t(error.message, { defaultValue: error.message }));
         }
       } finally {
         if (!cancelled) {
@@ -78,16 +78,12 @@ const ImageRenderer = ({
   return (
     <div className="canvas-result" ref={containerRef}>
       {loading && (
-        <div
-          role="status"
-          aria-live="polite"
-          aria-label="Gerando colagem de álbuns"
-        >
+        <div role="status" aria-live="polite" aria-label={t("canvas.loading")}>
           <Audio
             height={80}
             width={80}
             color="red"
-            ariaLabel="Carregando colagem de álbuns do Last.fm"
+            ariaLabel={t("canvas.loadingAria")}
             wrapperClass="loading"
           />
         </div>
@@ -96,7 +92,12 @@ const ImageRenderer = ({
         <>
           <img
             src={imageSrc}
-            alt={`Colagem de ${userInput.limit}x${userInput.limit} álbuns mais escutados de ${userInput.user} no período de ${userInput.period}`}
+            alt={t("canvas.altText", {
+              size: userInput.limit,
+              type: t(`types.${userInput.type}`),
+              user: userInput.user,
+              period: t(`periods.${userInput.period}`),
+            })}
             loading="lazy"
             decoding="async"
             role="img"

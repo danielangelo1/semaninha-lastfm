@@ -7,7 +7,7 @@ import {
 } from "../types/apiResponse";
 import { UserRequest } from "../types/userRequest";
 import { api } from "./api";
-import { ERROR_MESSAGES } from "../constants";
+import { ERROR_KEYS, ERROR_MESSAGES } from "../constants";
 import { env } from "../config/env";
 
 const ENDPOINTS = {
@@ -41,12 +41,12 @@ export const getTopAlbums = async (
     const response = await api.get(url);
 
     if (response.status !== 200) {
-      throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
+      throw new Error(ERROR_KEYS.API_REQUEST_ERROR);
     }
 
     // Check if the response contains an error from Last.fm API
     if (response.data.error) {
-      throw new Error(response.data.message || ERROR_MESSAGES.USER_NOT_FOUND);
+      throw new Error(response.data.message || ERROR_KEYS.USER_NOT_FOUND);
     }
 
     return response.data as AlbumApiResponse;
@@ -54,7 +54,7 @@ export const getTopAlbums = async (
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
+    throw new Error(ERROR_KEYS.API_REQUEST_ERROR);
   }
 };
 
@@ -72,12 +72,12 @@ export const getTopArtists = async (
     const response = await api.get(url);
 
     if (response.status !== 200) {
-      throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
+      throw new Error(ERROR_KEYS.API_REQUEST_ERROR);
     }
 
     // Check if the response contains an error from Last.fm API
     if (response.data.error) {
-      throw new Error(response.data.message || ERROR_MESSAGES.USER_NOT_FOUND);
+      throw new Error(response.data.message || ERROR_KEYS.USER_NOT_FOUND);
     }
 
     return response.data as ArtistApiResponse;
@@ -85,7 +85,7 @@ export const getTopArtists = async (
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
+    throw new Error(ERROR_KEYS.API_REQUEST_ERROR);
   }
 };
 
@@ -103,12 +103,12 @@ export const getTopTracks = async (
     const response = await api.get(url);
 
     if (response.status !== 200) {
-      throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
+      throw new Error(ERROR_KEYS.API_REQUEST_ERROR);
     }
 
     // Check if the response contains an error from Last.fm API
     if (response.data.error) {
-      throw new Error(response.data.message || ERROR_MESSAGES.USER_NOT_FOUND);
+      throw new Error(response.data.message || ERROR_KEYS.USER_NOT_FOUND);
     }
 
     return response.data as TrackApiResponse;
@@ -116,7 +116,7 @@ export const getTopTracks = async (
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
+    throw new Error(ERROR_KEYS.API_REQUEST_ERROR);
   }
 };
 

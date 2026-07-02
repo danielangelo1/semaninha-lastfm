@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { processImages } from "../canvasUtils";
 import { UserRequest } from "../../types/userRequest";
-import { ERROR_MESSAGES } from "../../constants";
+import { ERROR_KEYS } from "../../constants";
 
 const userInput: UserRequest = {
   user: "dandowski",
@@ -19,7 +19,7 @@ describe("processImages", () => {
   it("throws when there is no data at all", async () => {
     await expect(
       processImages([], userInput, (item) => item.src, vi.fn()),
-    ).rejects.toThrow(ERROR_MESSAGES.INSUFFICIENT_DATA);
+    ).rejects.toThrow(ERROR_KEYS.INSUFFICIENT_DATA);
   });
 
   it("generates a full grid without marking it partial", async () => {

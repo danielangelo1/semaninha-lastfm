@@ -45,7 +45,16 @@ export const API_CONFIG = {
   MAX_RETRY_ATTEMPTS: 3,
 } as const;
 
-// Error Messages
+// Error i18n keys (traduzidas via i18next nos toasts; en.json/pt.json → errors.*)
+export const ERROR_KEYS = {
+  USER_NOT_FOUND: 'errors.userNotFound',
+  INSUFFICIENT_DATA: 'errors.insufficientData',
+  API_REQUEST_ERROR: 'errors.apiError',
+  USER_REQUIRED: 'errors.userRequired',
+  PERIOD_REQUIRED: 'errors.periodRequired',
+} as const;
+
+// Error Messages (legado; ainda usado pelo subsistema Wrapped)
 export const ERROR_MESSAGES = {
   USER_NOT_FOUND: 'Usuário não encontrado',
   INSUFFICIENT_DATA: 'Você não tem dados suficientes para gerar a imagem :(, tente diminuir o tamanho',

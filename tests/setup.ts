@@ -1,5 +1,9 @@
 import "@testing-library/jest-dom";
 import { vi } from "vitest";
+import i18n from "../src/i18n";
+
+// Idioma determinístico nos testes (o LanguageDetector seguiria navigator.language)
+await i18n.changeLanguage("pt");
 
 // Mock environment variables for import.meta.env
 vi.stubEnv("VITE_API_KEY", "test-api-key");

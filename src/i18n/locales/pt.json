@@ -43,11 +43,14 @@
     "retry": "Tentar Novamente"
   },
   "canvas": {
-    "loading": "Gerando colagem de álbuns",
-    "loadingAria": "Carregando colagem de álbuns do Last.fm",
-    "altText": "Colagem de {{size}}x{{size}} álbuns mais escutados de {{user}} no período de {{period}}",
+    "loading": "Gerando colagem",
+    "loadingAria": "Carregando colagem do Last.fm",
+    "altText": "Colagem {{size}}x{{size}} do top {{type}} de {{user}} no período: {{period}}",
     "download": "Baixar imagem",
     "partialGrid": "Você não tem itens suficientes para preencher toda a grade — as células restantes receberam um espaço reservado"
+  },
+  "common": {
+    "loading": "Carregando..."
   },
   "footer": {
     "developedBy": "Desenvolvido por",
