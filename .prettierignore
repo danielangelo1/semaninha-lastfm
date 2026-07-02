@@ -1,0 +1,8 @@
+dist
+coverage
+tests/coverage
+node_modules
+package-lock.json
+public/ads.txt
+docs
+.vercel

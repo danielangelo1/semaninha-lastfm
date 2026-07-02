@@ -12,14 +12,15 @@ import {
   CONTENT_TYPES,
   GRID_SIZES,
   DEFAULT_VALUES,
-  ERROR_MESSAGES,
+  ERROR_KEYS,
 } from "../../constants";
 
 const UserInput = () => {
   const { t } = useTranslation();
   const [userInput, setUserInput] = useState<UserRequest | null>(null);
   const { getLocalStorage, setLocalStorage } = useLocalStorage();
-  const { albumData, artistData, trackData, fetchData } = useLastFmData();
+  const { albumData, artistData, trackData, loading, fetchData } =
+    useLastFmData();
 
   const defaultFormValues = useMemo(() => {
     const storage = getLocalStorage();
@@ -28,7 +29,7 @@ const UserInput = () => {
       period: storage.period || DEFAULT_VALUES.PERIOD,
       limit: parseInt(storage.limit || DEFAULT_VALUES.LIMIT.toString()),
       showAlbum: storage.showAlbum === "true",
-      showPlays: storage.showPlays === "false",
+      showPlays: storage.showPlays === "true",
       type: storage.type || DEFAULT_VALUES.TYPE,
     };
   }, [getLocalStorage]);
@@ -63,12 +64,14 @@ const UserInput = () => {
 
   useEffect(() => {
     if (errors.user) {
-      toast.error(ERROR_MESSAGES.USER_REQUIRED);
+      toast.error(t(ERROR_KEYS.USER_REQUIRED), { toastId: "user-required" });
     }
     if (errors.period) {
-      toast.error(ERROR_MESSAGES.PERIOD_REQUIRED);
+      toast.error(t(ERROR_KEYS.PERIOD_REQUIRED), {
+        toastId: "period-required",
+      });
     }
-  }, [errors]);
+  }, [errors, t]);
 
   const currentData = useMemo(() => {
     if (albumData) return albumData;
@@ -106,8 +109,9 @@ const UserInput = () => {
         <div className="select">
           <label htmlFor="limit">{t("form.size")}</label>
           <select
+            id="limit"
             aria-label={t("form.sizeSelect")}
-            {...register("limit", { required: true })}
+            {...register("limit", { required: true, valueAsNumber: true })}
           >
             {GRID_SIZES.map((size) => (
               <option key={size.value} value={size.value}>
@@ -119,6 +123,7 @@ const UserInput = () => {
         <div className="select">
           <label htmlFor="type">{t("form.type")}</label>
           <select
+            id="type"
             aria-label={t("form.typeSelect")}
             {...register("type", { required: true })}
           >
@@ -141,7 +146,9 @@ const UserInput = () => {
           id="showPlays"
           {...register("showPlays")}
         />
-        <button type="submit">{t("form.generate")}</button>
+        <button type="submit" disabled={loading}>
+          {loading ? t("form.generating") : t("form.generate")}
+        </button>
       </div>
       {userInput && currentData && (
         <Canvas data={currentData} userInput={userInput} />

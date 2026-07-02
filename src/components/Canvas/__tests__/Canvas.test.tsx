@@ -6,8 +6,18 @@ import { UserRequest } from "../../../types/userRequest";
 
 // Mock the generateCanvas utils
 vi.mock("../../../utils/generateCanvas", () => ({
-  createAlbumImage: vi.fn().mockResolvedValue("data:image/png;base64,mock"),
-  createSpotifyImage: vi.fn().mockResolvedValue("data:image/png;base64,mock"),
+  createAlbumImage: vi.fn().mockResolvedValue({
+    dataURL: "data:image/png;base64,mock",
+    isPartial: false,
+  }),
+  createSpotifyImage: vi.fn().mockResolvedValue({
+    dataURL: "data:image/png;base64,mock",
+    isPartial: false,
+  }),
+  createTrackImage: vi.fn().mockResolvedValue({
+    dataURL: "data:image/png;base64,mock",
+    isPartial: false,
+  }),
 }));
 
 describe("Canvas Component", () => {
@@ -32,22 +42,34 @@ describe("Canvas Component", () => {
     limit: 3,
     showAlbum: true,
     showPlays: true,
-    type: "albums",
+    type: "album",
   };
 
   it("renders canvas component with loading state", () => {
     render(<Canvas data={mockAlbumData} userInput={mockUserInput} />);
 
-    // Should show loading spinner initially
-    expect(screen.getByLabelText("Gerando colagem de álbuns")).toBeInTheDocument();
+    // Should show loading spinner initially (setup força idioma pt)
+    expect(screen.getByLabelText("Gerando colagem")).toBeInTheDocument();
   });
 
-  it("renders image after loading", async () => {
+  it("renders image after loading with a translated, type-aware alt text", async () => {
     render(<Canvas data={mockAlbumData} userInput={mockUserInput} />);
 
-    // Wait for image to load - using the new descriptive alt text
-    const image = await screen.findByAltText(/Colagem de \d+x\d+ álbuns mais escutados de .+ no período de .+/);
+    const image = await screen.findByAltText(
+      "Colagem 3x3 do top Álbuns de dandowski no período: Últimos 7 dias",
+    );
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute("src", "data:image/png;base64,mock");
+  });
+
+  it("renders a download link for the generated image", async () => {
+    render(<Canvas data={mockAlbumData} userInput={mockUserInput} />);
+
+    const link = await screen.findByRole("link", { name: "Baixar imagem" });
+    expect(link).toHaveAttribute("href", "data:image/png;base64,mock");
+    expect(link).toHaveAttribute(
+      "download",
+      "semaninha-dandowski-album-3x3.jpg",
+    );
   });
 });

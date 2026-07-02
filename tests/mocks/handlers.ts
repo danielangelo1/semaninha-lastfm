@@ -10,7 +10,10 @@ export const mockAlbumResponse = {
         { "#text": "", size: "small" },
         { "#text": "", size: "medium" },
         { "#text": "", size: "large" },
-        { "#text": `https://lastfm.freetls.fastly.net/i/u/300x300/album-${i}.png`, size: "extralarge" },
+        {
+          "#text": `https://lastfm.freetls.fastly.net/i/u/300x300/album-${i}.png`,
+          size: "extralarge",
+        },
       ],
       mbid: `album-mbid-${i}`,
       name: `Album ${i}`,
@@ -66,7 +69,10 @@ export const handlers = [
                 { "#text": "", size: "small" },
                 { "#text": "", size: "medium" },
                 { "#text": "", size: "large" },
-                { "#text": `https://lastfm.freetls.fastly.net/i/u/300x300/track-${i}.png`, size: "extralarge" },
+                {
+                  "#text": `https://lastfm.freetls.fastly.net/i/u/300x300/track-${i}.png`,
+                  size: "extralarge",
+                },
               ],
               mbid: `track-mbid-${i}`,
               name: `Track ${i}`,
@@ -78,7 +84,10 @@ export const handlers = [
       case "user.getinfo":
         return HttpResponse.json(mockUserInfoResponse);
       default:
-        return HttpResponse.json({ error: 3, message: "Invalid Method" }, { status: 400 });
+        return HttpResponse.json(
+          { error: 3, message: "Invalid Method" },
+          { status: 400 },
+        );
     }
   }),
 ];

@@ -22,7 +22,7 @@ interface Album {
 export interface AlbumApiResponse {
   topalbums: {
     album: Album[];
-    '@attr'?: {
+    "@attr"?: {
       total: string;
     };
   };
@@ -31,7 +31,7 @@ export interface AlbumApiResponse {
 export interface ArtistApiResponse {
   topartists: {
     artist: Artist[];
-    '@attr'?: {
+    "@attr"?: {
       total: string;
     };
   };
@@ -49,7 +49,7 @@ interface Track {
 export interface TrackApiResponse {
   toptracks: {
     track: Track[];
-    '@attr'?: {
+    "@attr"?: {
       total: string;
     };
   };
@@ -58,7 +58,7 @@ export interface TrackApiResponse {
 interface Tag {
   name: string;
   count: string;
-  url: string;  
+  url: string;
 }
 export interface TagApiResponse {
   toptags: {

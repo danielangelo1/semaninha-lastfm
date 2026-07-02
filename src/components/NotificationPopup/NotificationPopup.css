@@ -154,7 +154,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -171,23 +172,23 @@
     width: auto;
     max-width: none;
   }
-  
+
   .notification-content {
     padding: 16px;
   }
-  
+
   .notification-header h3 {
     font-size: 15px;
   }
-  
+
   .notification-content p {
     font-size: 13px;
   }
-  
+
   .notification-actions {
     flex-direction: column;
   }
-  
+
   .notification-btn {
     flex: none;
   }
@@ -199,24 +200,24 @@
     background: #1a1a1a;
     border: 2px solid #c3000d;
   }
-  
+
   .notification-content {
     color: #f7f7f7;
   }
-  
+
   .notification-header h3 {
     color: #f7f7f7;
   }
-  
+
   .notification-content p {
     color: #cccccc;
   }
-  
+
   .notification-close {
     background: #333333;
     color: #c3000d;
   }
-  
+
   .notification-close:hover {
     background: #c3000d;
     color: white;
@@ -228,16 +229,16 @@
   .notification-popup {
     animation: none;
   }
-  
+
   .notification-popup.closing {
     animation: none;
     opacity: 0;
   }
-  
+
   .notification-icon {
     animation: none;
   }
-  
+
   .notification-btn:hover {
     transform: none;
   }

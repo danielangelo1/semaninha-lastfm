@@ -1,9 +1,18 @@
-import { useState } from 'react';
-import { toast } from 'react-toastify';
-import { AlbumApiResponse, ArtistApiResponse, TrackApiResponse } from '../types/apiResponse';
-import { UserRequest } from '../types/userRequest';
-import { getTopAlbums, getTopArtists, getTopTracks } from '../services/LastFMService';
-import { ERROR_MESSAGES } from '../constants';
+import { useState } from "react";
+import { toast } from "react-toastify";
+import {
+  AlbumApiResponse,
+  ArtistApiResponse,
+  TrackApiResponse,
+} from "../types/apiResponse";
+import { UserRequest } from "../types/userRequest";
+import {
+  getTopAlbums,
+  getTopArtists,
+  getTopTracks,
+} from "../services/LastFMService";
+import { ERROR_KEYS } from "../constants";
+import i18n from "../i18n";
 
 interface UseLastFmDataReturn {
   albumData: AlbumApiResponse | null;
@@ -26,28 +35,31 @@ export const useLastFmData = (): UseLastFmDataReturn => {
     try {
       setLoading(true);
       setError(null);
-      
-      if (data.type === 'album') {
+
+      if (data.type === "album") {
         setArtistData(null);
         setTrackData(null);
         const response = await getTopAlbums(data);
         setAlbumData(response);
-      } else if (data.type === 'artist') {
+      } else if (data.type === "artist") {
         setAlbumData(null);
         setTrackData(null);
         const response = await getTopArtists(data);
         setArtistData(response);
-      } else if (data.type === 'track') {
+      } else if (data.type === "track") {
         setAlbumData(null);
         setArtistData(null);
         const response = await getTopTracks(data);
         setTrackData(response);
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : ERROR_MESSAGES.USER_NOT_FOUND;
+      const rawMessage =
+        error instanceof Error ? error.message : ERROR_KEYS.USER_NOT_FOUND;
+      // chaves conhecidas (errors.*) são traduzidas; mensagens dinâmicas passam cruas
+      const errorMessage = i18n.t(rawMessage, { defaultValue: rawMessage });
       setError(errorMessage);
       toast.error(errorMessage);
-      console.error('Last.fm API error:', error);
+      console.error("Last.fm API error:", error);
     } finally {
       setLoading(false);
     }

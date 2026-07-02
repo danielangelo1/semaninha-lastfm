@@ -1,5 +1,5 @@
-import { memo } from 'react';
-import './WrappedInput.css';
+import { memo } from "react";
+import "./WrappedInput.css";
 
 interface WrappedInputProps {
   username: string;
@@ -8,9 +8,14 @@ interface WrappedInputProps {
   onGenerate: () => void;
 }
 
-const WrappedInput = ({ username, loading, onUsernameChange, onGenerate }: WrappedInputProps) => {
+const WrappedInput = ({
+  username,
+  loading,
+  onUsernameChange,
+  onGenerate,
+}: WrappedInputProps) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && !loading && username.trim()) {
+    if (e.key === "Enter" && !loading && username.trim()) {
       onGenerate();
     }
   };
@@ -37,7 +42,7 @@ const WrappedInput = ({ username, loading, onUsernameChange, onGenerate }: Wrapp
         disabled={loading || !username.trim()}
         aria-label="Gerar Wrapped 2025"
       >
-        {loading ? 'Gerando...' : 'Gerar Wrapped 2025'}
+        {loading ? "Gerando..." : "Gerar Wrapped 2025"}
       </button>
     </div>
   );

@@ -1,6 +1,6 @@
 import { UserRequest } from "../types/userRequest";
 import { setFont } from "./FontHandler";
-import { CANVAS_CONFIG, ERROR_MESSAGES } from "../constants";
+import { CANVAS_CONFIG, ERROR_KEYS, ERROR_MESSAGES } from "../constants";
 
 export const createCanvasContext = () => {
   const canvas = document.createElement("canvas");
@@ -18,6 +18,7 @@ export const createCanvasContext = () => {
   return { canvas, context };
 };
 
+const IMAGE_CACHE_MAX_ENTRIES = 50;
 const imageCache = new Map<string, HTMLImageElement>();
 
 export const clearImageCache = () => imageCache.clear();
@@ -34,6 +35,13 @@ const loadImage = (src: string): Promise<HTMLImageElement> => {
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.onload = () => {
+      // o hit acima reordena via delete+set, então a primeira chave é a LRU
+      if (imageCache.size >= IMAGE_CACHE_MAX_ENTRIES) {
+        const oldestKey = imageCache.keys().next().value;
+        if (oldestKey !== undefined) {
+          imageCache.delete(oldestKey);
+        }
+      }
       imageCache.set(src, img);
       resolve(img);
     };
@@ -56,7 +64,9 @@ export const drawImageOnCanvas = (
       context.drawImage(img, x, y, width, height);
     })
     .catch(() => {
-      console.log("Error loading image", imgSrc);
+      if (import.meta.env.DEV) {
+        console.warn("Error loading image", imgSrc);
+      }
       context.fillStyle = errorFill;
       context.fillRect(x, y, width, height);
     });
@@ -73,6 +83,35 @@ export const drawTextOnCanvas = (
   context.fillText(text, x, y);
 };
 
+export interface GeneratedImage {
+  dataURL: string;
+  isPartial: boolean;
+}
+
+const drawPlaceholderCell = async (
+  context: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+) => {
+  context.fillStyle = "#1a1a1a";
+  context.fillRect(x, y, size, size);
+
+  try {
+    const img = await loadImage(CANVAS_CONFIG.PLACEHOLDER_IMAGE);
+    const iconSize = size * 0.4;
+    context.drawImage(
+      img,
+      x + (size - iconSize) / 2,
+      y + (size - iconSize) / 2,
+      iconSize,
+      iconSize,
+    );
+  } catch {
+    // célula fica apenas com o fundo escuro
+  }
+};
+
 export const processImages = async <T>(
   dataItems: T[],
   userInput: UserRequest,
@@ -86,9 +125,9 @@ export const processImages = async <T>(
     albumSize: number,
     especialPlays: number,
   ) => void,
-) => {
-  if (dataItems.length < userInput.limit * userInput.limit) {
-    throw new Error(ERROR_MESSAGES.INSUFFICIENT_DATA);
+): Promise<GeneratedImage> => {
+  if (dataItems.length === 0) {
+    throw new Error(ERROR_KEYS.INSUFFICIENT_DATA);
   }
 
   const { canvas, context } = createCanvasContext();
@@ -97,25 +136,38 @@ export const processImages = async <T>(
     userInput.limit,
   );
 
-  const imagePromises = dataItems.map(async (item, index) => {
-    const x = (index % userInput.limit) * (canvas.width / userInput.limit);
-    const y =
-      Math.floor(index / userInput.limit) * (canvas.height / userInput.limit);
-    const imgSrc = getImageSrc(item);
+  const totalCells = userInput.limit * userInput.limit;
+  const cellSize = canvas.width / userInput.limit;
+
+  const cellPromises = Array.from({ length: totalCells }, async (_, index) => {
+    const x = (index % userInput.limit) * cellSize;
+    const y = Math.floor(index / userInput.limit) * cellSize;
+    const item = dataItems[index];
+
+    if (!item) {
+      await drawPlaceholderCell(context, x, y, cellSize);
+      return;
+    }
 
     await drawImageOnCanvas(
       context,
-      imgSrc,
+      getImageSrc(item),
       x,
       y,
-      canvas.width / userInput.limit,
-      canvas.height / userInput.limit,
+      cellSize,
+      cellSize,
     );
 
     drawExtraDetails(context, item, x, y, artistSize, albumSize, especialPlays);
   });
 
-  await Promise.all(imagePromises);
+  await Promise.all(cellPromises);
 
-  return canvas.toDataURL("image/png");
+  return {
+    dataURL: canvas.toDataURL(
+      CANVAS_CONFIG.IMAGE_FORMAT,
+      CANVAS_CONFIG.IMAGE_QUALITY,
+    ),
+    isPartial: dataItems.length < totalCells,
+  };
 };

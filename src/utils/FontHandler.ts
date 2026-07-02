@@ -11,7 +11,7 @@ export default function fontHandler(gridSize: number) {
     10: [10, 4, 0],
   };
 
-  return fontSizes[gridSize];
+  return fontSizes[gridSize] ?? fontSizes[5];
 }
 
 export async function setFont(

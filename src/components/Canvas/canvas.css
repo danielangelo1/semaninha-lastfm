@@ -1,3 +1,27 @@
+.canvas-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  scroll-margin-top: 1rem;
+}
+
+.download-button {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background-color: #c3000d;
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.download-button:hover,
+.download-button:focus-visible {
+  background-color: #9e000a;
+}
+
 .loading {
   display: flex;
   justify-content: center;
