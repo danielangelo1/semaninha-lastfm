@@ -28,7 +28,7 @@ const UserInput = () => {
       period: storage.period || DEFAULT_VALUES.PERIOD,
       limit: parseInt(storage.limit || DEFAULT_VALUES.LIMIT.toString()),
       showAlbum: storage.showAlbum === "true",
-      showPlays: storage.showPlays === "false",
+      showPlays: storage.showPlays === "true",
       type: storage.type || DEFAULT_VALUES.TYPE,
     };
   }, [getLocalStorage]);
@@ -106,8 +106,9 @@ const UserInput = () => {
         <div className="select">
           <label htmlFor="limit">{t("form.size")}</label>
           <select
+            id="limit"
             aria-label={t("form.sizeSelect")}
-            {...register("limit", { required: true })}
+            {...register("limit", { required: true, valueAsNumber: true })}
           >
             {GRID_SIZES.map((size) => (
               <option key={size.value} value={size.value}>
@@ -119,6 +120,7 @@ const UserInput = () => {
         <div className="select">
           <label htmlFor="type">{t("form.type")}</label>
           <select
+            id="type"
             aria-label={t("form.typeSelect")}
             {...register("type", { required: true })}
           >

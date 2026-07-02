@@ -74,7 +74,7 @@ export const getArtistImage = async (artistName: string): Promise<Image> => {
       (artist) => artist.name.toLowerCase() === formatArtistName(artistName),
     );
   const spotifyObject = found || response.data.artists.items[0];
-  return spotifyObject.images[0];
+  return spotifyObject?.images?.[0] ?? { url: "" };
 };
 
 export const getSpotifyIdFromMBID = async (mbid: string): Promise<string> => {
