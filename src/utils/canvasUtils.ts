@@ -18,6 +18,7 @@ export const createCanvasContext = () => {
   return { canvas, context };
 };
 
+const IMAGE_CACHE_MAX_ENTRIES = 50;
 const imageCache = new Map<string, HTMLImageElement>();
 
 export const clearImageCache = () => imageCache.clear();
@@ -34,6 +35,13 @@ const loadImage = (src: string): Promise<HTMLImageElement> => {
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.onload = () => {
+      // o hit acima reordena via delete+set, então a primeira chave é a LRU
+      if (imageCache.size >= IMAGE_CACHE_MAX_ENTRIES) {
+        const oldestKey = imageCache.keys().next().value;
+        if (oldestKey !== undefined) {
+          imageCache.delete(oldestKey);
+        }
+      }
       imageCache.set(src, img);
       resolve(img);
     };
@@ -56,7 +64,9 @@ export const drawImageOnCanvas = (
       context.drawImage(img, x, y, width, height);
     })
     .catch(() => {
-      console.log("Error loading image", imgSrc);
+      if (import.meta.env.DEV) {
+        console.warn("Error loading image", imgSrc);
+      }
       context.fillStyle = errorFill;
       context.fillRect(x, y, width, height);
     });

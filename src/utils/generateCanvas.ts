@@ -58,14 +58,18 @@ export const createSpotifyImage = async (
   );
 };
 
-export const createAlbumImage = async (
-  data: AlbumApiResponse,
-  userInput: UserRequest,
-) => {
+interface MediaItem {
+  name: string;
+  playcount: string;
+  artist: { name: string };
+  image: { "#text": string }[];
+}
+
+const createMediaImage = (items: MediaItem[], userInput: UserRequest) => {
   return processImages(
-    data.topalbums.album,
+    items,
     userInput,
-    (album) => album.image[3]["#text"],
+    (item) => item.image[3]["#text"],
     (context, item, x, y, artistSize, albumSize, especialPlays) => {
       if (userInput.showAlbum) {
         drawTextOnCanvas(context, item.artist.name, x + 2, artistSize + y);
@@ -82,26 +86,12 @@ export const createAlbumImage = async (
   );
 };
 
-export const createTrackImage = async (
+export const createAlbumImage = (
+  data: AlbumApiResponse,
+  userInput: UserRequest,
+) => createMediaImage(data.topalbums.album, userInput);
+
+export const createTrackImage = (
   data: TrackApiResponse,
   userInput: UserRequest,
-) => {
-  return processImages(
-    data.toptracks.track,
-    userInput,
-    (track) => track.image[3]["#text"],
-    (context, item, x, y, artistSize, albumSize, especialPlays) => {
-      if (userInput.showAlbum) {
-        drawTextOnCanvas(context, item.artist.name, x + 2, artistSize + y);
-        drawTextOnCanvas(context, item.name, x + 2, y + (albumSize + 16));
-      }
-      if (userInput.showPlays)
-        drawTextOnCanvas(
-          context,
-          `Plays: ${item.playcount}`,
-          x + 2,
-          y + (especialPlays + 30),
-        );
-    },
-  );
-};
+) => createMediaImage(data.toptracks.track, userInput);

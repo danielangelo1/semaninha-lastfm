@@ -27,17 +27,13 @@ const buildLastFmUrl = (
   return `${endpoint}user=${encodeURIComponent(user)}&period=${period}&limit=${limit}&api_key=${env.VITE_API_KEY}&format=json`;
 };
 
-export const getTopAlbums = async (
+const fetchTopData = async <T>(
+  endpoint: string,
   data: UserRequest,
-): Promise<AlbumApiResponse> => {
+): Promise<T> => {
   try {
     const gridSize = data.limit * data.limit;
-    const url = buildLastFmUrl(
-      ENDPOINTS.TOP_ALBUMS,
-      data.user,
-      data.period,
-      gridSize,
-    );
+    const url = buildLastFmUrl(endpoint, data.user, data.period, gridSize);
     const response = await api.get(url);
 
     if (response.status !== 200) {
@@ -49,7 +45,7 @@ export const getTopAlbums = async (
       throw new Error(response.data.message || ERROR_KEYS.USER_NOT_FOUND);
     }
 
-    return response.data as AlbumApiResponse;
+    return response.data as T;
   } catch (error) {
     if (error instanceof Error) {
       throw error;
@@ -58,67 +54,14 @@ export const getTopAlbums = async (
   }
 };
 
-export const getTopArtists = async (
-  data: UserRequest,
-): Promise<ArtistApiResponse> => {
-  try {
-    const gridSize = data.limit * data.limit;
-    const url = buildLastFmUrl(
-      ENDPOINTS.TOP_ARTISTS,
-      data.user,
-      data.period,
-      gridSize,
-    );
-    const response = await api.get(url);
+export const getTopAlbums = (data: UserRequest): Promise<AlbumApiResponse> =>
+  fetchTopData<AlbumApiResponse>(ENDPOINTS.TOP_ALBUMS, data);
 
-    if (response.status !== 200) {
-      throw new Error(ERROR_KEYS.API_REQUEST_ERROR);
-    }
+export const getTopArtists = (data: UserRequest): Promise<ArtistApiResponse> =>
+  fetchTopData<ArtistApiResponse>(ENDPOINTS.TOP_ARTISTS, data);
 
-    // Check if the response contains an error from Last.fm API
-    if (response.data.error) {
-      throw new Error(response.data.message || ERROR_KEYS.USER_NOT_FOUND);
-    }
-
-    return response.data as ArtistApiResponse;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error(ERROR_KEYS.API_REQUEST_ERROR);
-  }
-};
-
-export const getTopTracks = async (
-  data: UserRequest,
-): Promise<TrackApiResponse> => {
-  try {
-    const gridSize = data.limit * data.limit;
-    const url = buildLastFmUrl(
-      ENDPOINTS.TOP_TRACKS,
-      data.user,
-      data.period,
-      gridSize,
-    );
-    const response = await api.get(url);
-
-    if (response.status !== 200) {
-      throw new Error(ERROR_KEYS.API_REQUEST_ERROR);
-    }
-
-    // Check if the response contains an error from Last.fm API
-    if (response.data.error) {
-      throw new Error(response.data.message || ERROR_KEYS.USER_NOT_FOUND);
-    }
-
-    return response.data as TrackApiResponse;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error(ERROR_KEYS.API_REQUEST_ERROR);
-  }
-};
+export const getTopTracks = (data: UserRequest): Promise<TrackApiResponse> =>
+  fetchTopData<TrackApiResponse>(ENDPOINTS.TOP_TRACKS, data);
 
 export const getTopTags = async (
   data: UserRequest,
@@ -186,12 +129,12 @@ const retryWithBackoff = async <T>(
   fn: () => Promise<T>,
   maxRetries: number = 3,
 ): Promise<T> => {
-  let lastError: any;
+  let lastError: unknown;
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
       return await fn();
-    } catch (error: any) {
+    } catch (error) {
       lastError = error;
       const isLastAttempt = attempt === maxRetries - 1;
 
@@ -201,9 +144,11 @@ const retryWithBackoff = async <T>(
 
       // Wait 1 second between retries
       const waitTime = 1000;
-      console.log(
-        `Tentativa ${attempt + 1}/${maxRetries} falhou, tentando novamente...`,
-      );
+      if (import.meta.env.DEV) {
+        console.warn(
+          `Tentativa ${attempt + 1}/${maxRetries} falhou, tentando novamente...`,
+        );
+      }
       await new Promise((resolve) => setTimeout(resolve, waitTime));
     }
   }

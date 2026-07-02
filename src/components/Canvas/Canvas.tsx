@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { UserRequest } from "../../types/userRequest";
-import { Audio } from "react-loader-spinner";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import "./canvas.css";
 import { toast } from "react-toastify";
 import { AlbumApiResponse, ArtistApiResponse, TrackApiResponse } from "../../types/apiResponse";
@@ -77,17 +77,7 @@ const ImageRenderer = ({
 
   return (
     <div className="canvas-result" ref={containerRef}>
-      {loading && (
-        <div role="status" aria-live="polite" aria-label={t("canvas.loading")}>
-          <Audio
-            height={80}
-            width={80}
-            color="red"
-            ariaLabel={t("canvas.loadingAria")}
-            wrapperClass="loading"
-          />
-        </div>
-      )}
+      {loading && <LoadingSpinner message={t("canvas.loading")} />}
       {!loading && imageSrc && (
         <>
           <img
