@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import "./Wrapped.css";
 import { useWrappedData } from "../../hooks/useWrappedData";
-import { generateWrappedCanvas } from "../../services/WrappedCanvasService";
+import { generateWrappedCanvas } from "../../utils/generateWrappedCanvas";
 import WrappedInput from "../../components/WrappedInput/WrappedInput";
 import WrappedResult from "../../components/WrappedResult/WrappedResult";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
