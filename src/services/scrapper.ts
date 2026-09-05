@@ -1,7 +1,7 @@
 import axios from "axios";
 import { load } from "cheerio";
 
-export const getArtistImageScraper = async (artistURL: string) => {
+export const getArtistImageScrapper = async (artistURL: string) => {
   const { data } = await axios.get(`${artistURL}/+images`, {
     headers: {
       "User-Agent":

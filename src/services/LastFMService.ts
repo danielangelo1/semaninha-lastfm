@@ -9,6 +9,7 @@ import { UserRequest } from "../types/userRequest";
 import { api } from "./api";
 import { ERROR_MESSAGES } from "../constants";
 import { env } from "../config/env";
+import { ServicesHelper } from "../helpers/services.helper";
 
 const ENDPOINTS = {
   TOP_ALBUMS: "?method=user.gettopalbums&",
@@ -18,21 +19,12 @@ const ENDPOINTS = {
   USER_INFO: "?method=user.getinfo&",
 } as const;
 
-const buildLastFmUrl = (
-  endpoint: string,
-  user: string,
-  period: string,
-  limit: number,
-): string => {
-  return `${endpoint}user=${encodeURIComponent(user)}&period=${period}&limit=${limit}&api_key=${env.VITE_API_KEY}&format=json`;
-};
-
 export const getTopAlbums = async (
   data: UserRequest,
 ): Promise<AlbumApiResponse> => {
   try {
     const gridSize = data.limit * data.limit;
-    const url = buildLastFmUrl(
+    const url = ServicesHelper.buildLastFmUrl(
       ENDPOINTS.TOP_ALBUMS,
       data.user,
       data.period,
@@ -63,7 +55,7 @@ export const getTopArtists = async (
 ): Promise<ArtistApiResponse> => {
   try {
     const gridSize = data.limit * data.limit;
-    const url = buildLastFmUrl(
+    const url = ServicesHelper.buildLastFmUrl(
       ENDPOINTS.TOP_ARTISTS,
       data.user,
       data.period,
@@ -94,7 +86,7 @@ export const getTopTracks = async (
 ): Promise<TrackApiResponse> => {
   try {
     const gridSize = data.limit * data.limit;
-    const url = buildLastFmUrl(
+    const url = ServicesHelper.buildLastFmUrl(
       ENDPOINTS.TOP_TRACKS,
       data.user,
       data.period,
@@ -125,7 +117,7 @@ export const getTopTags = async (
 ): Promise<TagApiResponse> => {
   try {
     const gridSize = data.limit * data.limit;
-    const url = buildLastFmUrl(
+    const url = ServicesHelper.buildLastFmUrl(
       ENDPOINTS.TOP_TAGS,
       data.user,
       data.period,
