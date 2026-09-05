@@ -22,7 +22,7 @@ const imageCache = new Map<string, HTMLImageElement>();
 
 export const clearImageCache = () => imageCache.clear();
 
-const loadImage = (src: string): Promise<HTMLImageElement> => {
+export const loadImage = (src: string): Promise<HTMLImageElement> => {
   const cached = imageCache.get(src);
   if (cached) {
     imageCache.delete(src);

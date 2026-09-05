@@ -1,64 +1,10 @@
 import { Image, SpotifyArtistResponse } from "../types/spotifyResponse";
 import { musicBrainzApi, spotifyApi } from "./api";
-import { API_CONFIG } from "../constants";
-import { env } from "../config/env";
-
-let spotifyToken: string | null = null;
-let tokenExpirationTime: number | null = null;
-
-const formatArtistName = (artistName: string) => {
-  return artistName
-    .toLowerCase()
-    .replace(/\$/g, "s")
-    .replace(/\s+/g, " ")
-    .trim();
-};
-
-const getToken = async () => {
-  const currentTime = Date.now();
-  if (
-    spotifyToken &&
-    tokenExpirationTime &&
-    currentTime < tokenExpirationTime
-  ) {
-    return spotifyToken;
-  }
-
-  const response = await fetch("https://accounts.spotify.com/api/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: `Basic ${btoa(
-        `${env.VITE_SPOTIFY_CLIENT_ID}:${env.VITE_SPOTIFY_CLIENT_SECRET}`,
-      )}`,
-    },
-    body: "grant_type=client_credentials",
-  });
-
-  const data = await response.json();
-  spotifyToken = data.access_token;
-  tokenExpirationTime =
-    currentTime + data.expires_in * 1000 - API_CONFIG.SPOTIFY_TOKEN_BUFFER_MS;
-  return data.access_token;
-};
-
-const SpotifyTokenSingleton = (() => {
-  let instance: Promise<string> | null = null;
-
-  return {
-    getInstance: async () => {
-      const isExpired =
-        tokenExpirationTime && Date.now() >= tokenExpirationTime;
-      if (!instance || isExpired) {
-        instance = getToken();
-      }
-      return await instance;
-    },
-  };
-})();
+import { getSpotifyToken } from "./spotifyAuth";
+import { SpotifyHelper } from "../helpers/spotify.helper";
 
 export const getArtistImage = async (artistName: string): Promise<Image> => {
-  const token = await SpotifyTokenSingleton.getInstance();
+  const token = await getSpotifyToken();
   const response = await spotifyApi.get<SpotifyArtistResponse>(
     `/search?q=${encodeURIComponent(artistName)}&type=artist&limit=5`,
     {
@@ -71,7 +17,8 @@ export const getArtistImage = async (artistName: string): Promise<Image> => {
   const found = response.data.artists.items
     .filter((a) => a.images.length)
     .find(
-      (artist) => artist.name.toLowerCase() === formatArtistName(artistName),
+      (artist) =>
+        artist.name.toLowerCase() === SpotifyHelper.formatArtistName(artistName),
     );
   const spotifyObject = found || response.data.artists.items[0];
   return spotifyObject.images[0];

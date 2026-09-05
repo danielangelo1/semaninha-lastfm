@@ -4,23 +4,8 @@ import {
   WRAPPED_COLORS,
   WRAPPED_TYPOGRAPHY,
 } from '../constants/wrapped';
-import { getArtistImage } from './SpotifyService';
-
-/**
- * Load an image from a URL
- */
-const loadImage = (src: string): Promise<HTMLImageElement> => {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => resolve(img);
-    img.onerror = (error) => {
-      console.warn('Failed to load image:', src, error);
-      reject(error);
-    };
-    img.src = src;
-  });
-};
+import { getArtistImage } from '../services/SpotifyService';
+import { loadImage } from './canvasUtils';
 
 /**
  * Truncate text to fit within max width
@@ -96,7 +81,7 @@ const drawHighlightedArtistImages = async (
   const sideImageHeight = 320;
   const borderRadius = 20;
   const centerX = WRAPPED_CANVAS_CONFIG.WIDTH / 2;
-  
+
   try {
     const loadedImages = await Promise.allSettled(
       images.map(src => loadImage(src))
@@ -110,13 +95,13 @@ const drawHighlightedArtistImages = async (
 
     const drawRoundedImage = (img: HTMLImageElement, x: number, y: number, width: number, height: number, opacity: number = 1) => {
       ctx.save();
-      
+
       ctx.globalAlpha = opacity;
       ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
       ctx.shadowBlur = 25;
       ctx.shadowOffsetX = 0;
       ctx.shadowOffsetY = 15;
-      
+
       ctx.beginPath();
       ctx.moveTo(x + borderRadius, y);
       ctx.lineTo(x + width - borderRadius, y);
@@ -129,11 +114,11 @@ const drawHighlightedArtistImages = async (
       ctx.quadraticCurveTo(x, y, x + borderRadius, y);
       ctx.closePath();
       ctx.clip();
-      
+
       ctx.drawImage(img, x, y, width, height);
-      
+
       ctx.restore();
-      
+
       ctx.globalAlpha = opacity;
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
       ctx.lineWidth = 4;
@@ -171,7 +156,7 @@ const drawHighlightedArtistImages = async (
     const centerImgX = centerX - centerImageWidth / 2;
     const centerImgY = startY;
     drawRoundedImage(validImages[0], centerImgX, centerImgY, centerImageWidth, centerImageHeight, 1);
-    
+
     return startY + centerImageHeight + 40;
   } catch (error) {
     console.warn('Error loading artist images:', error);
@@ -193,15 +178,15 @@ const drawCompactList = (
   ctx.font = `700 34px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = color;
   ctx.fillText(title, x, y);
-  
-  let currentY = y + 50;  
-  
+
+  let currentY = y + 50;
+
   items.forEach((item) => {
     ctx.font = `600 32px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
     ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
     const truncated = truncateText(ctx, item.name, 420);
     ctx.fillText(truncated, x, currentY);
-    
+
     if (item.detail) {
       ctx.font = `400 24px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
       ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
@@ -254,12 +239,12 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   ctx.textAlign = 'center';
   ctx.fillText(data.username, WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
   currentY += 60;
-  
+
   ctx.font = `600 32px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = '#e07b7b';
   ctx.fillText('SCROBBLES', WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
   currentY += 20;
-  
+
   ctx.font = `900 84px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
   ctx.fillText(data.totalScrobbles.toLocaleString(), WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY + 60);
@@ -269,21 +254,21 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   ctx.font = `700 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = '#e07b7b';
   ctx.textAlign = 'center';
-  
+
   const circleY = currentY + 80;
   const circleRadius = 65;
   const circleSpacing = 280;
   const startX = WRAPPED_CANVAS_CONFIG.WIDTH / 2 - circleSpacing;
-  
+
   const stats = [
     { value: data.stats.totalArtists, label: 'Artistas' },
     { value: data.stats.totalAlbums, label: 'Álbuns' },
     { value: data.stats.totalTracks, label: 'Músicas' }
   ];
-  
+
   stats.forEach((stat, index) => {
     const x = startX + index * circleSpacing;
-    
+
     const gradient = ctx.createRadialGradient(x, circleY, 0, x, circleY, circleRadius);
     gradient.addColorStop(0, 'rgba(224, 123, 123, 0.3)');
     gradient.addColorStop(1, 'rgba(224, 123, 123, 0.1)');
@@ -291,18 +276,18 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
     ctx.beginPath();
     ctx.arc(x, circleY, circleRadius, 0, Math.PI * 2);
     ctx.fill();
-    
+
     ctx.fillStyle = 'rgba(224, 123, 123, 0.2)';
     ctx.beginPath();
     ctx.arc(x, circleY, circleRadius - 10, 0, Math.PI * 2);
     ctx.fill();
-    
+
     ctx.font = `900 34px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
     ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(stat.value.toLocaleString(), x, circleY);
-    
+
     ctx.font = `600 24px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
     ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
     ctx.textBaseline = 'top';
@@ -321,21 +306,21 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
     name: artist.name,
     detail: undefined,
   }));
-  
+
   drawCompactList(ctx, 'ARTISTAS MAIS OUVIDOS', artistItems, leftX, listsY, '#e07b7b');
-  
+
   const trackItems = data.tracks.map(track => ({
     name: track.name,
     detail: undefined,
   }));
-  
+
   drawCompactList(ctx, 'MÚSICAS MAIS OUVIDAS', trackItems, leftX, listsY + 320, '#e07b7b');
 
   const albumItems = data.albums.map(album => ({
     name: album.name,
     detail: undefined,
   }));
-  
+
   drawCompactList(ctx, 'ÁLBUNS MAIS OUVIDOS', albumItems, rightX, listsY, '#e07b7b');
 
   ctx.textAlign = 'center';
