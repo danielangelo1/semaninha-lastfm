@@ -29,7 +29,7 @@
     "react-hook-form": "^7.53.0",
     "react-i18next": "^17.0.8",
     "react-loader-spinner": "^6.1.6",
-    "react-router-dom": "^6.30.4",
+    "react-router-dom": "^6.30.6",
     "react-toastify": "^10.0.6",
     "web-vitals": "^5.3.0",
     "zod": "^4.4.3"
