@@ -1,6 +1,8 @@
 import { http, HttpResponse } from "msw";
 
-const LASTFM_URL = "http://ws.audioscrobbler.com/2.0/";
+// Same-origin path the client now calls — Last.fm itself is only reached
+// server-side, from api/lastfm.ts (see tests/integration/lastfm-proxy.test.ts).
+const LASTFM_PROXY_PATH = "/api/lastfm";
 
 export const mockAlbumResponse = {
   topalbums: {
@@ -40,7 +42,7 @@ export const mockUserInfoResponse = {
 };
 
 export const handlers = [
-  http.get(LASTFM_URL, ({ request }) => {
+  http.get(LASTFM_PROXY_PATH, ({ request }) => {
     const url = new URL(request.url);
     const method = url.searchParams.get("method");
     const user = url.searchParams.get("user");

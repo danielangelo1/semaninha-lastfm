@@ -35,7 +35,7 @@ describe("LastFM Service (MSW Integration)", () => {
 
     it("should throw on network failure", async () => {
       server.use(
-        http.get("http://ws.audioscrobbler.com/2.0/", () => {
+        http.get("/api/lastfm", () => {
           return HttpResponse.error();
         })
       );
@@ -45,7 +45,7 @@ describe("LastFM Service (MSW Integration)", () => {
 
     it("should throw on server error (500)", async () => {
       server.use(
-        http.get("http://ws.audioscrobbler.com/2.0/", () => {
+        http.get("/api/lastfm", () => {
           return HttpResponse.json({ error: "server" }, { status: 500 });
         })
       );
@@ -94,7 +94,7 @@ describe("LastFM Service (MSW Integration)", () => {
   describe("Edge cases", () => {
     it("should handle empty album list", async () => {
       server.use(
-        http.get("http://ws.audioscrobbler.com/2.0/", () => {
+        http.get("/api/lastfm", () => {
           return HttpResponse.json({ topalbums: { album: [] } });
         })
       );
@@ -105,7 +105,7 @@ describe("LastFM Service (MSW Integration)", () => {
 
     it("should handle slow responses", async () => {
       server.use(
-        http.get("http://ws.audioscrobbler.com/2.0/", async () => {
+        http.get("/api/lastfm", async () => {
           await new Promise((resolve) => setTimeout(resolve, 100));
           return HttpResponse.json({ topalbums: { album: [] } });
         })

@@ -16,7 +16,6 @@ import {
 import { UserRequest } from "../types/userRequest";
 import { api } from "./api";
 import { ERROR_MESSAGES } from "../constants";
-import { env } from "../config/env";
 import { ServicesHelper } from "../helpers/services.helper";
 
 const ENDPOINTS = {
@@ -75,7 +74,7 @@ export const getTopTags = (data: UserRequest): Promise<TagApiResponse> =>
 
 export const getUserInfo = (username: string): Promise<UserInfoApiResponse> =>
   requestLastFm(
-    `${ENDPOINTS.USER_INFO}user=${encodeURIComponent(username)}&api_key=${env.VITE_API_KEY}&format=json`,
+    `${ENDPOINTS.USER_INFO}user=${encodeURIComponent(username)}&format=json`,
     userInfoApiResponseSchema,
   );
 
@@ -129,7 +128,7 @@ export const getTotalScrobblesForPeriod = async (
 
   for (let page = 1; page <= maxPages; page++) {
     const fetchPage = async () => {
-      const url = `${ENDPOINTS.TOP_TRACKS}user=${encodeURIComponent(username)}&period=${period}&limit=${limit}&page=${page}&api_key=${env.VITE_API_KEY}&format=json`;
+      const url = `${ENDPOINTS.TOP_TRACKS}user=${encodeURIComponent(username)}&period=${period}&limit=${limit}&page=${page}&format=json`;
       const response = await api.get(url);
 
       if (response.status !== 200) {

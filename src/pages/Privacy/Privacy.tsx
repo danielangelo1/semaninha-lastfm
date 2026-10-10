@@ -16,6 +16,8 @@ const Privacy = () => {
         <li>{t("privacy.dataDisplay")}</li>
       </ul>
       <p>{t("privacy.noSharing")}</p>
+      <h2>{t("privacy.analyticsTitle")}</h2>
+      <p>{t("privacy.analyticsText")}</p>
       <div className="contact">
         <p>
           {t("privacy.contact")}{" "}

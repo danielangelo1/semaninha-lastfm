@@ -19,7 +19,7 @@ O Site **Semaninha** é um gerador de colagem dos albuns, artistas ou faixas mai
 - **Vitest** + **Testing Library** + **MSW**
 - **ESLint**
 - **Sentry**
-- **Vercel**
+- **Vercel** (deploy + funções serverless)
 
 ---
 
@@ -46,17 +46,17 @@ cd semaninha-lastfm
 npm install
 ```
 
-Crie um arquivo `.env` na raiz com sua chave da API do Last.fm:
+A chamada à API do Last.fm passa por uma função serverless (`api/lastfm.ts`) pra manter a chave fora do navegador. Crie um arquivo `.env` na raiz (veja [.env.example](.env.example)):
 
 ```bash
-VITE_API_KEY=sua_api_key_do_lastfm
-VITE_LASTFM_URL=https://ws.audioscrobbler.com/2.0/
+LASTFM_API_KEY=sua_api_key_do_lastfm
 ```
 
-Depois, rode o projeto:
+Como essa variável só existe no lado do servidor, rodar `vite` sozinho não é suficiente — use a CLI da Vercel:
 
 ```bash
-npm run dev
+npm install -g vercel
+vercel dev
 ```
 
 ---

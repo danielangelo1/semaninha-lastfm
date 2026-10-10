@@ -9,9 +9,6 @@ vi.mock('../api', () => ({
   },
 }));
 
-// Mock environment variables
-vi.stubEnv('VITE_API_KEY', 'test-api-key');
-
 describe('LastFM API Service Tests', () => {
   const mockUserRequest: UserRequest = {
     user: 'testuser',
@@ -45,8 +42,10 @@ describe('LastFM API Service Tests', () => {
       expect(api.get).toHaveBeenCalledWith(
         expect.stringContaining('period=7day')
       );
+      // The api key must never be built into the client-side request —
+      // it's injected server-side by the api/lastfm proxy.
       expect(api.get).toHaveBeenCalledWith(
-        expect.stringContaining('api_key=test-api-key')
+        expect.not.stringContaining('api_key')
       );
     });
 
@@ -89,7 +88,7 @@ describe('LastFM API Service Tests', () => {
         expect.stringContaining('period=7day')
       );
       expect(api.get).toHaveBeenCalledWith(
-        expect.stringContaining('api_key=test-api-key')
+        expect.not.stringContaining('api_key')
       );
     });
 

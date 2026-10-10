@@ -58,7 +58,9 @@
     "dataPeriod": "Período de tempo",
     "dataSize": "Tamanho da colagem",
     "dataDisplay": "Se o nome do album/artista e a quantidade de plays devem ser exibidos",
-    "noSharing": "Os dados coletados não são compartilhados com terceiros.",
+    "noSharing": "Os dados do formulário (usuário, período, tamanho e preferências de exibição) não são compartilhados com terceiros além da consulta à API do Last.fm.",
+    "analyticsTitle": "Cookies e anúncios",
+    "analyticsText": "Este site utiliza Google Analytics e Google AdSense, que podem usar cookies para coletar dados de navegação e exibir anúncios. Esses serviços são operados pelo Google, seguem a política de privacidade própria do Google e não são controlados por nós.",
     "contact": "Para mais informações, entre em contato pelo email:"
   }
 }
