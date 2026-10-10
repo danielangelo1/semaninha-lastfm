@@ -25,9 +25,9 @@ O Site **Semaninha** é um gerador de colagem dos albuns, artistas ou faixas mai
 
 ## 🖥️ Demonstração
 
-<video src="docs/demo.mp4" controls width="600">
-  Veja o vídeo em <a href="docs/demo.mp4">docs/demo.mp4</a>.
-</video>
+![Demonstração do Semaninha](docs/demo.gif)
+
+Vídeo em melhor qualidade: [docs/demo.mp4](docs/demo.mp4).
 
 Você pode acessar o projeto clicando [aqui](https://www.semaninha.net/).
 
