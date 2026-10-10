@@ -2,27 +2,32 @@
 
 ## 📖 Sobre
 
-O Site **Semaninha** é um gerador de colagem dos albuns mais escutados pelo usuário no **Last FM**
+O Site **Semaninha** é um gerador de colagem dos albuns, artistas ou faixas mais escutados pelo usuário no **Last.fm**.
 
 ---
 
 ## 🚀 Tecnologias e ferramentas utilizadas
 
-- **React**
-- **TypeScript**
-- **CSS**
-- **React Hook Form**
-- **Phosphor Icons**
-- **Axios**
-- **Vercel**
-- **Last FM API**
+- **React** + **TypeScript**
 - **Vite**
+- **React Hook Form**
+- **React Router**
+- **Zod** (validação de env/schemas)
+- **i18next** (pt/en)
+- **Axios**
+- **Phosphor Icons**
+- **Vitest** + **Testing Library** + **MSW**
+- **ESLint**
+- **Sentry**
+- **Vercel**
 
 ---
 
 ## 🖥️ Demonstração
 
-https://user-images.githubusercontent.com/84107769/233744746-765e816b-ef9b-4f62-969d-b49b7f5276e9.mp4
+<video src="docs/demo.mp4" controls width="600">
+  Veja o vídeo em <a href="docs/demo.mp4">docs/demo.mp4</a>.
+</video>
 
 Você pode acessar o projeto clicando [aqui](https://www.semaninha.net/).
 
@@ -36,9 +41,23 @@ git clone https://github.com/danielangelo1/semaninha-lastfm
 
 # Entre no diretório
 cd semaninha-lastfm
+
+# Instale as dependências
+npm install
 ```
 
-Depois disso, utilize uma ferramenta como o [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) para criar um servidor local e executar o projeto.
+Crie um arquivo `.env` na raiz com sua chave da API do Last.fm:
+
+```bash
+VITE_API_KEY=sua_api_key_do_lastfm
+VITE_LASTFM_URL=https://ws.audioscrobbler.com/2.0/
+```
+
+Depois, rode o projeto:
+
+```bash
+npm run dev
+```
 
 ---
 
