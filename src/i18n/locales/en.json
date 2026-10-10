@@ -58,7 +58,9 @@
     "dataPeriod": "Time period",
     "dataSize": "Collage size",
     "dataDisplay": "Whether album/artist name and play count should be displayed",
-    "noSharing": "Collected data is not shared with third parties.",
+    "noSharing": "Form data (username, period, size and display preferences) is not shared with third parties beyond querying the Last.fm API.",
+    "analyticsTitle": "Cookies and ads",
+    "analyticsText": "This site uses Google Analytics and Google AdSense, which may use cookies to collect browsing data and display ads. These services are operated by Google, follow Google's own privacy policy, and are not controlled by us.",
     "contact": "For more information, contact us at:"
   }
 }
