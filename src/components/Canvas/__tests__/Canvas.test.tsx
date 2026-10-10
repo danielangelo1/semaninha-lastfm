@@ -16,7 +16,7 @@ describe("Canvas Component", () => {
       album: [
         {
           name: "Test Album",
-          artist: { name: "Test Artist", mbid: "", url: "", playcount: "50" },
+          artist: { name: "Test Artist", mbid: "", url: "" },
           image: [{ "#text": "test-image-url", size: "large" }],
           playcount: "100",
           mbid: "",
