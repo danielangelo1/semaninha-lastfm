@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useLastFmData } from '../useLastFmData';
 import { UserRequest } from '../../types/userRequest';
 import { TrackApiResponse } from '../../types/apiResponse';
@@ -18,6 +19,17 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+const renderUseLastFmData = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: { mutations: { retry: false } },
+  });
+  return renderHook(() => useLastFmData(), {
+    wrapper: ({ children }) => (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    ),
+  });
+};
+
 describe('useLastFmData Hook', () => {
   const mockUserRequest: UserRequest = {
     user: 'testuser',
@@ -31,7 +43,7 @@ describe('useLastFmData Hook', () => {
   });
 
   it('should initialize with correct default values', () => {
-    const { result } = renderHook(() => useLastFmData());
+    const { result } = renderUseLastFmData();
 
     expect(result.current.albumData).toBeNull();
     expect(result.current.artistData).toBeNull();
@@ -48,14 +60,16 @@ describe('useLastFmData Hook', () => {
     
     vi.mocked(getTopAlbums).mockResolvedValueOnce(mockAlbumData);
 
-    const { result } = renderHook(() => useLastFmData());
+    const { result } = renderUseLastFmData();
 
     await act(async () => {
       await result.current.fetchData(mockUserRequest);
     });
 
     expect(getTopAlbums).toHaveBeenCalledWith(mockUserRequest);
-    expect(result.current.albumData).toEqual(mockAlbumData);
+    await waitFor(() => {
+      expect(result.current.albumData).toEqual(mockAlbumData);
+    });
     expect(result.current.artistData).toBeNull();
     expect(result.current.trackData).toBeNull();
     expect(result.current.loading).toBe(false);
@@ -67,7 +81,7 @@ describe('useLastFmData Hook', () => {
     
     vi.mocked(getTopArtists).mockResolvedValueOnce(mockArtistData);
 
-    const { result } = renderHook(() => useLastFmData());
+    const { result } = renderUseLastFmData();
 
     const artistRequest = { ...mockUserRequest, type: 'artist' as const };
 
@@ -76,7 +90,9 @@ describe('useLastFmData Hook', () => {
     });
 
     expect(getTopArtists).toHaveBeenCalledWith(artistRequest);
-    expect(result.current.artistData).toEqual(mockArtistData);
+    await waitFor(() => {
+      expect(result.current.artistData).toEqual(mockArtistData);
+    });
     expect(result.current.albumData).toBeNull();
     expect(result.current.trackData).toBeNull();
     expect(result.current.loading).toBe(false);
@@ -88,7 +104,7 @@ describe('useLastFmData Hook', () => {
     
     vi.mocked(getTopTracks).mockResolvedValueOnce(mockTrackData);
 
-    const { result } = renderHook(() => useLastFmData());
+    const { result } = renderUseLastFmData();
 
     const trackRequest = { ...mockUserRequest, type: 'track' as const };
 
@@ -97,7 +113,9 @@ describe('useLastFmData Hook', () => {
     });
 
     expect(getTopTracks).toHaveBeenCalledWith(trackRequest);
-    expect(result.current.trackData).toEqual(mockTrackData);
+    await waitFor(() => {
+      expect(result.current.trackData).toEqual(mockTrackData);
+    });
     expect(result.current.albumData).toBeNull();
     expect(result.current.artistData).toBeNull();
     expect(result.current.loading).toBe(false);
@@ -110,7 +128,7 @@ describe('useLastFmData Hook', () => {
     const errorMessage = 'User not found';
     vi.mocked(getTopTracks).mockRejectedValueOnce(new Error(errorMessage));
 
-    const { result } = renderHook(() => useLastFmData());
+    const { result } = renderUseLastFmData();
 
     const trackRequest = { ...mockUserRequest, type: 'track' as const };
 
@@ -118,7 +136,9 @@ describe('useLastFmData Hook', () => {
       await result.current.fetchData(trackRequest);
     });
 
-    expect(result.current.error).toBe(errorMessage);
+    await waitFor(() => {
+      expect(result.current.error).toBe(errorMessage);
+    });
     expect(result.current.loading).toBe(false);
     expect(toast.error).toHaveBeenCalledWith(errorMessage);
   });
@@ -134,7 +154,7 @@ describe('useLastFmData Hook', () => {
     
     vi.mocked(getTopTracks).mockReturnValueOnce(controlledPromise);
 
-    const { result } = renderHook(() => useLastFmData());
+    const { result } = renderUseLastFmData();
 
     const trackRequest = { ...mockUserRequest, type: 'track' as const };
 
@@ -144,7 +164,9 @@ describe('useLastFmData Hook', () => {
     });
 
     // Should be loading
-    expect(result.current.loading).toBe(true);
+    await waitFor(() => {
+      expect(result.current.loading).toBe(true);
+    });
 
     // Resolve the promise
     await act(async () => {
@@ -152,11 +174,13 @@ describe('useLastFmData Hook', () => {
     });
 
     // Should not be loading anymore
-    expect(result.current.loading).toBe(false);
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+    });
   });
 
   it('should clear all data when clearData is called', () => {
-    const { result } = renderHook(() => useLastFmData());
+    const { result } = renderUseLastFmData();
 
     // Set some initial state
     act(() => {
@@ -178,14 +202,16 @@ describe('useLastFmData Hook', () => {
     vi.mocked(getTopAlbums).mockResolvedValueOnce(mockAlbumData);
     vi.mocked(getTopTracks).mockResolvedValueOnce(mockTrackData);
 
-    const { result } = renderHook(() => useLastFmData());
+    const { result } = renderUseLastFmData();
 
     // First fetch albums
     await act(async () => {
       await result.current.fetchData(mockUserRequest);
     });
 
-    expect(result.current.albumData).toEqual(mockAlbumData);
+    await waitFor(() => {
+      expect(result.current.albumData).toEqual(mockAlbumData);
+    });
 
     // Then fetch tracks - should clear album data
     const trackRequest = { ...mockUserRequest, type: 'track' as const };
@@ -193,7 +219,9 @@ describe('useLastFmData Hook', () => {
       await result.current.fetchData(trackRequest);
     });
 
-    expect(result.current.trackData).toEqual(mockTrackData);
+    await waitFor(() => {
+      expect(result.current.trackData).toEqual(mockTrackData);
+    });
     expect(result.current.albumData).toBeNull();
     expect(result.current.artistData).toBeNull();
   });

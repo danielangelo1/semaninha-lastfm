@@ -20,6 +20,7 @@
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
     "@sentry/react": "^10.38.0",
+    "@tanstack/react-query": "^5.104.1",
     "axios": "^1.18.0",
     "cheerio": "^1.0.0",
     "i18next": "^26.3.1",
@@ -55,8 +56,5 @@
     "vite": "^6.4.2",
     "vite-plugin-checker": "^0.8.0",
     "vitest": "^4.1.8"
-  },
-  "overrides": {
-    "styled-components": "^6.4.2"
   }
 }

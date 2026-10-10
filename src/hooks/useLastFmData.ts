@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { AlbumApiResponse, ArtistApiResponse, TrackApiResponse } from '../types/apiResponse';
 import { UserRequest } from '../types/userRequest';
@@ -15,57 +15,54 @@ interface UseLastFmDataReturn {
   clearData: () => void;
 }
 
-export const useLastFmData = (): UseLastFmDataReturn => {
-  const [albumData, setAlbumData] = useState<AlbumApiResponse | null>(null);
-  const [artistData, setArtistData] = useState<ArtistApiResponse | null>(null);
-  const [trackData, setTrackData] = useState<TrackApiResponse | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+type LastFmMutationResult =
+  | { type: 'album'; response: AlbumApiResponse }
+  | { type: 'artist'; response: ArtistApiResponse }
+  | { type: 'track'; response: TrackApiResponse };
 
-  const fetchData = async (data: UserRequest): Promise<void> => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      if (data.type === 'album') {
-        setArtistData(null);
-        setTrackData(null);
-        const response = await getTopAlbums(data);
-        setAlbumData(response);
-      } else if (data.type === 'artist') {
-        setAlbumData(null);
-        setTrackData(null);
-        const response = await getTopArtists(data);
-        setArtistData(response);
-      } else if (data.type === 'track') {
-        setAlbumData(null);
-        setArtistData(null);
-        const response = await getTopTracks(data);
-        setTrackData(response);
-      }
-    } catch (error) {
+const fetchLastFmData = async (data: UserRequest): Promise<LastFmMutationResult> => {
+  if (data.type === 'album') {
+    return { type: 'album', response: await getTopAlbums(data) };
+  }
+  if (data.type === 'artist') {
+    return { type: 'artist', response: await getTopArtists(data) };
+  }
+  if (data.type === 'track') {
+    return { type: 'track', response: await getTopTracks(data) };
+  }
+  throw new Error(ERROR_MESSAGES.USER_NOT_FOUND);
+};
+
+export const useLastFmData = (): UseLastFmDataReturn => {
+  const mutation = useMutation({
+    mutationFn: fetchLastFmData,
+    onError: (error) => {
       const errorMessage = error instanceof Error ? error.message : ERROR_MESSAGES.USER_NOT_FOUND;
-      setError(errorMessage);
       toast.error(errorMessage);
       console.error('Last.fm API error:', error);
-    } finally {
-      setLoading(false);
-    }
+    },
+  });
+
+  const fetchData = async (data: UserRequest): Promise<void> => {
+    await mutation.mutateAsync(data).catch(() => {});
   };
 
   const clearData = (): void => {
-    setAlbumData(null);
-    setArtistData(null);
-    setTrackData(null);
-    setError(null);
+    mutation.reset();
   };
 
+  const errorMessage = mutation.error
+    ? mutation.error instanceof Error
+      ? mutation.error.message
+      : ERROR_MESSAGES.USER_NOT_FOUND
+    : null;
+
   return {
-    albumData,
-    artistData,
-    trackData,
-    loading,
-    error,
+    albumData: mutation.data?.type === 'album' ? mutation.data.response : null,
+    artistData: mutation.data?.type === 'artist' ? mutation.data.response : null,
+    trackData: mutation.data?.type === 'track' ? mutation.data.response : null,
+    loading: mutation.isPending,
+    error: errorMessage,
     fetchData,
     clearData,
   };
