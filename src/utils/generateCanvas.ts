@@ -3,14 +3,41 @@ import { AlbumApiResponse, ArtistApiResponse, TrackApiResponse } from "../types/
 import { UserRequest } from "../types/userRequest";
 import { drawTextOnCanvas, processImages } from "./canvasUtils";
 
+const SPOTIFY_CONCURRENCY = 5;
+
+const mapWithConcurrency = async <T, R>(
+  items: T[],
+  limit: number,
+  fn: (item: T) => Promise<R>,
+): Promise<R[]> => {
+  const results = new Array<R>(items.length);
+  let next = 0;
+
+  const workers = Array.from(
+    { length: Math.min(limit, items.length) },
+    async () => {
+      while (next < items.length) {
+        const index = next++;
+        results[index] = await fn(items[index]);
+      }
+    },
+  );
+
+  await Promise.all(workers);
+  return results;
+};
+
 export const createSpotifyImage = async (
   data: ArtistApiResponse,
   userInput: UserRequest,
 ) => {
-  const imgs = await Promise.all(
-    data.topartists.artist.map((artist) =>
-      getArtistImage(artist.name).then((res) => res?.url ?? ""),
-    ),
+  const imgs = await mapWithConcurrency(
+    data.topartists.artist,
+    SPOTIFY_CONCURRENCY,
+    (artist) =>
+      getArtistImage(artist.name)
+        .then((res) => res?.url ?? "")
+        .catch(() => ""),
   );
 
   return processImages(
