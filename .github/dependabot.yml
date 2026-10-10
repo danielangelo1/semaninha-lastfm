@@ -7,6 +7,11 @@ updates:
       day: "monday"
     # Only allow security updates (version updates disabled)
     open-pull-requests-limit: 0
+    groups:
+      security-updates:
+        applies-to: security-updates
+        patterns:
+          - "*"
     commit-message:
       prefix: "chore(deps):"
 
