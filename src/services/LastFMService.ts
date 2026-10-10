@@ -1,3 +1,4 @@
+import { z } from "zod";
 import {
   AlbumApiResponse,
   ArtistApiResponse,
@@ -5,6 +6,13 @@ import {
   TagApiResponse,
   UserInfoApiResponse,
 } from "../types/apiResponse";
+import {
+  albumApiResponseSchema,
+  artistApiResponseSchema,
+  trackApiResponseSchema,
+  tagApiResponseSchema,
+  userInfoApiResponseSchema,
+} from "../schemas/lastfmResponse.schema";
 import { UserRequest } from "../types/userRequest";
 import { api } from "./api";
 import { ERROR_MESSAGES } from "../constants";
@@ -19,17 +27,11 @@ const ENDPOINTS = {
   USER_INFO: "?method=user.getinfo&",
 } as const;
 
-export const getTopAlbums = async (
-  data: UserRequest,
-): Promise<AlbumApiResponse> => {
+const requestLastFm = async <T>(
+  url: string,
+  schema: z.ZodType<T>,
+): Promise<T> => {
   try {
-    const gridSize = data.limit * data.limit;
-    const url = ServicesHelper.buildLastFmUrl(
-      ENDPOINTS.TOP_ALBUMS,
-      data.user,
-      data.period,
-      gridSize,
-    );
     const response = await api.get(url);
 
     if (response.status !== 200) {
@@ -41,39 +43,12 @@ export const getTopAlbums = async (
       throw new Error(response.data.message || ERROR_MESSAGES.USER_NOT_FOUND);
     }
 
-    return response.data as AlbumApiResponse;
+    return schema.parse(response.data);
   } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
-  }
-};
-
-export const getTopArtists = async (
-  data: UserRequest,
-): Promise<ArtistApiResponse> => {
-  try {
-    const gridSize = data.limit * data.limit;
-    const url = ServicesHelper.buildLastFmUrl(
-      ENDPOINTS.TOP_ARTISTS,
-      data.user,
-      data.period,
-      gridSize,
-    );
-    const response = await api.get(url);
-
-    if (response.status !== 200) {
+    if (error instanceof z.ZodError) {
+      console.error("Last.fm response failed schema validation:", error.issues);
       throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
     }
-
-    // Check if the response contains an error from Last.fm API
-    if (response.data.error) {
-      throw new Error(response.data.message || ERROR_MESSAGES.USER_NOT_FOUND);
-    }
-
-    return response.data as ArtistApiResponse;
-  } catch (error) {
     if (error instanceof Error) {
       throw error;
     }
@@ -81,91 +56,28 @@ export const getTopArtists = async (
   }
 };
 
-export const getTopTracks = async (
-  data: UserRequest,
-): Promise<TrackApiResponse> => {
-  try {
-    const gridSize = data.limit * data.limit;
-    const url = ServicesHelper.buildLastFmUrl(
-      ENDPOINTS.TOP_TRACKS,
-      data.user,
-      data.period,
-      gridSize,
-    );
-    const response = await api.get(url);
-
-    if (response.status !== 200) {
-      throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
-    }
-
-    // Check if the response contains an error from Last.fm API
-    if (response.data.error) {
-      throw new Error(response.data.message || ERROR_MESSAGES.USER_NOT_FOUND);
-    }
-
-    return response.data as TrackApiResponse;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
-  }
+const buildTopUrl = (endpoint: string, data: UserRequest): string => {
+  const gridSize = data.limit * data.limit;
+  return ServicesHelper.buildLastFmUrl(endpoint, data.user, data.period, gridSize);
 };
 
-export const getTopTags = async (
-  data: UserRequest,
-): Promise<TagApiResponse> => {
-  try {
-    const gridSize = data.limit * data.limit;
-    const url = ServicesHelper.buildLastFmUrl(
-      ENDPOINTS.TOP_TAGS,
-      data.user,
-      data.period,
-      gridSize,
-    );
-    const response = await api.get(url);
+export const getTopAlbums = (data: UserRequest): Promise<AlbumApiResponse> =>
+  requestLastFm(buildTopUrl(ENDPOINTS.TOP_ALBUMS, data), albumApiResponseSchema);
 
-    if (response.status !== 200) {
-      throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
-    }
+export const getTopArtists = (data: UserRequest): Promise<ArtistApiResponse> =>
+  requestLastFm(buildTopUrl(ENDPOINTS.TOP_ARTISTS, data), artistApiResponseSchema);
 
-    // Check if the response contains an error from Last.fm API
-    if (response.data.error) {
-      throw new Error(response.data.message || ERROR_MESSAGES.USER_NOT_FOUND);
-    }
+export const getTopTracks = (data: UserRequest): Promise<TrackApiResponse> =>
+  requestLastFm(buildTopUrl(ENDPOINTS.TOP_TRACKS, data), trackApiResponseSchema);
 
-    return response.data as TagApiResponse;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
-  }
-};
+export const getTopTags = (data: UserRequest): Promise<TagApiResponse> =>
+  requestLastFm(buildTopUrl(ENDPOINTS.TOP_TAGS, data), tagApiResponseSchema);
 
-export const getUserInfo = async (
-  username: string,
-): Promise<UserInfoApiResponse> => {
-  try {
-    const url = `${ENDPOINTS.USER_INFO}user=${encodeURIComponent(username)}&api_key=${env.VITE_API_KEY}&format=json`;
-    const response = await api.get(url);
-
-    if (response.status !== 200) {
-      throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
-    }
-
-    if (response.data.error) {
-      throw new Error(response.data.message || ERROR_MESSAGES.USER_NOT_FOUND);
-    }
-
-    return response.data as UserInfoApiResponse;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
-  }
-};
+export const getUserInfo = (username: string): Promise<UserInfoApiResponse> =>
+  requestLastFm(
+    `${ENDPOINTS.USER_INFO}user=${encodeURIComponent(username)}&api_key=${env.VITE_API_KEY}&format=json`,
+    userInfoApiResponseSchema,
+  );
 
 /**
  * Calculate total scrobbles for a period by fetching paginated tracks
