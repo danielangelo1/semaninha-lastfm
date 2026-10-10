@@ -88,7 +88,7 @@ jobs:
         run: npm ci
 
       - name: Run security audit
-        run: npm audit --audit-level=moderate
+        run: npm audit --audit-level=high
 
       - name: Check for outdated packages
         run: npm outdated || true
