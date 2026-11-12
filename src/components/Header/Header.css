@@ -53,16 +53,25 @@ header h1 {
 }
 
 .wrapped-link {
-  background: linear-gradient(135deg, #c3000d 0%, #ff6b6b 100%);
-  color: white !important;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(195, 0, 13, 0.2);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+}
+
+/* Small "live" dot marking the seasonal feature */
+.wrapped-link::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #c3000d;
 }
 
 .wrapped-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(195, 0, 13, 0.3);
-  background: linear-gradient(135deg, #ff6b6b 0%, #c3000d 100%);
+  background: none;
+  color: #c3000d;
 }
 
 @media (max-width: 768px) {
@@ -81,21 +90,16 @@ header h1 {
   }
 
   .header-nav {
-    flex-direction: column;
-    gap: 0.5rem;
+    justify-content: center;
+    gap: 0.75rem;
     width: 100%;
   }
 
   .nav-link {
-    width: 100%;
-    text-align: center;
     font-size: 1rem;
     padding: 0.5rem 0.75rem;
   }
 
-  .wrapped-link {
-    font-size: 1rem;
-  }
 }
 
 @media (max-width: 480px) {

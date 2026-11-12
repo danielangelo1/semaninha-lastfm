@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { DownloadSimple } from '@phosphor-icons/react';
 import { WRAPPED_YEAR } from '../../constants/wrapped';
 import './WrappedResult.css';
 
@@ -14,14 +15,16 @@ const WrappedResult = ({ imageUrl, username, onDownload }: WrappedResultProps) =
 
   return (
     <div className="wrapped-result">
-      <div className="wrapped-image-container">
+      <figure className="wrapped-figure">
         <img src={imageUrl} alt={t('wrapped.altText', { year: WRAPPED_YEAR, user: username })} />
-      </div>
+      </figure>
       <button
-        className="download-button"
+        type="button"
+        className="wrapped-download"
         onClick={onDownload}
         aria-label={t('wrapped.downloadAria')}
       >
+        <DownloadSimple size={16} weight="bold" aria-hidden="true" />
         {t('wrapped.download')}
       </button>
     </div>

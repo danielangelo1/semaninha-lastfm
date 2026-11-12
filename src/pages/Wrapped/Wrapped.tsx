@@ -5,7 +5,6 @@ import { useWrappedData } from "../../hooks/useWrappedData";
 import { generateWrappedCanvas } from "../../utils/generateWrappedCanvas";
 import WrappedInput from "../../components/WrappedInput/WrappedInput";
 import WrappedResult from "../../components/WrappedResult/WrappedResult";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { WRAPPED_YEAR } from "../../constants/wrapped";
 
 const Wrapped = () => {
@@ -50,11 +49,17 @@ const Wrapped = () => {
     link.click();
   }, [imageUrl, username]);
 
+  // Covers both the API calls and drawing the canvas (artist photos load there)
+  const isPreparing = loading || (wrappedData !== null && imageUrl === null);
+
   return (
     <main className="wrapped">
-      <div className="wrapped-header">
+      <div className="wrapped-hero">
+        <span className="wrapped-eyebrow">
+          {t("wrapped.eyebrow", { year: WRAPPED_YEAR })}
+        </span>
         <h1>{t("wrapped.title")}</h1>
-        <p>{t("wrapped.description")}</p>
+        <p>{t("wrapped.description", { year: WRAPPED_YEAR })}</p>
       </div>
 
       <WrappedInput
@@ -72,7 +77,11 @@ const Wrapped = () => {
         />
       )}
 
-      {loading && <LoadingSpinner message={t("wrapped.loading")} />}
+      {isPreparing && !imageUrl && (
+        <div className="wrapped-placeholder" role="status">
+          <span>{t("wrapped.loading")}</span>
+        </div>
+      )}
     </main>
   );
 };

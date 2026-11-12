@@ -1,15 +1,15 @@
 .wrapped-result {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   align-items: center;
-  animation: fadeIn 0.5s ease;
+  gap: 1.25rem;
+  animation: wrappedReveal 0.5s ease both;
 }
 
-@keyframes fadeIn {
+@keyframes wrappedReveal {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -17,40 +17,47 @@
   }
 }
 
-.wrapped-image-container {
+.wrapped-figure {
   width: 100%;
-  max-width: 400px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  max-width: 340px;
+  padding: 6px;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 18px 40px -18px rgba(0, 0, 0, 0.25);
 }
 
-.wrapped-image-container img {
+.wrapped-figure img {
+  display: block;
   width: 100%;
   height: auto;
-  display: block;
+  border-radius: 13px;
 }
 
-.download-button {
-  padding: 0.875rem 2rem;
-  background: #1db954;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* Resets the global button styles from the home form */
+.wrapped-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.3rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 999px;
+  background: transparent;
+  color: #1a1a1a;
   font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
-.download-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+.wrapped-download:hover {
+  border-color: #c3000d;
+  color: #c3000d;
 }
 
-@media (max-width: 768px) {
-  .wrapped-image-container {
-    max-width: 300px;
+@media (prefers-reduced-motion: reduce) {
+  .wrapped-result {
+    animation: none;
   }
 }
