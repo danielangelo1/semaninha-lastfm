@@ -89,7 +89,8 @@
       "topAlbums": "Albums",
       "subtitle": "Your year in music",
       "topArtist": "Artist of the year",
-      "plays": "plays"
+      "plays": "plays",
+      "dailyAverage": "Daily average"
     },
     "announcement": {
       "eyebrow": "New",

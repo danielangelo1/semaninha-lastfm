@@ -1,6 +1,6 @@
 export interface WrappedData {
   username: string;
-  // Last.fm profile picture, used when the top artist photo is unavailable
+  // Last.fm profile picture, shown next to the year
   avatarUrl: string | null;
   totalScrobbles: number;
   artists: Array<{ name: string; playcount: string }>;
@@ -10,6 +10,8 @@ export interface WrappedData {
     totalArtists: number;
     totalAlbums: number;
     totalTracks: number;
+    // Scrobbles per day from Jan 1st until today
+    dailyAverage: number;
   };
 }
 
@@ -26,6 +28,7 @@ export interface WrappedCanvasLabels {
   tracks: string;
   topArtist: string;
   plays: string;
+  dailyAverage: string;
   topTracks: string;
   topAlbums: string;
 }

@@ -51,6 +51,7 @@ const fetchWrappedData = async (username: string): Promise<WrappedData> => {
     fetchAvatarUrl(username),
   ]);
 
+  const daysElapsed = Math.max(1, Math.ceil((range.to - range.from) / 86400));
   const artists = artistChart.weeklyartistchart.artist;
   const tracks = trackChart.weeklytrackchart.track;
   const albums = albumChart.weeklyalbumchart.album;
@@ -70,6 +71,7 @@ const fetchWrappedData = async (username: string): Promise<WrappedData> => {
       totalArtists: artists.length,
       totalAlbums: albums.length,
       totalTracks: tracks.length,
+      dailyAverage: totalScrobbles / daysElapsed,
     },
   };
 };

@@ -108,26 +108,13 @@ const drawCircularImage = (ctx: Ctx, img: HTMLImageElement, x: number, y: number
   ctx.stroke();
 };
 
-/** Top artist photo from Spotify, falling back to the user's Last.fm picture */
-const loadFeatureImage = async (data: WrappedData): Promise<HTMLImageElement | null> => {
-  const artistName = data.artists[0]?.name;
-  if (artistName) {
-    try {
-      const { url } = await getArtistImage(artistName);
-      return await loadImage(url);
-    } catch {
-      // Fall through to the avatar
-    }
+const loadOptionalImage = async (getUrl: () => Promise<string | null>): Promise<HTMLImageElement | null> => {
+  try {
+    const url = await getUrl();
+    return url ? await loadImage(url) : null;
+  } catch {
+    return null;
   }
-
-  if (data.avatarUrl) {
-    try {
-      return await loadImage(data.avatarUrl);
-    } catch {
-      return null;
-    }
-  }
-  return null;
 };
 
 /** Ranked list: "01  Name" with a secondary line underneath */
@@ -173,9 +160,11 @@ export const generateWrappedCanvas = async (
     throw new Error('Canvas context not found');
   }
 
-  const [, featureImage] = await Promise.all([
+  const topArtistName = data.artists[0]?.name;
+  const [, avatarImage, artistImage] = await Promise.all([
     ensureFonts(),
-    loadFeatureImage(data),
+    loadOptionalImage(async () => data.avatarUrl),
+    loadOptionalImage(async () => (topArtistName ? (await getArtistImage(topArtistName)).url : null)),
   ]);
 
   const formatNumber = (value: number) => value.toLocaleString(locale);
@@ -199,11 +188,31 @@ export const generateWrappedCanvas = async (
   setFont(ctx, 400, 40, -0.5);
   drawText(ctx, labels.subtitle, PAD, 528, WRAPPED_COLORS.TEXT_SECONDARY);
 
+  if (avatarImage) {
+    const avatarSize = 184;
+    drawCircularImage(ctx, avatarImage, WIDTH - PAD - avatarSize - 8, 262, avatarSize);
+  }
+
   // Numbers
   drawRule(ctx, 610);
   drawEyebrow(ctx, labels.scrobbles, PAD, 680, WRAPPED_COLORS.TEXT_SECONDARY);
   setFont(ctx, 700, 150, -6);
   drawText(ctx, formatNumber(data.totalScrobbles), PAD - 6, 824, WRAPPED_COLORS.TEXT_PRIMARY);
+
+  // Right-aligned so a six-digit scrobble count still has room on the left
+  setFont(ctx, 500, 24, 4);
+  drawText(ctx, labels.dailyAverage.toUpperCase(), WIDTH - PAD, 680, WRAPPED_COLORS.TEXT_SECONDARY, 'right');
+  setFont(ctx, 700, 120, -5);
+  drawText(
+    ctx,
+    data.stats.dailyAverage.toLocaleString(locale, {
+      maximumFractionDigits: data.stats.dailyAverage < 10 ? 1 : 0,
+    }),
+    WIDTH - PAD,
+    824,
+    WRAPPED_COLORS.TEXT_PRIMARY,
+    'right',
+  );
 
   const stats = [
     { value: data.stats.totalArtists, label: labels.artists },
@@ -224,7 +233,7 @@ export const generateWrappedCanvas = async (
   const [topArtist, ...otherArtists] = data.artists;
   if (topArtist) {
     const photoSize = 216;
-    const textWidth = featureImage ? CONTENT_WIDTH - photoSize - 48 : CONTENT_WIDTH;
+    const textWidth = artistImage ? CONTENT_WIDTH - photoSize - 48 : CONTENT_WIDTH;
 
     drawEyebrow(ctx, labels.topArtist, PAD, 1106, WRAPPED_COLORS.ACCENT);
     setFont(ctx, 700, 76, -3);
@@ -248,8 +257,8 @@ export const generateWrappedCanvas = async (
       );
     }
 
-    if (featureImage) {
-      drawCircularImage(ctx, featureImage, WIDTH - PAD - photoSize, 1086, photoSize);
+    if (artistImage) {
+      drawCircularImage(ctx, artistImage, WIDTH - PAD - photoSize, 1086, photoSize);
     }
   }
 

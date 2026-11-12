@@ -89,7 +89,8 @@
       "topAlbums": "Álbuns",
       "subtitle": "Seu ano em música",
       "topArtist": "Artista do ano",
-      "plays": "plays"
+      "plays": "plays",
+      "dailyAverage": "Média por dia"
     },
     "announcement": {
       "eyebrow": "Novo",
