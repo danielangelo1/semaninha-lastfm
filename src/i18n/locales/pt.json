@@ -88,6 +88,14 @@
       "topArtists": "ARTISTAS MAIS OUVIDOS",
       "topTracks": "MÚSICAS MAIS OUVIDAS",
       "topAlbums": "ÁLBUNS MAIS OUVIDOS"
+    },
+    "announcement": {
+      "eyebrow": "Novo",
+      "title": "O Wrapped {{year}} chegou",
+      "text": "Seus artistas, álbuns e músicas mais ouvidos do ano numa imagem pronta para compartilhar.",
+      "cta": "Gerar meu Wrapped",
+      "dismiss": "Agora não",
+      "close": "Fechar aviso"
     }
   }
 }

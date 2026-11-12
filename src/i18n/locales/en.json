@@ -88,6 +88,14 @@
       "topArtists": "TOP ARTISTS",
       "topTracks": "TOP TRACKS",
       "topAlbums": "TOP ALBUMS"
+    },
+    "announcement": {
+      "eyebrow": "New",
+      "title": "Wrapped {{year}} is here",
+      "text": "Your most played artists, albums and tracks of the year in an image ready to share.",
+      "cta": "Make my Wrapped",
+      "dismiss": "Not now",
+      "close": "Dismiss notice"
     }
   }
 }
