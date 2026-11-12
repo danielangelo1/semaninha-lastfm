@@ -5,6 +5,7 @@ import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 
 const Home = lazy(() => import("../pages/Home/Home"));
 const Privacy = lazy(() => import("../pages/Privacy/Privacy"));
+const Wrapped = lazy(() => import("../pages/Wrapped/Wrapped"));
 
 const Router = () => {
   return (
@@ -14,7 +15,7 @@ const Router = () => {
           <Route element={<LayoutDefault />}>
             <Route path="/" element={<Home />} />
             <Route path="/privacy" element={<Privacy />} />
-            {/* <Route path="/wrapped" element={<Wrapped />} /> */}
+            <Route path="/wrapped" element={<Wrapped />} />
             <Route path="*" element={<Home />} />
           </Route>
         </Routes>

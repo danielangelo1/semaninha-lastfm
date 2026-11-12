@@ -1,4 +1,7 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ArrowRight } from '@phosphor-icons/react';
+import { WRAPPED_YEAR } from '../../constants/wrapped';
 import './WrappedInput.css';
 
 interface WrappedInputProps {
@@ -9,6 +12,8 @@ interface WrappedInputProps {
 }
 
 const WrappedInput = ({ username, loading, onUsernameChange, onGenerate }: WrappedInputProps) => {
+  const { t } = useTranslation();
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !loading && username.trim()) {
       onGenerate();
@@ -16,29 +21,38 @@ const WrappedInput = ({ username, loading, onUsernameChange, onGenerate }: Wrapp
   };
 
   return (
-    <div className="wrapped-input-section">
-      <div className="input-group">
-        <label htmlFor="username">Usuário do Last.fm</label>
+    <div className="wrapped-form">
+      <label htmlFor="wrapped-username" className="wrapped-label">
+        {t('wrapped.usernameLabel')}
+      </label>
+      <div className="wrapped-field">
+        <span className="wrapped-field-prefix" aria-hidden="true">
+          last.fm/user/
+        </span>
         <input
-          id="username"
+          id="wrapped-username"
           type="text"
           value={username}
           onChange={(e) => onUsernameChange(e.target.value)}
-          placeholder="Digite seu usuário"
+          placeholder={t('wrapped.usernamePlaceholder')}
           disabled={loading}
           onKeyDown={handleKeyDown}
-          aria-label="Nome de usuário do Last.fm"
+          autoComplete="off"
+          autoCapitalize="off"
+          spellCheck={false}
         />
+        <button
+          type="button"
+          className="wrapped-generate"
+          onClick={onGenerate}
+          disabled={loading || !username.trim()}
+          aria-label={t('wrapped.generateAria', { year: WRAPPED_YEAR })}
+        >
+          {loading ? t('wrapped.generating') : t('wrapped.generate')}
+          {!loading && <ArrowRight size={16} weight="bold" aria-hidden="true" />}
+        </button>
       </div>
-
-      <button
-        className="generate-button"
-        onClick={onGenerate}
-        disabled={loading || !username.trim()}
-        aria-label="Gerar Wrapped 2025"
-      >
-        {loading ? 'Gerando...' : 'Gerar Wrapped 2025'}
-      </button>
+      <p className="wrapped-hint">{t('wrapped.hint')}</p>
     </div>
   );
 };

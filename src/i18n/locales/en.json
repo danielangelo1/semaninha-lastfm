@@ -62,5 +62,43 @@
     "analyticsTitle": "Cookies and ads",
     "analyticsText": "This site uses Google Analytics and Google AdSense, which may use cookies to collect browsing data and display ads. These services are operated by Google, follow Google's own privacy policy, and are not controlled by us.",
     "contact": "For more information, contact us at:"
+  },
+  "wrapped": {
+    "title": "Your year in music",
+    "description": "Your most played artists, albums and tracks of {{year}}, gathered in an image ready to share.",
+    "usernameLabel": "Last.fm username",
+    "usernamePlaceholder": "your username",
+    "usernameAria": "Last.fm username",
+    "generate": "Generate",
+    "generating": "Generating…",
+    "loading": "Putting your Wrapped together…",
+    "success": "Your Wrapped is ready",
+    "usernameRequired": "Please enter your Last.fm username",
+    "altText": "{{user}}'s Wrapped {{year}}",
+    "download": "Download image",
+    "downloadAria": "Download Wrapped image",
+    "eyebrow": "Semaninha Wrapped · {{year}}",
+    "generateAria": "Generate Wrapped {{year}}",
+    "hint": "Based on your scrobbles from January 1st until today.",
+    "canvas": {
+      "scrobbles": "Scrobbles",
+      "artists": "Artists",
+      "albums": "Albums",
+      "tracks": "Tracks",
+      "topTracks": "Tracks",
+      "topAlbums": "Albums",
+      "subtitle": "Your year in music",
+      "topArtist": "Artist of the year",
+      "plays": "plays",
+      "dailyAverage": "Daily average"
+    },
+    "announcement": {
+      "eyebrow": "New",
+      "title": "Wrapped {{year}} is here",
+      "text": "Your most played artists, albums and tracks of the year in an image ready to share.",
+      "cta": "Make my Wrapped",
+      "dismiss": "Not now",
+      "close": "Dismiss notice"
+    }
   }
 }

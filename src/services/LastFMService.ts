@@ -5,6 +5,9 @@ import {
   TrackApiResponse,
   TagApiResponse,
   UserInfoApiResponse,
+  WeeklyArtistChartResponse,
+  WeeklyTrackChartResponse,
+  WeeklyAlbumChartResponse,
 } from "../types/apiResponse";
 import {
   albumApiResponseSchema,
@@ -12,6 +15,10 @@ import {
   trackApiResponseSchema,
   tagApiResponseSchema,
   userInfoApiResponseSchema,
+  weeklyArtistChartResponseSchema,
+  weeklyTrackChartResponseSchema,
+  weeklyAlbumChartResponseSchema,
+  recentTracksTotalResponseSchema,
 } from "../schemas/lastfmResponse.schema";
 import { UserRequest } from "../types/userRequest";
 import { api } from "./api";
@@ -24,6 +31,10 @@ const ENDPOINTS = {
   TOP_TRACKS: "?method=user.gettoptracks&",
   TOP_TAGS: "?method=user.gettoptags&",
   USER_INFO: "?method=user.getinfo&",
+  WEEKLY_ARTIST_CHART: "?method=user.getweeklyartistchart&",
+  WEEKLY_TRACK_CHART: "?method=user.getweeklytrackchart&",
+  WEEKLY_ALBUM_CHART: "?method=user.getweeklyalbumchart&",
+  RECENT_TRACKS: "?method=user.getrecenttracks&",
 } as const;
 
 const requestLastFm = async <T>(
@@ -78,91 +89,60 @@ export const getUserInfo = (username: string): Promise<UserInfoApiResponse> =>
     userInfoApiResponseSchema,
   );
 
-/**
- * Calculate total scrobbles for a period by fetching paginated tracks
- * This gives a more accurate count than just summing top tracks
- */
-/**
- * Helper function to retry API calls with exponential backoff
- */
-const retryWithBackoff = async <T>(
-  fn: () => Promise<T>,
-  maxRetries: number = 3,
-): Promise<T> => {
-  let lastError: any;
+/** A time range in Unix seconds, as accepted by Last.fm's from/to params. */
+export interface DateRange {
+  from: number;
+  to: number;
+}
 
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      return await fn();
-    } catch (error: any) {
-      lastError = error;
-      const isLastAttempt = attempt === maxRetries - 1;
-
-      if (isLastAttempt) {
-        throw error;
-      }
-
-      // Wait 1 second between retries
-      const waitTime = 1000;
-      console.log(
-        `Tentativa ${attempt + 1}/${maxRetries} falhou, tentando novamente...`,
-      );
-      await new Promise((resolve) => setTimeout(resolve, waitTime));
-    }
-  }
-
-  throw lastError;
-};
-
-/**
- * Calculate total scrobbles for a period by fetching paginated tracks
- * Tries 3 times and throws error if fails
- */
-export const getTotalScrobblesForPeriod = async (
+const buildRangeUrl = (
+  endpoint: string,
   username: string,
-  period: string,
+  { from, to }: DateRange,
+  limit: number,
+): string =>
+  `${endpoint}user=${encodeURIComponent(username)}&from=${from}&to=${to}&limit=${limit}&format=json`;
+
+// Unlike user.gettop*, the weekly chart methods accept an arbitrary range.
+// Last.fm caps their size at 1000 entries.
+export const getWeeklyArtistChart = (
+  username: string,
+  range: DateRange,
+  limit: number,
+): Promise<WeeklyArtistChartResponse> =>
+  requestLastFm(
+    buildRangeUrl(ENDPOINTS.WEEKLY_ARTIST_CHART, username, range, limit),
+    weeklyArtistChartResponseSchema,
+  );
+
+export const getWeeklyTrackChart = (
+  username: string,
+  range: DateRange,
+  limit: number,
+): Promise<WeeklyTrackChartResponse> =>
+  requestLastFm(
+    buildRangeUrl(ENDPOINTS.WEEKLY_TRACK_CHART, username, range, limit),
+    weeklyTrackChartResponseSchema,
+  );
+
+export const getWeeklyAlbumChart = (
+  username: string,
+  range: DateRange,
+  limit: number,
+): Promise<WeeklyAlbumChartResponse> =>
+  requestLastFm(
+    buildRangeUrl(ENDPOINTS.WEEKLY_ALBUM_CHART, username, range, limit),
+    weeklyAlbumChartResponseSchema,
+  );
+
+/** Exact number of scrobbles in the range (from recenttracks' total). */
+export const getScrobbleCount = async (
+  username: string,
+  range: DateRange,
 ): Promise<number> => {
-  let totalScrobbles = 0;
-  const limit = 1000;
-  const maxPages = 3;
-
-  for (let page = 1; page <= maxPages; page++) {
-    const fetchPage = async () => {
-      const url = `${ENDPOINTS.TOP_TRACKS}user=${encodeURIComponent(username)}&period=${period}&limit=${limit}&page=${page}&format=json`;
-      const response = await api.get(url);
-
-      if (response.status !== 200) {
-        throw new Error(`Erro HTTP ${response.status}`);
-      }
-
-      if (response.data.error) {
-        throw new Error(response.data.message || "Erro na API do Last.fm");
-      }
-
-      return response.data;
-    };
-
-    // Try 3 times with 1s delay between attempts
-    const data = await retryWithBackoff(fetchPage, 3);
-
-    const tracks = data.toptracks?.track || [];
-    if (tracks.length === 0) {
-      break;
-    }
-
-    const pageTotal = tracks.reduce(
-      (sum: number, track: { playcount: string }) => {
-        return sum + parseInt(track.playcount || "0");
-      },
-      0,
-    );
-
-    totalScrobbles += pageTotal;
-
-    if (tracks.length < limit) {
-      break;
-    }
-  }
-
-  return totalScrobbles;
+  const data = await requestLastFm(
+    buildRangeUrl(ENDPOINTS.RECENT_TRACKS, username, range, 1),
+    recentTracksTotalResponseSchema,
+  );
+  return parseInt(data.recenttracks["@attr"].total, 10);
 };

@@ -1,10 +1,17 @@
 import { useCallback } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import { WrappedData } from '../types/wrapped';
-import { UserRequest } from '../types/userRequest';
-import { getTopAlbums, getTopArtists, getTopTracks, getTotalScrobblesForPeriod } from '../services/LastFMService';
-import { WRAPPED_API_CONFIG, WRAPPED_MESSAGES } from '../constants/wrapped';
+import {
+  DateRange,
+  getScrobbleCount,
+  getUserInfo,
+  getWeeklyAlbumChart,
+  getWeeklyArtistChart,
+  getWeeklyTrackChart,
+} from '../services/LastFMService';
+import { WRAPPED_API_CONFIG, WRAPPED_YEAR } from '../constants/wrapped';
 import { ERROR_MESSAGES } from '../constants';
 
 interface UseWrappedDataReturn {
@@ -15,40 +22,69 @@ interface UseWrappedDataReturn {
   clearData: () => void;
 }
 
-const fetchWrappedData = async (username: string): Promise<WrappedData> => {
-  const userRequest: UserRequest = {
-    user: username,
-    period: WRAPPED_API_CONFIG.PERIOD,
-    limit: WRAPPED_API_CONFIG.LIMIT,
-    showAlbum: false,
-  };
+// Largest profile picture, or null when the user has none or the call fails
+const fetchAvatarUrl = async (username: string): Promise<string | null> => {
+  try {
+    const { user } = await getUserInfo(username);
+    const images = user.image ?? [];
+    return images[images.length - 1]?.['#text'] || null;
+  } catch {
+    return null;
+  }
+};
 
-  const [artistsResponse, tracksResponse, albumsResponse, totalScrobbles] = await Promise.all([
-    getTopArtists(userRequest),
-    getTopTracks(userRequest),
-    getTopAlbums(userRequest),
-    getTotalScrobblesForPeriod(username, WRAPPED_API_CONFIG.PERIOD),
+// Calendar year so far: Jan 1st (viewer's local time) until now
+const getWrappedRange = (): DateRange => ({
+  from: Math.floor(new Date(WRAPPED_YEAR, 0, 1).getTime() / 1000),
+  to: Math.floor(Date.now() / 1000),
+});
+
+const fetchWrappedData = async (username: string): Promise<WrappedData> => {
+  const range = getWrappedRange();
+  const { CHART_LIMIT, TOP_COUNT } = WRAPPED_API_CONFIG;
+
+  const [artistChart, trackChart, albumChart, totalScrobbles, avatarUrl] = await Promise.all([
+    getWeeklyArtistChart(username, range, CHART_LIMIT),
+    getWeeklyTrackChart(username, range, CHART_LIMIT),
+    getWeeklyAlbumChart(username, range, CHART_LIMIT),
+    getScrobbleCount(username, range),
+    fetchAvatarUrl(username),
   ]);
+
+  const daysElapsed = Math.max(1, Math.ceil((range.to - range.from) / 86400));
+  const artists = artistChart.weeklyartistchart.artist;
+  const tracks = trackChart.weeklytrackchart.track;
+  const albums = albumChart.weeklyalbumchart.album;
 
   return {
     username,
+    avatarUrl,
     totalScrobbles,
-    artists: artistsResponse.topartists.artist.slice(0, WRAPPED_API_CONFIG.TOP_COUNT),
-    tracks: tracksResponse.toptracks.track.slice(0, WRAPPED_API_CONFIG.TOP_COUNT),
-    albums: albumsResponse.topalbums.album.slice(0, WRAPPED_API_CONFIG.TOP_COUNT),
+    artists: artists.slice(0, TOP_COUNT),
+    tracks: tracks
+      .slice(0, TOP_COUNT)
+      .map(({ name, playcount, artist }) => ({ name, playcount, artist: { name: artist['#text'] } })),
+    albums: albums
+      .slice(0, TOP_COUNT)
+      .map(({ name, playcount, artist }) => ({ name, playcount, artist: { name: artist['#text'] } })),
     stats: {
-      totalArtists: artistsResponse.topartists['@attr']?.total ? parseInt(artistsResponse.topartists['@attr'].total) : artistsResponse.topartists.artist.length,
-      totalAlbums: albumsResponse.topalbums['@attr']?.total ? parseInt(albumsResponse.topalbums['@attr'].total) : albumsResponse.topalbums.album.length,
-      totalTracks: tracksResponse.toptracks['@attr']?.total ? parseInt(tracksResponse.toptracks['@attr'].total) : tracksResponse.toptracks.track.length,
+      totalArtists: artists.length,
+      totalAlbums: albums.length,
+      totalTracks: tracks.length,
+      dailyAverage: totalScrobbles / daysElapsed,
     },
   };
 };
 
 export const useWrappedData = (): UseWrappedDataReturn => {
+  const { t } = useTranslation();
   const mutation = useMutation({
     mutationFn: fetchWrappedData,
+    // Last.fm intermittently returns 500 on large year-long charts
+    retry: 2,
+    retryDelay: 1000,
     onSuccess: () => {
-      toast.success(WRAPPED_MESSAGES.SUCCESS);
+      toast.success(t('wrapped.success'));
     },
     onError: (err) => {
       const errorMessage = err instanceof Error ? err.message : ERROR_MESSAGES.API_REQUEST_ERROR;
@@ -60,13 +96,13 @@ export const useWrappedData = (): UseWrappedDataReturn => {
   const fetchWrappedDataCallback = useCallback(
     async (username: string): Promise<void> => {
       if (!username.trim()) {
-        toast.error(WRAPPED_MESSAGES.ERROR_USERNAME_REQUIRED);
+        toast.error(t('wrapped.usernameRequired'));
         return;
       }
 
       await mutation.mutateAsync(username.trim()).catch(() => {});
     },
-    [mutation],
+    [mutation, t],
   );
 
   const clearData = useCallback((): void => {

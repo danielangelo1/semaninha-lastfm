@@ -62,5 +62,43 @@
     "analyticsTitle": "Cookies e anúncios",
     "analyticsText": "Este site utiliza Google Analytics e Google AdSense, que podem usar cookies para coletar dados de navegação e exibir anúncios. Esses serviços são operados pelo Google, seguem a política de privacidade própria do Google e não são controlados por nós.",
     "contact": "Para mais informações, entre em contato pelo email:"
+  },
+  "wrapped": {
+    "title": "Seu ano em música",
+    "description": "Seus artistas, álbuns e músicas mais ouvidos de {{year}}, reunidos numa imagem pronta para compartilhar.",
+    "usernameLabel": "Usuário do Last.fm",
+    "usernamePlaceholder": "seu usuário",
+    "usernameAria": "Nome de usuário do Last.fm",
+    "generate": "Gerar",
+    "generating": "Gerando…",
+    "loading": "Montando seu Wrapped…",
+    "success": "Seu Wrapped está pronto",
+    "usernameRequired": "Por favor, insira seu nome de usuário do Last.fm",
+    "altText": "Wrapped {{year}} de {{user}}",
+    "download": "Baixar imagem",
+    "downloadAria": "Baixar imagem do Wrapped",
+    "eyebrow": "Semaninha Wrapped · {{year}}",
+    "generateAria": "Gerar Wrapped {{year}}",
+    "hint": "Considera seus scrobbles de 1º de janeiro até hoje.",
+    "canvas": {
+      "scrobbles": "Scrobbles",
+      "artists": "Artistas",
+      "albums": "Álbuns",
+      "tracks": "Músicas",
+      "topTracks": "Músicas",
+      "topAlbums": "Álbuns",
+      "subtitle": "Seu ano em música",
+      "topArtist": "Artista do ano",
+      "plays": "plays",
+      "dailyAverage": "Média por dia"
+    },
+    "announcement": {
+      "eyebrow": "Novo",
+      "title": "O Wrapped {{year}} chegou",
+      "text": "Seus artistas, álbuns e músicas mais ouvidos do ano numa imagem pronta para compartilhar.",
+      "cta": "Gerar meu Wrapped",
+      "dismiss": "Agora não",
+      "close": "Fechar aviso"
+    }
   }
 }
