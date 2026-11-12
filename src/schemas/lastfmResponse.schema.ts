@@ -74,6 +74,7 @@ export const userInfoApiResponseSchema = z.object({
   user: z.object({
     name: z.string(),
     playcount: z.string(),
+    image: z.array(imageSchema).optional(),
     registered: z.object({
       unixtime: z.string(),
     }),

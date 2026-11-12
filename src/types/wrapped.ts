@@ -1,5 +1,7 @@
 export interface WrappedData {
   username: string;
+  // Last.fm profile picture, used when the top artist photo is unavailable
+  avatarUrl: string | null;
   totalScrobbles: number;
   artists: Array<{ name: string; playcount: string }>;
   tracks: Array<{ name: string; artist: { name: string }; playcount: string }>;

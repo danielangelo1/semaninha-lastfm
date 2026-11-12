@@ -108,14 +108,26 @@ const drawCircularImage = (ctx: Ctx, img: HTMLImageElement, x: number, y: number
   ctx.stroke();
 };
 
-const loadTopArtistImage = async (artistName?: string): Promise<HTMLImageElement | null> => {
-  if (!artistName) return null;
-  try {
-    const { url } = await getArtistImage(artistName);
-    return await loadImage(url);
-  } catch {
-    return null;
+/** Top artist photo from Spotify, falling back to the user's Last.fm picture */
+const loadFeatureImage = async (data: WrappedData): Promise<HTMLImageElement | null> => {
+  const artistName = data.artists[0]?.name;
+  if (artistName) {
+    try {
+      const { url } = await getArtistImage(artistName);
+      return await loadImage(url);
+    } catch {
+      // Fall through to the avatar
+    }
   }
+
+  if (data.avatarUrl) {
+    try {
+      return await loadImage(data.avatarUrl);
+    } catch {
+      return null;
+    }
+  }
+  return null;
 };
 
 /** Ranked list: "01  Name" with a secondary line underneath */
@@ -161,9 +173,9 @@ export const generateWrappedCanvas = async (
     throw new Error('Canvas context not found');
   }
 
-  const [, topArtistImage] = await Promise.all([
+  const [, featureImage] = await Promise.all([
     ensureFonts(),
-    loadTopArtistImage(data.artists[0]?.name),
+    loadFeatureImage(data),
   ]);
 
   const formatNumber = (value: number) => value.toLocaleString(locale);
@@ -181,11 +193,11 @@ export const generateWrappedCanvas = async (
   drawRule(ctx, 172);
 
   // Hero: the year, then who and what
-  setFont(ctx, 700, 300, -14);
-  drawText(ctx, String(WRAPPED_YEAR), PAD - 12, 470, WRAPPED_COLORS.ACCENT);
+  setFont(ctx, 700, 220, -10);
+  drawText(ctx, String(WRAPPED_YEAR), PAD - 9, 440, WRAPPED_COLORS.ACCENT);
 
   setFont(ctx, 400, 40, -0.5);
-  drawText(ctx, labels.subtitle, PAD, 548, WRAPPED_COLORS.TEXT_SECONDARY);
+  drawText(ctx, labels.subtitle, PAD, 528, WRAPPED_COLORS.TEXT_SECONDARY);
 
   // Numbers
   drawRule(ctx, 610);
@@ -212,7 +224,7 @@ export const generateWrappedCanvas = async (
   const [topArtist, ...otherArtists] = data.artists;
   if (topArtist) {
     const photoSize = 216;
-    const textWidth = topArtistImage ? CONTENT_WIDTH - photoSize - 48 : CONTENT_WIDTH;
+    const textWidth = featureImage ? CONTENT_WIDTH - photoSize - 48 : CONTENT_WIDTH;
 
     drawEyebrow(ctx, labels.topArtist, PAD, 1106, WRAPPED_COLORS.ACCENT);
     setFont(ctx, 700, 76, -3);
@@ -236,8 +248,8 @@ export const generateWrappedCanvas = async (
       );
     }
 
-    if (topArtistImage) {
-      drawCircularImage(ctx, topArtistImage, WIDTH - PAD - photoSize, 1086, photoSize);
+    if (featureImage) {
+      drawCircularImage(ctx, featureImage, WIDTH - PAD - photoSize, 1086, photoSize);
     }
   }
 

@@ -4,6 +4,7 @@ import {
   getTopAlbums,
   getTopArtists,
   getTopTracks,
+  getUserInfo,
   getWeeklyTrackChart,
 } from '../LastFMService';
 import { UserRequest } from '../../types/userRequest';
@@ -239,6 +240,27 @@ describe('LastFM API Service Tests', () => {
       expect(api.get).toHaveBeenCalledWith(
         expect.stringContaining('method=user.getrecenttracks'),
       );
+    });
+  });
+
+  describe('User info', () => {
+    it('should keep the profile pictures used as the Wrapped fallback', async () => {
+      const { api } = await import('../api');
+      vi.mocked(api.get).mockResolvedValueOnce({
+        status: 200,
+        data: {
+          user: {
+            name: 'testuser',
+            playcount: '100',
+            registered: { unixtime: '0' },
+            image: [{ size: 'extralarge', '#text': 'https://img/300x300/a.png' }],
+          },
+        },
+      });
+
+      const { user } = await getUserInfo('testuser');
+
+      expect(user.image?.[0]['#text']).toBe('https://img/300x300/a.png');
     });
   });
 });

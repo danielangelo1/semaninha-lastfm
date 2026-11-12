@@ -6,6 +6,7 @@ import { WrappedData } from '../types/wrapped';
 import {
   DateRange,
   getScrobbleCount,
+  getUserInfo,
   getWeeklyAlbumChart,
   getWeeklyArtistChart,
   getWeeklyTrackChart,
@@ -21,6 +22,17 @@ interface UseWrappedDataReturn {
   clearData: () => void;
 }
 
+// Largest profile picture, or null when the user has none or the call fails
+const fetchAvatarUrl = async (username: string): Promise<string | null> => {
+  try {
+    const { user } = await getUserInfo(username);
+    const images = user.image ?? [];
+    return images[images.length - 1]?.['#text'] || null;
+  } catch {
+    return null;
+  }
+};
+
 // Calendar year so far: Jan 1st (viewer's local time) until now
 const getWrappedRange = (): DateRange => ({
   from: Math.floor(new Date(WRAPPED_YEAR, 0, 1).getTime() / 1000),
@@ -31,11 +43,12 @@ const fetchWrappedData = async (username: string): Promise<WrappedData> => {
   const range = getWrappedRange();
   const { CHART_LIMIT, TOP_COUNT } = WRAPPED_API_CONFIG;
 
-  const [artistChart, trackChart, albumChart, totalScrobbles] = await Promise.all([
+  const [artistChart, trackChart, albumChart, totalScrobbles, avatarUrl] = await Promise.all([
     getWeeklyArtistChart(username, range, CHART_LIMIT),
     getWeeklyTrackChart(username, range, CHART_LIMIT),
     getWeeklyAlbumChart(username, range, CHART_LIMIT),
     getScrobbleCount(username, range),
+    fetchAvatarUrl(username),
   ]);
 
   const artists = artistChart.weeklyartistchart.artist;
@@ -44,6 +57,7 @@ const fetchWrappedData = async (username: string): Promise<WrappedData> => {
 
   return {
     username,
+    avatarUrl,
     totalScrobbles,
     artists: artists.slice(0, TOP_COUNT),
     tracks: tracks
