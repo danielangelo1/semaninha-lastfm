@@ -1,5 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getTopAlbums, getTopArtists, getTopTracks } from '../LastFMService';
+import {
+  getScrobbleCount,
+  getTopAlbums,
+  getTopArtists,
+  getTopTracks,
+  getWeeklyTrackChart,
+} from '../LastFMService';
 import { UserRequest } from '../../types/userRequest';
 
 // Mock the api module completely
@@ -194,6 +200,45 @@ describe('LastFM API Service Tests', () => {
 
       const trackRequest = { ...mockUserRequest, type: 'track' };
       await expect(getTopTracks(trackRequest)).rejects.toThrow('User not found');
+    });
+  });
+
+  describe('Date range requests (Wrapped)', () => {
+    const range = { from: 1767236400, to: 1794489518 };
+
+    it('should request a weekly chart with from/to instead of period', async () => {
+      const { api } = await import('../api');
+      vi.mocked(api.get).mockResolvedValueOnce({
+        status: 200,
+        data: {
+          weeklytrackchart: {
+            track: [{ name: 'Song', playcount: '10', artist: { '#text': 'Band' } }],
+          },
+        },
+      });
+
+      const result = await getWeeklyTrackChart('testuser', range, 1000);
+
+      const url = vi.mocked(api.get).mock.calls[0][0] as string;
+      expect(url).toContain('method=user.getweeklytrackchart');
+      expect(url).toContain('from=1767236400');
+      expect(url).toContain('to=1794489518');
+      expect(url).toContain('limit=1000');
+      expect(url).not.toContain('period=');
+      expect(result.weeklytrackchart.track[0].artist['#text']).toBe('Band');
+    });
+
+    it('should read the exact scrobble count from recenttracks total', async () => {
+      const { api } = await import('../api');
+      vi.mocked(api.get).mockResolvedValueOnce({
+        status: 200,
+        data: { recenttracks: { '@attr': { total: '2536' } } },
+      });
+
+      await expect(getScrobbleCount('testuser', range)).resolves.toBe(2536);
+      expect(api.get).toHaveBeenCalledWith(
+        expect.stringContaining('method=user.getrecenttracks'),
+      );
     });
   });
 });

@@ -5,7 +5,7 @@ import { generateWrappedCanvas } from "../../utils/generateWrappedCanvas";
 import WrappedInput from "../../components/WrappedInput/WrappedInput";
 import WrappedResult from "../../components/WrappedResult/WrappedResult";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import { WRAPPED_MESSAGES } from "../../constants/wrapped";
+import { WRAPPED_MESSAGES, WRAPPED_YEAR } from "../../constants/wrapped";
 
 const Wrapped = () => {
   const [username, setUsername] = useState("");
@@ -30,14 +30,14 @@ const Wrapped = () => {
     }
   }, [wrappedData]);
 
-  // const handleDownload = useCallback(() => {
-  //   if (!imageUrl) return;
+  const handleDownload = useCallback(() => {
+    if (!imageUrl) return;
 
-  //   const link = document.createElement("a");
-  //   link.download = `${username}-wrapped-2025.png`;
-  //   link.href = imageUrl;
-  //   link.click();
-  // }, [imageUrl, username]);
+    const link = document.createElement("a");
+    link.download = `${username}-wrapped-${WRAPPED_YEAR}.png`;
+    link.href = imageUrl;
+    link.click();
+  }, [imageUrl, username]);
 
   return (
     <main className="wrapped">
@@ -59,6 +59,7 @@ const Wrapped = () => {
         <WrappedResult
           imageUrl={imageUrl}
           username={username}
+          onDownload={handleDownload}
         />
       )}
 

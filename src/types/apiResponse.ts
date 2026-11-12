@@ -4,4 +4,7 @@ export type {
   TrackApiResponse,
   TagApiResponse,
   UserInfoApiResponse,
+  WeeklyArtistChartResponse,
+  WeeklyTrackChartResponse,
+  WeeklyAlbumChartResponse,
 } from "../schemas/lastfmResponse.schema";

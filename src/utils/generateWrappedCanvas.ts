@@ -1,8 +1,10 @@
 import { WrappedData } from '../types/wrapped';
 import {
+  WRAPPED_API_CONFIG,
   WRAPPED_CANVAS_CONFIG,
   WRAPPED_COLORS,
   WRAPPED_TYPOGRAPHY,
+  WRAPPED_YEAR,
 } from '../constants/wrapped';
 import { getArtistImage } from '../services/SpotifyService';
 import { loadImage } from './canvasUtils';
@@ -286,7 +288,9 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
     ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(stat.value.toLocaleString(), x, circleY);
+    // Charts are capped by Last.fm, so a count at the cap means "at least"
+    const capped = stat.value >= WRAPPED_API_CONFIG.CHART_LIMIT;
+    ctx.fillText(`${stat.value.toLocaleString()}${capped ? '+' : ''}`, x, circleY);
 
     ctx.font = `600 24px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
     ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
@@ -326,7 +330,7 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   ctx.textAlign = 'center';
   ctx.font = `900 72px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
-  ctx.fillText('2025', WRAPPED_CANVAS_CONFIG.WIDTH / 2, WRAPPED_CANVAS_CONFIG.HEIGHT - 140);
+  ctx.fillText(String(WRAPPED_YEAR), WRAPPED_CANVAS_CONFIG.WIDTH / 2, WRAPPED_CANVAS_CONFIG.HEIGHT - 140);
 
   ctx.font = `600 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;

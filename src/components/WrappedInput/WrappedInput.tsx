@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { WRAPPED_YEAR } from '../../constants/wrapped';
 import './WrappedInput.css';
 
 interface WrappedInputProps {
@@ -35,9 +36,9 @@ const WrappedInput = ({ username, loading, onUsernameChange, onGenerate }: Wrapp
         className="generate-button"
         onClick={onGenerate}
         disabled={loading || !username.trim()}
-        aria-label="Gerar Wrapped 2025"
+        aria-label={`Gerar Wrapped ${WRAPPED_YEAR}`}
       >
-        {loading ? 'Gerando...' : 'Gerar Wrapped 2025'}
+        {loading ? 'Gerando...' : `Gerar Wrapped ${WRAPPED_YEAR}`}
       </button>
     </div>
   );

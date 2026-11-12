@@ -80,8 +80,44 @@ export const userInfoApiResponseSchema = z.object({
   }),
 });
 
+// Weekly charts accept an arbitrary from/to range (used by the Wrapped). Their
+// nested artist reference carries the name in "#text" instead of "name".
+const chartArtistRefSchema = z.object({ "#text": z.string() });
+
+const chartItemSchema = z.object({
+  name: z.string(),
+  playcount: z.string(),
+});
+
+export const weeklyArtistChartResponseSchema = z.object({
+  weeklyartistchart: z.object({
+    artist: z.array(chartItemSchema),
+  }),
+});
+
+export const weeklyTrackChartResponseSchema = z.object({
+  weeklytrackchart: z.object({
+    track: z.array(chartItemSchema.extend({ artist: chartArtistRefSchema })),
+  }),
+});
+
+export const weeklyAlbumChartResponseSchema = z.object({
+  weeklyalbumchart: z.object({
+    album: z.array(chartItemSchema.extend({ artist: chartArtistRefSchema })),
+  }),
+});
+
+export const recentTracksTotalResponseSchema = z.object({
+  recenttracks: z.object({
+    "@attr": z.object({ total: z.string() }),
+  }),
+});
+
 export type AlbumApiResponse = z.infer<typeof albumApiResponseSchema>;
 export type ArtistApiResponse = z.infer<typeof artistApiResponseSchema>;
 export type TrackApiResponse = z.infer<typeof trackApiResponseSchema>;
 export type TagApiResponse = z.infer<typeof tagApiResponseSchema>;
 export type UserInfoApiResponse = z.infer<typeof userInfoApiResponseSchema>;
+export type WeeklyArtistChartResponse = z.infer<typeof weeklyArtistChartResponseSchema>;
+export type WeeklyTrackChartResponse = z.infer<typeof weeklyTrackChartResponseSchema>;
+export type WeeklyAlbumChartResponse = z.infer<typeof weeklyAlbumChartResponseSchema>;

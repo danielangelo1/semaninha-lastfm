@@ -1,3 +1,6 @@
+// Year shown in the Wrapped (current year, since the feature runs at year end)
+export const WRAPPED_YEAR = new Date().getFullYear();
+
 // Wrapped Canvas Configuration
 export const WRAPPED_CANVAS_CONFIG = {
   WIDTH: 1080,
@@ -80,8 +83,8 @@ export const WRAPPED_LAYOUT = {
 
 // Wrapped API Configuration
 export const WRAPPED_API_CONFIG = {
-  PERIOD: '12month',
-  LIMIT: 3, // 3x3 grid = 9 items, we'll use top 5
+  // Max entries Last.fm returns for a weekly chart; also caps the distinct counts
+  CHART_LIMIT: 1000,
   TOP_COUNT: 5,
 } as const;
 

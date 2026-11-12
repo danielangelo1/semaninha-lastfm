@@ -44,9 +44,9 @@ em `config/`, não na raiz. Deploy é na Vercel, com funções serverless em `ap
    isso como warning, não erro — não bloqueie por isso, mas comente).
 7. **Testes**: mudanças em `src/services/`, `src/utils/` ou `src/hooks/` sem
    teste correspondente em `__tests__/` quando o arquivo já tinha cobertura.
-8. **Feature "Wrapped" desativada**: não remover código/rotas do Wrapped
-   silenciosamente — a feature está propositalmente dormente; confirmar com o
-   autor antes de sugerir remoção total.
+8. **Feature "Wrapped" sazonal**: ativa no fim do ano (rota `/wrapped` + link no
+   header) e desativada no resto do ano. Não remover código/rotas do Wrapped
+   silenciosamente; o ano exibido vem de `WRAPPED_YEAR`, nunca fixo no código.
 
 ## Antes de aprovar
 
