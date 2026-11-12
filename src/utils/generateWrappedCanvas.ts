@@ -117,29 +117,24 @@ const loadOptionalImage = async (getUrl: () => Promise<string | null>): Promise<
   }
 };
 
-/** Ranked list: "01  Name" with a secondary line underneath */
-const drawRankedList = (
+/** Rows of "01  Name"; y is the first row's baseline */
+const drawRankedRows = (
   ctx: Ctx,
-  title: string,
-  items: Array<{ name: string; detail: string }>,
+  names: string[],
   x: number,
   y: number,
   width: number,
+  { firstRank = 1, step = 72 } = {},
 ): void => {
-  drawEyebrow(ctx, title, x, y, WRAPPED_COLORS.ACCENT);
-
   const rankWidth = 56;
-  items.forEach((item, index) => {
-    const rowY = y + 70 + index * 74;
+  names.forEach((name, index) => {
+    const rowY = y + index * step;
 
     setFont(ctx, 500, 26);
-    drawText(ctx, String(index + 1).padStart(2, '0'), x, rowY, WRAPPED_COLORS.TEXT_TERTIARY);
+    drawText(ctx, String(firstRank + index).padStart(2, '0'), x, rowY, WRAPPED_COLORS.TEXT_TERTIARY);
 
-    setFont(ctx, 600, 30, -0.5);
-    drawText(ctx, truncateText(ctx, item.name, width - rankWidth), x + rankWidth, rowY, WRAPPED_COLORS.TEXT_PRIMARY);
-
-    setFont(ctx, 400, 24);
-    drawText(ctx, truncateText(ctx, item.detail, width - rankWidth), x + rankWidth, rowY + 32, WRAPPED_COLORS.TEXT_SECONDARY);
+    setFont(ctx, 600, 32, -0.5);
+    drawText(ctx, truncateText(ctx, name, width - rankWidth), x + rankWidth, rowY, WRAPPED_COLORS.TEXT_PRIMARY);
   });
 };
 
@@ -194,94 +189,76 @@ export const generateWrappedCanvas = async (
   }
 
   // Numbers
-  drawRule(ctx, 610);
-  drawEyebrow(ctx, labels.scrobbles, PAD, 680, WRAPPED_COLORS.TEXT_SECONDARY);
-  setFont(ctx, 700, 150, -6);
-  drawText(ctx, formatNumber(data.totalScrobbles), PAD - 6, 824, WRAPPED_COLORS.TEXT_PRIMARY);
+  drawRule(ctx, 600);
+  drawEyebrow(ctx, labels.scrobbles, PAD, 664, WRAPPED_COLORS.TEXT_SECONDARY);
+  setFont(ctx, 700, 112, -4);
+  drawText(ctx, formatNumber(data.totalScrobbles), PAD - 4, 778, WRAPPED_COLORS.TEXT_PRIMARY);
+  setFont(ctx, 400, 30);
+  drawText(
+    ctx,
+    `${formatCount(data.stats.totalArtists)} ${labels.artists.toLocaleLowerCase(locale)} · ` +
+      `${formatCount(data.stats.totalAlbums)} ${labels.albums.toLocaleLowerCase(locale)}`,
+    PAD,
+    830,
+    WRAPPED_COLORS.TEXT_SECONDARY,
+  );
 
   // Right-aligned so a six-digit scrobble count still has room on the left
   setFont(ctx, 500, 24, 4);
-  drawText(ctx, labels.dailyAverage.toUpperCase(), WIDTH - PAD, 680, WRAPPED_COLORS.TEXT_SECONDARY, 'right');
-  setFont(ctx, 700, 120, -5);
+  drawText(ctx, labels.dailyAverage.toUpperCase(), WIDTH - PAD, 664, WRAPPED_COLORS.TEXT_SECONDARY, 'right');
+  setFont(ctx, 700, 112, -4);
   drawText(
     ctx,
     data.stats.dailyAverage.toLocaleString(locale, {
       maximumFractionDigits: data.stats.dailyAverage < 10 ? 1 : 0,
     }),
     WIDTH - PAD,
-    824,
+    778,
     WRAPPED_COLORS.TEXT_PRIMARY,
     'right',
   );
 
-  const stats = [
-    { value: data.stats.totalArtists, label: labels.artists },
-    { value: data.stats.totalAlbums, label: labels.albums },
-    { value: data.stats.totalTracks, label: labels.tracks },
-  ];
-  const statWidth = CONTENT_WIDTH / stats.length;
-  stats.forEach((stat, index) => {
-    const x = PAD + index * statWidth;
-    setFont(ctx, 600, 64, -2);
-    drawText(ctx, formatCount(stat.value), x, 936, WRAPPED_COLORS.TEXT_PRIMARY);
-    setFont(ctx, 400, 28);
-    drawText(ctx, stat.label, x, 978, WRAPPED_COLORS.TEXT_SECONDARY);
-  });
+  const columnGap = 48;
+  const columnWidth = (CONTENT_WIDTH - columnGap) / 2;
 
-  // Artist of the year, with the runners-up on one line
-  drawRule(ctx, 1036);
+  // Artist of the year, then the runners-up in two columns
+  drawRule(ctx, 880);
   const [topArtist, ...otherArtists] = data.artists;
   if (topArtist) {
-    const photoSize = 216;
+    const photoSize = 180;
     const textWidth = artistImage ? CONTENT_WIDTH - photoSize - 48 : CONTENT_WIDTH;
 
-    drawEyebrow(ctx, labels.topArtist, PAD, 1106, WRAPPED_COLORS.ACCENT);
-    setFont(ctx, 700, 76, -3);
-    drawText(ctx, truncateText(ctx, topArtist.name, textWidth), PAD - 4, 1196, WRAPPED_COLORS.TEXT_PRIMARY);
+    drawEyebrow(ctx, labels.topArtist, PAD, 952, WRAPPED_COLORS.ACCENT);
+    setFont(ctx, 700, 92, -3.5);
+    drawText(ctx, truncateText(ctx, topArtist.name, textWidth), PAD - 5, 1050, WRAPPED_COLORS.TEXT_PRIMARY);
     setFont(ctx, 400, 30);
     drawText(
       ctx,
       `${formatNumber(Number(topArtist.playcount))} ${labels.plays}`,
       PAD,
-      1244,
+      1096,
       WRAPPED_COLORS.TEXT_SECONDARY,
     );
-    if (otherArtists.length > 0) {
-      setFont(ctx, 500, 28);
-      drawText(
-        ctx,
-        truncateText(ctx, otherArtists.map((a) => a.name).join(' · '), textWidth),
-        PAD,
-        1290,
-        WRAPPED_COLORS.TEXT_TERTIARY,
-      );
-    }
 
     if (artistImage) {
-      drawCircularImage(ctx, artistImage, WIDTH - PAD - photoSize, 1086, photoSize);
+      // Beside the name and plays, clear of the runners-up below
+      drawCircularImage(ctx, artistImage, WIDTH - PAD - photoSize - 8, 932, photoSize);
     }
+
+    const runnersUp = otherArtists.map((artist) => artist.name);
+    drawRankedRows(ctx, runnersUp.slice(0, 2), PAD, 1178, columnWidth, { firstRank: 2, step: 58 });
+    drawRankedRows(ctx, runnersUp.slice(2, 4), PAD + columnWidth + columnGap, 1178, columnWidth, {
+      firstRank: 4,
+      step: 58,
+    });
   }
 
   // Tracks and albums side by side
-  drawRule(ctx, 1350);
-  const columnGap = 48;
-  const columnWidth = (CONTENT_WIDTH - columnGap) / 2;
-  drawRankedList(
-    ctx,
-    labels.topTracks,
-    data.tracks.map((track) => ({ name: track.name, detail: track.artist.name })),
-    PAD,
-    1418,
-    columnWidth,
-  );
-  drawRankedList(
-    ctx,
-    labels.topAlbums,
-    data.albums.map((album) => ({ name: album.name, detail: album.artist.name })),
-    PAD + columnWidth + columnGap,
-    1418,
-    columnWidth,
-  );
+  drawRule(ctx, 1310);
+  drawEyebrow(ctx, labels.topTracks, PAD, 1382, WRAPPED_COLORS.ACCENT);
+  drawRankedRows(ctx, data.tracks.map((track) => track.name), PAD, 1452, columnWidth);
+  drawEyebrow(ctx, labels.topAlbums, PAD + columnWidth + columnGap, 1382, WRAPPED_COLORS.ACCENT);
+  drawRankedRows(ctx, data.albums.map((album) => album.name), PAD + columnWidth + columnGap, 1452, columnWidth);
 
   // Footer
   drawRule(ctx, 1842);
