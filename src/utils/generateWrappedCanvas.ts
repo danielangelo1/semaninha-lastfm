@@ -1,4 +1,4 @@
-import { WrappedData } from '../types/wrapped';
+import { WrappedCanvasLabels, WrappedData } from '../types/wrapped';
 import {
   WRAPPED_API_CONFIG,
   WRAPPED_CANVAS_CONFIG,
@@ -204,7 +204,10 @@ const drawCompactList = (
 /**
  * Generate the Wrapped canvas with compact layout
  */
-export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanvasElement> => {
+export const generateWrappedCanvas = async (
+  data: WrappedData,
+  labels: WrappedCanvasLabels,
+): Promise<HTMLCanvasElement> => {
   const canvas = document.createElement('canvas');
   canvas.width = WRAPPED_CANVAS_CONFIG.WIDTH;
   canvas.height = WRAPPED_CANVAS_CONFIG.HEIGHT;
@@ -244,7 +247,7 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
 
   ctx.font = `600 32px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = '#e07b7b';
-  ctx.fillText('SCROBBLES', WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
+  ctx.fillText(labels.scrobbles, WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
   currentY += 20;
 
   ctx.font = `900 84px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
@@ -263,9 +266,9 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
   const startX = WRAPPED_CANVAS_CONFIG.WIDTH / 2 - circleSpacing;
 
   const stats = [
-    { value: data.stats.totalArtists, label: 'Artistas' },
-    { value: data.stats.totalAlbums, label: 'Álbuns' },
-    { value: data.stats.totalTracks, label: 'Músicas' }
+    { value: data.stats.totalArtists, label: labels.artists },
+    { value: data.stats.totalAlbums, label: labels.albums },
+    { value: data.stats.totalTracks, label: labels.tracks }
   ];
 
   stats.forEach((stat, index) => {
@@ -311,21 +314,21 @@ export const generateWrappedCanvas = async (data: WrappedData): Promise<HTMLCanv
     detail: undefined,
   }));
 
-  drawCompactList(ctx, 'ARTISTAS MAIS OUVIDOS', artistItems, leftX, listsY, '#e07b7b');
+  drawCompactList(ctx, labels.topArtists, artistItems, leftX, listsY, '#e07b7b');
 
   const trackItems = data.tracks.map(track => ({
     name: track.name,
     detail: undefined,
   }));
 
-  drawCompactList(ctx, 'MÚSICAS MAIS OUVIDAS', trackItems, leftX, listsY + 320, '#e07b7b');
+  drawCompactList(ctx, labels.topTracks, trackItems, leftX, listsY + 320, '#e07b7b');
 
   const albumItems = data.albums.map(album => ({
     name: album.name,
     detail: undefined,
   }));
 
-  drawCompactList(ctx, 'ÁLBUNS MAIS OUVIDOS', albumItems, rightX, listsY, '#e07b7b');
+  drawCompactList(ctx, labels.topAlbums, albumItems, rightX, listsY, '#e07b7b');
 
   ctx.textAlign = 'center';
   ctx.font = `900 72px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;

@@ -88,14 +88,6 @@ export const WRAPPED_API_CONFIG = {
   TOP_COUNT: 5,
 } as const;
 
-// Wrapped Messages
-export const WRAPPED_MESSAGES = {
-  SUCCESS: 'Wrapped gerado com sucesso! 🎉',
-  ERROR_USERNAME_REQUIRED: 'Por favor, insira seu nome de usuário do Last.fm',
-  ERROR_GENERATION: 'Erro ao gerar o Wrapped',
-  LOADING: 'Criando seu Wrapped... Isso pode levar alguns segundos ✨',
-} as const;
-
 // Wrapped Sections Configuration
 export const WRAPPED_SECTIONS = [
   {

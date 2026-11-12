@@ -14,3 +14,14 @@ export interface WrappedData {
 export interface WrappedRequest {
   username: string;
 }
+
+// Translated strings drawn on the Wrapped image
+export interface WrappedCanvasLabels {
+  scrobbles: string;
+  artists: string;
+  albums: string;
+  tracks: string;
+  topArtists: string;
+  topTracks: string;
+  topAlbums: string;
+}

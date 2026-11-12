@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { WRAPPED_YEAR } from '../../constants/wrapped';
 import './WrappedResult.css';
 
@@ -9,17 +10,19 @@ interface WrappedResultProps {
 }
 
 const WrappedResult = ({ imageUrl, username, onDownload }: WrappedResultProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="wrapped-result">
       <div className="wrapped-image-container">
-        <img src={imageUrl} alt={`Wrapped ${WRAPPED_YEAR} - ${username}`} />
+        <img src={imageUrl} alt={t('wrapped.altText', { year: WRAPPED_YEAR, user: username })} />
       </div>
       <button
         className="download-button"
         onClick={onDownload}
-        aria-label="Baixar imagem do Wrapped"
+        aria-label={t('wrapped.downloadAria')}
       >
-        Baixar Imagem
+        {t('wrapped.download')}
       </button>
     </div>
   );

@@ -1,13 +1,15 @@
 import { useState, useCallback, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import "./Wrapped.css";
 import { useWrappedData } from "../../hooks/useWrappedData";
 import { generateWrappedCanvas } from "../../utils/generateWrappedCanvas";
 import WrappedInput from "../../components/WrappedInput/WrappedInput";
 import WrappedResult from "../../components/WrappedResult/WrappedResult";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import { WRAPPED_MESSAGES, WRAPPED_YEAR } from "../../constants/wrapped";
+import { WRAPPED_YEAR } from "../../constants/wrapped";
 
 const Wrapped = () => {
+  const { t } = useTranslation();
   const [username, setUsername] = useState("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const { wrappedData, loading, fetchWrappedData } = useWrappedData();
@@ -19,7 +21,16 @@ const Wrapped = () => {
 
   useEffect(() => {
     if (wrappedData) {
-      generateWrappedCanvas(wrappedData)
+      // Re-runs on language change so the image text follows the UI
+      generateWrappedCanvas(wrappedData, {
+        scrobbles: t("wrapped.canvas.scrobbles"),
+        artists: t("wrapped.canvas.artists"),
+        albums: t("wrapped.canvas.albums"),
+        tracks: t("wrapped.canvas.tracks"),
+        topArtists: t("wrapped.canvas.topArtists"),
+        topTracks: t("wrapped.canvas.topTracks"),
+        topAlbums: t("wrapped.canvas.topAlbums"),
+      })
         .then((canvas) => {
           const url = canvas.toDataURL("image/png");
           setImageUrl(url);
@@ -28,7 +39,7 @@ const Wrapped = () => {
           console.error("Error generating canvas:", error);
         });
     }
-  }, [wrappedData]);
+  }, [wrappedData, t]);
 
   const handleDownload = useCallback(() => {
     if (!imageUrl) return;
@@ -42,10 +53,8 @@ const Wrapped = () => {
   return (
     <main className="wrapped">
       <div className="wrapped-header">
-        <h1>🎵 Semaninha Wrapped</h1>
-        <p>
-          Descubra seus artistas, músicas e álbuns mais ouvidos do ano!
-        </p>
+        <h1>{t("wrapped.title")}</h1>
+        <p>{t("wrapped.description")}</p>
       </div>
 
       <WrappedInput
@@ -63,7 +72,7 @@ const Wrapped = () => {
         />
       )}
 
-      {loading && <LoadingSpinner message={WRAPPED_MESSAGES.LOADING} />}
+      {loading && <LoadingSpinner message={t("wrapped.loading")} />}
     </main>
   );
 };

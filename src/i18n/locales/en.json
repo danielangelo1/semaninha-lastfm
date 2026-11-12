@@ -62,5 +62,29 @@
     "analyticsTitle": "Cookies and ads",
     "analyticsText": "This site uses Google Analytics and Google AdSense, which may use cookies to collect browsing data and display ads. These services are operated by Google, follow Google's own privacy policy, and are not controlled by us.",
     "contact": "For more information, contact us at:"
+  },
+  "wrapped": {
+    "title": "🎵 Semaninha Wrapped",
+    "description": "Discover your most played artists, tracks and albums of the year!",
+    "usernameLabel": "Last.fm username",
+    "usernamePlaceholder": "Enter your username",
+    "usernameAria": "Last.fm username",
+    "generate": "Generate Wrapped {{year}}",
+    "generating": "Generating...",
+    "loading": "Creating your Wrapped... This may take a few seconds ✨",
+    "success": "Wrapped generated successfully! 🎉",
+    "usernameRequired": "Please enter your Last.fm username",
+    "altText": "{{user}}'s Wrapped {{year}}",
+    "download": "Download Image",
+    "downloadAria": "Download Wrapped image",
+    "canvas": {
+      "scrobbles": "SCROBBLES",
+      "artists": "Artists",
+      "albums": "Albums",
+      "tracks": "Tracks",
+      "topArtists": "TOP ARTISTS",
+      "topTracks": "TOP TRACKS",
+      "topAlbums": "TOP ALBUMS"
+    }
   }
 }

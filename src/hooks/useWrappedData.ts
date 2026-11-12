@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import { WrappedData } from '../types/wrapped';
 import {
   DateRange,
@@ -9,7 +10,7 @@ import {
   getWeeklyArtistChart,
   getWeeklyTrackChart,
 } from '../services/LastFMService';
-import { WRAPPED_API_CONFIG, WRAPPED_MESSAGES, WRAPPED_YEAR } from '../constants/wrapped';
+import { WRAPPED_API_CONFIG, WRAPPED_YEAR } from '../constants/wrapped';
 import { ERROR_MESSAGES } from '../constants';
 
 interface UseWrappedDataReturn {
@@ -60,10 +61,14 @@ const fetchWrappedData = async (username: string): Promise<WrappedData> => {
 };
 
 export const useWrappedData = (): UseWrappedDataReturn => {
+  const { t } = useTranslation();
   const mutation = useMutation({
     mutationFn: fetchWrappedData,
+    // Last.fm intermittently returns 500 on large year-long charts
+    retry: 2,
+    retryDelay: 1000,
     onSuccess: () => {
-      toast.success(WRAPPED_MESSAGES.SUCCESS);
+      toast.success(t('wrapped.success'));
     },
     onError: (err) => {
       const errorMessage = err instanceof Error ? err.message : ERROR_MESSAGES.API_REQUEST_ERROR;
@@ -75,13 +80,13 @@ export const useWrappedData = (): UseWrappedDataReturn => {
   const fetchWrappedDataCallback = useCallback(
     async (username: string): Promise<void> => {
       if (!username.trim()) {
-        toast.error(WRAPPED_MESSAGES.ERROR_USERNAME_REQUIRED);
+        toast.error(t('wrapped.usernameRequired'));
         return;
       }
 
       await mutation.mutateAsync(username.trim()).catch(() => {});
     },
-    [mutation],
+    [mutation, t],
   );
 
   const clearData = useCallback((): void => {
