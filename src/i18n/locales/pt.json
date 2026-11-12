@@ -81,13 +81,15 @@
     "generateAria": "Gerar Wrapped {{year}}",
     "hint": "Considera seus scrobbles de 1º de janeiro até hoje.",
     "canvas": {
-      "scrobbles": "SCROBBLES",
+      "scrobbles": "Scrobbles",
       "artists": "Artistas",
       "albums": "Álbuns",
       "tracks": "Músicas",
-      "topArtists": "ARTISTAS MAIS OUVIDOS",
-      "topTracks": "MÚSICAS MAIS OUVIDAS",
-      "topAlbums": "ÁLBUNS MAIS OUVIDOS"
+      "topTracks": "Músicas",
+      "topAlbums": "Álbuns",
+      "subtitle": "Seu ano em música",
+      "topArtist": "Artista do ano",
+      "plays": "plays"
     },
     "announcement": {
       "eyebrow": "Novo",

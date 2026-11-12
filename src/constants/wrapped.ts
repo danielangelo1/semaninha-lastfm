@@ -18,14 +18,13 @@ export const WRAPPED_CANVAS_CONFIG = {
 
 // Wrapped Colors
 export const WRAPPED_COLORS = {
-  PRIMARY: '#c3000d',
-  SECONDARY: '#ff6b6b',
-  TERTIARY: '#1db954',
+  BACKGROUND: '#0e0e0f',
+  GLOW: 'rgba(195, 0, 13, 0.42)',
+  ACCENT: '#e5262f',
   TEXT_PRIMARY: '#ffffff',
-  TEXT_SECONDARY: '#aaaaaa',
-  TEXT_TERTIARY: '#888888',
-  TEXT_SHADOW: 'rgba(0, 0, 0, 0.3)',
-  FOOTER: '#666666',
+  TEXT_SECONDARY: 'rgba(255, 255, 255, 0.56)',
+  TEXT_TERTIARY: 'rgba(255, 255, 255, 0.34)',
+  RULE: 'rgba(255, 255, 255, 0.12)',
 } as const;
 
 // Wrapped Typography
@@ -87,22 +86,3 @@ export const WRAPPED_API_CONFIG = {
   CHART_LIMIT: 1000,
   TOP_COUNT: 5,
 } as const;
-
-// Wrapped Sections Configuration
-export const WRAPPED_SECTIONS = [
-  {
-    title: 'TOP 5 ARTISTAS',
-    color: WRAPPED_COLORS.PRIMARY,
-    key: 'artists' as const,
-  },
-  {
-    title: 'TOP 5 MÚSICAS',
-    color: WRAPPED_COLORS.SECONDARY,
-    key: 'tracks' as const,
-  },
-  {
-    title: 'TOP 5 ÁLBUNS',
-    color: WRAPPED_COLORS.TERTIARY,
-    key: 'albums' as const,
-  },
-] as const;

@@ -17,11 +17,13 @@ export interface WrappedRequest {
 
 // Translated strings drawn on the Wrapped image
 export interface WrappedCanvasLabels {
+  subtitle: string;
   scrobbles: string;
   artists: string;
   albums: string;
   tracks: string;
-  topArtists: string;
+  topArtist: string;
+  plays: string;
   topTracks: string;
   topAlbums: string;
 }

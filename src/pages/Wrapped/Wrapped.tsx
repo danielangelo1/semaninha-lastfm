@@ -8,7 +8,7 @@ import WrappedResult from "../../components/WrappedResult/WrappedResult";
 import { WRAPPED_YEAR } from "../../constants/wrapped";
 
 const Wrapped = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [username, setUsername] = useState("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const { wrappedData, loading, fetchWrappedData } = useWrappedData();
@@ -21,15 +21,21 @@ const Wrapped = () => {
   useEffect(() => {
     if (wrappedData) {
       // Re-runs on language change so the image text follows the UI
-      generateWrappedCanvas(wrappedData, {
-        scrobbles: t("wrapped.canvas.scrobbles"),
-        artists: t("wrapped.canvas.artists"),
-        albums: t("wrapped.canvas.albums"),
-        tracks: t("wrapped.canvas.tracks"),
-        topArtists: t("wrapped.canvas.topArtists"),
-        topTracks: t("wrapped.canvas.topTracks"),
-        topAlbums: t("wrapped.canvas.topAlbums"),
-      })
+      generateWrappedCanvas(
+        wrappedData,
+        {
+          subtitle: t("wrapped.canvas.subtitle"),
+          scrobbles: t("wrapped.canvas.scrobbles"),
+          artists: t("wrapped.canvas.artists"),
+          albums: t("wrapped.canvas.albums"),
+          tracks: t("wrapped.canvas.tracks"),
+          topArtist: t("wrapped.canvas.topArtist"),
+          plays: t("wrapped.canvas.plays"),
+          topTracks: t("wrapped.canvas.topTracks"),
+          topAlbums: t("wrapped.canvas.topAlbums"),
+        },
+        i18n.language,
+      )
         .then((canvas) => {
           const url = canvas.toDataURL("image/png");
           setImageUrl(url);
@@ -38,7 +44,7 @@ const Wrapped = () => {
           console.error("Error generating canvas:", error);
         });
     }
-  }, [wrappedData, t]);
+  }, [wrappedData, t, i18n.language]);
 
   const handleDownload = useCallback(() => {
     if (!imageUrl) return;

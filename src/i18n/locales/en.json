@@ -81,13 +81,15 @@
     "generateAria": "Generate Wrapped {{year}}",
     "hint": "Based on your scrobbles from January 1st until today.",
     "canvas": {
-      "scrobbles": "SCROBBLES",
+      "scrobbles": "Scrobbles",
       "artists": "Artists",
       "albums": "Albums",
       "tracks": "Tracks",
-      "topArtists": "TOP ARTISTS",
-      "topTracks": "TOP TRACKS",
-      "topAlbums": "TOP ALBUMS"
+      "topTracks": "Tracks",
+      "topAlbums": "Albums",
+      "subtitle": "Your year in music",
+      "topArtist": "Artist of the year",
+      "plays": "plays"
     },
     "announcement": {
       "eyebrow": "New",

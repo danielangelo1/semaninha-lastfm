@@ -9,335 +9,264 @@ import {
 import { getArtistImage } from '../services/SpotifyService';
 import { loadImage } from './canvasUtils';
 
+const { WIDTH, HEIGHT } = WRAPPED_CANVAS_CONFIG;
+const PAD = 96;
+const CONTENT_WIDTH = WIDTH - PAD * 2;
+const FONT = WRAPPED_TYPOGRAPHY.FONT_FAMILY;
+
+type Ctx = CanvasRenderingContext2D;
+
 /**
  * Truncate text to fit within max width
  */
-const truncateText = (
-  ctx: CanvasRenderingContext2D,
-  text: string,
-  maxWidth: number
-): string => {
-  const ellipsis = '...';
-  let truncated = text;
+const truncateText = (ctx: Ctx, text: string, maxWidth: number): string => {
+  if (ctx.measureText(text).width <= maxWidth) return text;
 
-  while (ctx.measureText(truncated).width > maxWidth && truncated.length > 0) {
+  let truncated = text;
+  while (truncated.length > 0 && ctx.measureText(`${truncated}…`).width > maxWidth) {
     truncated = truncated.slice(0, -1);
   }
-
-  if (truncated.length < text.length) {
-    truncated = truncated.slice(0, -3) + ellipsis;
-  }
-
-  return truncated;
+  return `${truncated.trimEnd()}…`;
 };
 
-/**
- * Draw the background with gradient and decorative elements
- */
-const drawBackground = (ctx: CanvasRenderingContext2D): void => {
-  const { WIDTH, HEIGHT } = WRAPPED_CANVAS_CONFIG;
-
-  // Create gradient background
-  const gradient = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
-  gradient.addColorStop(0, '#2d1b1b');
-  gradient.addColorStop(0.3, '#3d2626');
-  gradient.addColorStop(0.6, '#4a2c2c');
-  gradient.addColorStop(1, '#2d1b1b');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, WIDTH, HEIGHT);
-
-  // Add decorative circles with gradient
-  const circle1 = ctx.createRadialGradient(200, 300, 0, 200, 300, 400);
-  circle1.addColorStop(0, 'rgba(195, 0, 13, 0.15)');
-  circle1.addColorStop(1, 'rgba(195, 0, 13, 0)');
-  ctx.fillStyle = circle1;
-  ctx.fillRect(0, 0, WIDTH, HEIGHT);
-
-  const circle2 = ctx.createRadialGradient(WIDTH - 200, HEIGHT - 400, 0, WIDTH - 200, HEIGHT - 400, 500);
-  circle2.addColorStop(0, 'rgba(255, 107, 107, 0.12)');
-  circle2.addColorStop(1, 'rgba(255, 107, 107, 0)');
-  ctx.fillStyle = circle2;
-  ctx.fillRect(0, 0, WIDTH, HEIGHT);
-
-  // Add subtle texture/noise effect
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
-  for (let i = 0; i < 1500; i++) {
-    const x = Math.random() * WIDTH;
-    const y = Math.random() * HEIGHT;
-    const size = Math.random() * 2;
-    ctx.fillRect(x, y, size, size);
-  }
+const setFont = (ctx: Ctx, weight: number, size: number, tracking = 0): void => {
+  ctx.font = `${weight} ${size}px ${FONT}`;
+  // Not supported everywhere; older browsers just draw without tracking
+  (ctx as Ctx & { letterSpacing?: string }).letterSpacing = `${tracking}px`;
 };
 
-/**
- * Draw artist images with #1 in center (large) and others behind (smaller)
- */
-const drawHighlightedArtistImages = async (
-  ctx: CanvasRenderingContext2D,
-  images: string[],
-  startY: number
-): Promise<number> => {
-  const centerImageWidth = 400;
-  const centerImageHeight = 400;
-  const sideImageWidth = 320;
-  const sideImageHeight = 320;
-  const borderRadius = 20;
-  const centerX = WRAPPED_CANVAS_CONFIG.WIDTH / 2;
-
-  try {
-    const loadedImages = await Promise.allSettled(
-      images.map(src => loadImage(src))
-    );
-
-    const validImages = loadedImages
-      .filter(result => result.status === 'fulfilled')
-      .map(result => (result as PromiseFulfilledResult<HTMLImageElement>).value);
-
-    if (validImages.length === 0) return startY;
-
-    const drawRoundedImage = (img: HTMLImageElement, x: number, y: number, width: number, height: number, opacity: number = 1) => {
-      ctx.save();
-
-      ctx.globalAlpha = opacity;
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
-      ctx.shadowBlur = 25;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 15;
-
-      ctx.beginPath();
-      ctx.moveTo(x + borderRadius, y);
-      ctx.lineTo(x + width - borderRadius, y);
-      ctx.quadraticCurveTo(x + width, y, x + width, y + borderRadius);
-      ctx.lineTo(x + width, y + height - borderRadius);
-      ctx.quadraticCurveTo(x + width, y + height, x + width - borderRadius, y + height);
-      ctx.lineTo(x + borderRadius, y + height);
-      ctx.quadraticCurveTo(x, y + height, x, y + height - borderRadius);
-      ctx.lineTo(x, y + borderRadius);
-      ctx.quadraticCurveTo(x, y, x + borderRadius, y);
-      ctx.closePath();
-      ctx.clip();
-
-      ctx.drawImage(img, x, y, width, height);
-
-      ctx.restore();
-
-      ctx.globalAlpha = opacity;
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.moveTo(x + borderRadius, y);
-      ctx.lineTo(x + width - borderRadius, y);
-      ctx.quadraticCurveTo(x + width, y, x + width, y + borderRadius);
-      ctx.lineTo(x + width, y + height - borderRadius);
-      ctx.quadraticCurveTo(x + width, y + height, x + width - borderRadius, y + height);
-      ctx.lineTo(x + borderRadius, y + height);
-      ctx.quadraticCurveTo(x, y + height, x, y + height - borderRadius);
-      ctx.lineTo(x, y + borderRadius);
-      ctx.quadraticCurveTo(x, y, x + borderRadius, y);
-      ctx.closePath();
-      ctx.stroke();
-      ctx.globalAlpha = 1;
-    };
-
-    // Draw side images first (behind)
-    if (validImages.length > 1) {
-      // Left image (#2)
-      const leftX = centerX - centerImageWidth / 2 - sideImageWidth + 40;
-      const leftY = startY + 40;
-      drawRoundedImage(validImages[1], leftX, leftY, sideImageWidth, sideImageHeight, 0.7);
-    }
-
-    if (validImages.length > 2) {
-      // Right image (#3)
-      const rightX = centerX + centerImageWidth / 2 - 40;
-      const rightY = startY + 40;
-      drawRoundedImage(validImages[2], rightX, rightY, sideImageWidth, sideImageHeight, 0.7);
-    }
-
-    // Draw center image (#1) on top
-    const centerImgX = centerX - centerImageWidth / 2;
-    const centerImgY = startY;
-    drawRoundedImage(validImages[0], centerImgX, centerImgY, centerImageWidth, centerImageHeight, 1);
-
-    return startY + centerImageHeight + 40;
-  } catch (error) {
-    console.warn('Error loading artist images:', error);
-    return startY;
-  }
-};
-
-/**
- * Draw a compact list in a column
- */
-const drawCompactList = (
-  ctx: CanvasRenderingContext2D,
-  title: string,
-  items: Array<{ name: string; detail?: string }>,
+const drawText = (
+  ctx: Ctx,
+  text: string,
   x: number,
   y: number,
-  color: string
+  color: string,
+  align: CanvasTextAlign = 'left',
 ): void => {
-  ctx.font = `700 34px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
   ctx.fillStyle = color;
-  ctx.fillText(title, x, y);
+  ctx.textAlign = align;
+  ctx.fillText(text, x, y);
+};
 
-  let currentY = y + 50;
+const drawRule = (ctx: Ctx, y: number): void => {
+  ctx.fillStyle = WRAPPED_COLORS.RULE;
+  ctx.fillRect(PAD, y, CONTENT_WIDTH, 2);
+};
 
-  items.forEach((item) => {
-    ctx.font = `600 32px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
-    ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
-    const truncated = truncateText(ctx, item.name, 420);
-    ctx.fillText(truncated, x, currentY);
+/** Small uppercase, letter-spaced label */
+const drawEyebrow = (ctx: Ctx, text: string, x: number, y: number, color: string): void => {
+  setFont(ctx, 500, 24, 4);
+  drawText(ctx, text.toUpperCase(), x, y, color);
+};
 
-    if (item.detail) {
-      ctx.font = `400 24px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
-      ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
-      const truncatedDetail = truncateText(ctx, item.detail, 420);
-      ctx.fillText(truncatedDetail, x, currentY + 28);
-      currentY += 60;
-    } else {
-      currentY += 45;
-    }
+/** The canvas only sees fonts that finished loading, so wait for the weights we use */
+const ensureFonts = async (): Promise<void> => {
+  try {
+    await Promise.all(
+      [400, 500, 600, 700].map((weight) => document.fonts.load(`${weight} 32px Poppins`)),
+    );
+  } catch {
+    // Falls back to the next font in the stack
+  }
+};
+
+const drawBackground = (ctx: Ctx): void => {
+  ctx.fillStyle = WRAPPED_COLORS.BACKGROUND;
+  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+  const glow = ctx.createRadialGradient(WIDTH * 0.9, 120, 0, WIDTH * 0.9, 120, 1000);
+  glow.addColorStop(0, WRAPPED_COLORS.GLOW);
+  glow.addColorStop(1, 'rgba(195, 0, 13, 0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+  // Fine grain so the flat dark areas don't band
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.025)';
+  for (let i = 0; i < 9000; i++) {
+    ctx.fillRect(Math.random() * WIDTH, Math.random() * HEIGHT, 1.5, 1.5);
+  }
+};
+
+const drawCircularImage = (ctx: Ctx, img: HTMLImageElement, x: number, y: number, size: number): void => {
+  const radius = size / 2;
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(x + radius, y + radius, radius, 0, Math.PI * 2);
+  ctx.clip();
+  // Cover-crop non-square photos
+  const scale = Math.max(size / img.width, size / img.height);
+  const w = img.width * scale;
+  const h = img.height * scale;
+  ctx.drawImage(img, x + (size - w) / 2, y + (size - h) / 2, w, h);
+  ctx.restore();
+
+  ctx.strokeStyle = WRAPPED_COLORS.RULE;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(x + radius, y + radius, radius + 8, 0, Math.PI * 2);
+  ctx.stroke();
+};
+
+const loadTopArtistImage = async (artistName?: string): Promise<HTMLImageElement | null> => {
+  if (!artistName) return null;
+  try {
+    const { url } = await getArtistImage(artistName);
+    return await loadImage(url);
+  } catch {
+    return null;
+  }
+};
+
+/** Ranked list: "01  Name" with a secondary line underneath */
+const drawRankedList = (
+  ctx: Ctx,
+  title: string,
+  items: Array<{ name: string; detail: string }>,
+  x: number,
+  y: number,
+  width: number,
+): void => {
+  drawEyebrow(ctx, title, x, y, WRAPPED_COLORS.ACCENT);
+
+  const rankWidth = 56;
+  items.forEach((item, index) => {
+    const rowY = y + 70 + index * 74;
+
+    setFont(ctx, 500, 26);
+    drawText(ctx, String(index + 1).padStart(2, '0'), x, rowY, WRAPPED_COLORS.TEXT_TERTIARY);
+
+    setFont(ctx, 600, 30, -0.5);
+    drawText(ctx, truncateText(ctx, item.name, width - rankWidth), x + rankWidth, rowY, WRAPPED_COLORS.TEXT_PRIMARY);
+
+    setFont(ctx, 400, 24);
+    drawText(ctx, truncateText(ctx, item.detail, width - rankWidth), x + rankWidth, rowY + 32, WRAPPED_COLORS.TEXT_SECONDARY);
   });
 };
 
 /**
- * Generate the Wrapped canvas with compact layout
+ * Generate the Wrapped image (1080x1920 story format)
  */
 export const generateWrappedCanvas = async (
   data: WrappedData,
   labels: WrappedCanvasLabels,
+  locale?: string,
 ): Promise<HTMLCanvasElement> => {
   const canvas = document.createElement('canvas');
-  canvas.width = WRAPPED_CANVAS_CONFIG.WIDTH;
-  canvas.height = WRAPPED_CANVAS_CONFIG.HEIGHT;
+  canvas.width = WIDTH;
+  canvas.height = HEIGHT;
 
   const ctx = canvas.getContext('2d');
   if (!ctx) {
     throw new Error('Canvas context not found');
   }
 
+  const [, topArtistImage] = await Promise.all([
+    ensureFonts(),
+    loadTopArtistImage(data.artists[0]?.name),
+  ]);
+
+  const formatNumber = (value: number) => value.toLocaleString(locale);
+  const formatCount = (value: number) =>
+    // Charts are capped by Last.fm, so a count at the cap means "at least"
+    `${formatNumber(value)}${value >= WRAPPED_API_CONFIG.CHART_LIMIT ? '+' : ''}`;
+
+  ctx.textBaseline = 'alphabetic';
   drawBackground(ctx);
 
-  const artistImagePromises = data.artists.slice(0, 3).map(async (artist) => {
-    try {
-      const img = await getArtistImage(artist.name);
-      return img.url;
-    } catch {
-      return '';
-    }
-  });
+  // Top bar
+  drawEyebrow(ctx, 'Semaninha Wrapped', PAD, 132, WRAPPED_COLORS.TEXT_SECONDARY);
+  setFont(ctx, 500, 24, 4);
+  drawText(ctx, `@${data.username}`, WIDTH - PAD, 132, WRAPPED_COLORS.TEXT_SECONDARY, 'right');
+  drawRule(ctx, 172);
 
-  const artistImages = await Promise.all(artistImagePromises);
-  const validArtistImages = artistImages.filter(url => url);
+  // Hero: the year, then who and what
+  setFont(ctx, 700, 300, -14);
+  drawText(ctx, String(WRAPPED_YEAR), PAD - 12, 470, WRAPPED_COLORS.ACCENT);
 
-  let currentY = 110;
+  setFont(ctx, 400, 40, -0.5);
+  drawText(ctx, labels.subtitle, PAD, 548, WRAPPED_COLORS.TEXT_SECONDARY);
 
-  if (validArtistImages.length > 0) {
-    currentY = await drawHighlightedArtistImages(ctx, validArtistImages, currentY);
-  }
-
-  currentY += 20;
-
-  ctx.font = `700 72px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
-  ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
-  ctx.textAlign = 'center';
-  ctx.fillText(data.username, WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
-  currentY += 60;
-
-  ctx.font = `600 32px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
-  ctx.fillStyle = '#e07b7b';
-  ctx.fillText(labels.scrobbles, WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY);
-  currentY += 20;
-
-  ctx.font = `900 84px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
-  ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
-  ctx.fillText(data.totalScrobbles.toLocaleString(), WRAPPED_CANVAS_CONFIG.WIDTH / 2, currentY + 60);
-  currentY += 120;
-
-  // Draw stats circles section
-  ctx.font = `700 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
-  ctx.fillStyle = '#e07b7b';
-  ctx.textAlign = 'center';
-
-  const circleY = currentY + 80;
-  const circleRadius = 65;
-  const circleSpacing = 280;
-  const startX = WRAPPED_CANVAS_CONFIG.WIDTH / 2 - circleSpacing;
+  // Numbers
+  drawRule(ctx, 610);
+  drawEyebrow(ctx, labels.scrobbles, PAD, 680, WRAPPED_COLORS.TEXT_SECONDARY);
+  setFont(ctx, 700, 150, -6);
+  drawText(ctx, formatNumber(data.totalScrobbles), PAD - 6, 824, WRAPPED_COLORS.TEXT_PRIMARY);
 
   const stats = [
     { value: data.stats.totalArtists, label: labels.artists },
     { value: data.stats.totalAlbums, label: labels.albums },
-    { value: data.stats.totalTracks, label: labels.tracks }
+    { value: data.stats.totalTracks, label: labels.tracks },
   ];
-
+  const statWidth = CONTENT_WIDTH / stats.length;
   stats.forEach((stat, index) => {
-    const x = startX + index * circleSpacing;
-
-    const gradient = ctx.createRadialGradient(x, circleY, 0, x, circleY, circleRadius);
-    gradient.addColorStop(0, 'rgba(224, 123, 123, 0.3)');
-    gradient.addColorStop(1, 'rgba(224, 123, 123, 0.1)');
-    ctx.fillStyle = gradient;
-    ctx.beginPath();
-    ctx.arc(x, circleY, circleRadius, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = 'rgba(224, 123, 123, 0.2)';
-    ctx.beginPath();
-    ctx.arc(x, circleY, circleRadius - 10, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.font = `900 34px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
-    ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    // Charts are capped by Last.fm, so a count at the cap means "at least"
-    const capped = stat.value >= WRAPPED_API_CONFIG.CHART_LIMIT;
-    ctx.fillText(`${stat.value.toLocaleString()}${capped ? '+' : ''}`, x, circleY);
-
-    ctx.font = `600 24px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
-    ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
-    ctx.textBaseline = 'top';
-    ctx.fillText(stat.label, x, circleY + circleRadius + 15);
+    const x = PAD + index * statWidth;
+    setFont(ctx, 600, 64, -2);
+    drawText(ctx, formatCount(stat.value), x, 936, WRAPPED_COLORS.TEXT_PRIMARY);
+    setFont(ctx, 400, 28);
+    drawText(ctx, stat.label, x, 978, WRAPPED_COLORS.TEXT_SECONDARY);
   });
 
-  currentY = circleY + circleRadius + 80;
+  // Artist of the year, with the runners-up on one line
+  drawRule(ctx, 1036);
+  const [topArtist, ...otherArtists] = data.artists;
+  if (topArtist) {
+    const photoSize = 216;
+    const textWidth = topArtistImage ? CONTENT_WIDTH - photoSize - 48 : CONTENT_WIDTH;
 
-  ctx.textAlign = 'left';
+    drawEyebrow(ctx, labels.topArtist, PAD, 1106, WRAPPED_COLORS.ACCENT);
+    setFont(ctx, 700, 76, -3);
+    drawText(ctx, truncateText(ctx, topArtist.name, textWidth), PAD - 4, 1196, WRAPPED_COLORS.TEXT_PRIMARY);
+    setFont(ctx, 400, 30);
+    drawText(
+      ctx,
+      `${formatNumber(Number(topArtist.playcount))} ${labels.plays}`,
+      PAD,
+      1244,
+      WRAPPED_COLORS.TEXT_SECONDARY,
+    );
+    if (otherArtists.length > 0) {
+      setFont(ctx, 500, 28);
+      drawText(
+        ctx,
+        truncateText(ctx, otherArtists.map((a) => a.name).join(' · '), textWidth),
+        PAD,
+        1290,
+        WRAPPED_COLORS.TEXT_TERTIARY,
+      );
+    }
 
-  const leftX = 80;
-  const rightX = 560;
-  const listsY = currentY;
+    if (topArtistImage) {
+      drawCircularImage(ctx, topArtistImage, WIDTH - PAD - photoSize, 1086, photoSize);
+    }
+  }
 
-  const artistItems = data.artists.map(artist => ({
-    name: artist.name,
-    detail: undefined,
-  }));
+  // Tracks and albums side by side
+  drawRule(ctx, 1350);
+  const columnGap = 48;
+  const columnWidth = (CONTENT_WIDTH - columnGap) / 2;
+  drawRankedList(
+    ctx,
+    labels.topTracks,
+    data.tracks.map((track) => ({ name: track.name, detail: track.artist.name })),
+    PAD,
+    1418,
+    columnWidth,
+  );
+  drawRankedList(
+    ctx,
+    labels.topAlbums,
+    data.albums.map((album) => ({ name: album.name, detail: album.artist.name })),
+    PAD + columnWidth + columnGap,
+    1418,
+    columnWidth,
+  );
 
-  drawCompactList(ctx, labels.topArtists, artistItems, leftX, listsY, '#e07b7b');
-
-  const trackItems = data.tracks.map(track => ({
-    name: track.name,
-    detail: undefined,
-  }));
-
-  drawCompactList(ctx, labels.topTracks, trackItems, leftX, listsY + 320, '#e07b7b');
-
-  const albumItems = data.albums.map(album => ({
-    name: album.name,
-    detail: undefined,
-  }));
-
-  drawCompactList(ctx, labels.topAlbums, albumItems, rightX, listsY, '#e07b7b');
-
-  ctx.textAlign = 'center';
-  ctx.font = `900 72px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
-  ctx.fillStyle = WRAPPED_COLORS.TEXT_PRIMARY;
-  ctx.fillText(String(WRAPPED_YEAR), WRAPPED_CANVAS_CONFIG.WIDTH / 2, WRAPPED_CANVAS_CONFIG.HEIGHT - 140);
-
-  ctx.font = `600 28px ${WRAPPED_TYPOGRAPHY.FONT_FAMILY}`;
-  ctx.fillStyle = WRAPPED_COLORS.TEXT_SECONDARY;
-  ctx.fillText('semaninha.net', WRAPPED_CANVAS_CONFIG.WIDTH / 2, WRAPPED_CANVAS_CONFIG.HEIGHT - 80);
+  // Footer
+  drawRule(ctx, 1842);
+  setFont(ctx, 500, 24, 4);
+  drawText(ctx, 'SEMANINHA.NET', PAD, 1884, WRAPPED_COLORS.TEXT_TERTIARY);
+  drawText(ctx, `#${WRAPPED_YEAR}`, WIDTH - PAD, 1884, WRAPPED_COLORS.TEXT_TERTIARY, 'right');
 
   return canvas;
 };
