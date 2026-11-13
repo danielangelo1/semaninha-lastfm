@@ -1,8 +1,12 @@
 import { UserRequest } from "../types/userRequest";
 import { setFont } from "./FontHandler";
 import { CANVAS_CONFIG, ERROR_MESSAGES } from "../constants";
+import { getGridDimensions } from "../helpers/grid.helper";
 
-export const createCanvasContext = () => {
+export const createCanvasContext = (
+  width: number = CANVAS_CONFIG.WIDTH,
+  height: number = CANVAS_CONFIG.HEIGHT,
+) => {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
 
@@ -10,8 +14,8 @@ export const createCanvasContext = () => {
     throw new Error(ERROR_MESSAGES.CANVAS_CONTEXT_ERROR);
   }
 
-  canvas.width = CANVAS_CONFIG.WIDTH;
-  canvas.height = CANVAS_CONFIG.HEIGHT;
+  canvas.width = width;
+  canvas.height = height;
   context.fillStyle = CANVAS_CONFIG.BACKGROUND_COLOR;
   context.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -87,30 +91,27 @@ export const processImages = async <T>(
     especialPlays: number,
   ) => void,
 ) => {
-  if (dataItems.length < userInput.limit * userInput.limit) {
-    throw new Error(ERROR_MESSAGES.INSUFFICIENT_DATA);
-  }
-
-  const { canvas, context } = createCanvasContext();
-  const { artistSize, albumSize, especialPlays } = await setFont(
-    context,
+  const { columns, rows, tileSize, width, height } = getGridDimensions(
     userInput.limit,
   );
 
+  if (dataItems.length < columns * rows) {
+    throw new Error(ERROR_MESSAGES.INSUFFICIENT_DATA);
+  }
+
+  const { canvas, context } = createCanvasContext(width, height);
+  // Text is sized for the tile, which follows the longest side of the grid
+  const { artistSize, albumSize, especialPlays } = await setFont(
+    context,
+    Math.max(columns, rows),
+  );
+
   const imagePromises = dataItems.map(async (item, index) => {
-    const x = (index % userInput.limit) * (canvas.width / userInput.limit);
-    const y =
-      Math.floor(index / userInput.limit) * (canvas.height / userInput.limit);
+    const x = (index % columns) * tileSize;
+    const y = Math.floor(index / columns) * tileSize;
     const imgSrc = getImageSrc(item);
 
-    await drawImageOnCanvas(
-      context,
-      imgSrc,
-      x,
-      y,
-      canvas.width / userInput.limit,
-      canvas.height / userInput.limit,
-    );
+    await drawImageOnCanvas(context, imgSrc, x, y, tileSize, tileSize);
 
     drawExtraDetails(context, item, x, y, artistSize, albumSize, especialPlays);
   });

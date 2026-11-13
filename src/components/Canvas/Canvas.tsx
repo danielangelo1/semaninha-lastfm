@@ -9,6 +9,7 @@ import {
   createSpotifyImage,
   createTrackImage,
 } from "../../utils/generateCanvas";
+import { parseGridSize } from "../../helpers/grid.helper";
 
 interface ImageRendererProps {
   data: ArtistApiResponse | AlbumApiResponse | TrackApiResponse;
@@ -21,6 +22,8 @@ const ImageRenderer = ({
 }: ImageRendererProps) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const { columns, rows } = parseGridSize(userInput.limit);
+  const gridLabel = `${columns}x${rows}`;
 
   useEffect(() => {
     setLoading(true);
@@ -67,7 +70,7 @@ const ImageRenderer = ({
       {!loading && imageSrc && (
         <img 
           src={imageSrc} 
-          alt={`Colagem de ${userInput.limit}x${userInput.limit} álbuns mais escutados de ${userInput.user} no período de ${userInput.period}`}
+          alt={`Colagem de ${gridLabel} álbuns mais escutados de ${userInput.user} no período de ${userInput.period}`}
           loading="lazy"
           decoding="async"
           role="img"

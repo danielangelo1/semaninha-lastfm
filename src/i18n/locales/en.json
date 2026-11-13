@@ -48,7 +48,8 @@
   },
   "footer": {
     "developedBy": "Developed by",
-    "privacy": "Privacy Policy"
+    "privacy": "Privacy Policy",
+    "howToUse": "How to use"
   },
   "privacy": {
     "title": "Privacy Policy - Semaninha",
@@ -100,5 +101,47 @@
       "dismiss": "Not now",
       "close": "Dismiss notice"
     }
+  },
+  "howToUse": {
+    "navLink": "How to use",
+    "eyebrow": "Quick guide",
+    "title": "How to use semaninha",
+    "intro": "semaninha builds collages of what you listened to the most, using your Last.fm history. For that, you need an account there tracking what you listen to.",
+    "steps": {
+      "account": {
+        "title": "Create a Last.fm account",
+        "text": "It's free. Last.fm keeps a history of everything you listen to, and that's where semaninha gets its data.",
+        "link": "Create a Last.fm account"
+      },
+      "connect": {
+        "title": "Connect your player",
+        "text": "Every song you play becomes a \"scrobble\" on your profile. Spotify connects directly from your Last.fm settings, under Applications. For other players, use apps or browser extensions like Web Scrobbler.",
+        "link": "Open Last.fm applications"
+      },
+      "listen": {
+        "title": "Listen to music",
+        "text": "Last.fm only records from the moment you connect. If your account is new, start with the \"Last 7 days\" period and a small grid, and go bigger as your history grows."
+      },
+      "generate": {
+        "title": "Generate your collage",
+        "text": "On the home page, enter your Last.fm username (not your Spotify one), pick the period, grid size and type, then click Generate. Then just download the image."
+      }
+    },
+    "faqTitle": "Common questions",
+    "faq": {
+      "notFound": {
+        "question": "I got \"User not found\"",
+        "answer": "Make sure you entered your Last.fm profile name, exactly as it appears in last.fm/user/your-name."
+      },
+      "notEnough": {
+        "question": "It says I don't have enough data",
+        "answer": "You haven't listened to enough different albums or artists to fill the grid in that period yet. Pick a smaller grid or a longer period."
+      },
+      "noImage": {
+        "question": "Some covers came out black",
+        "answer": "Last.fm has no artwork for those albums, so the tile is filled in black."
+      }
+    },
+    "cta": "Generate my collage"
   }
 }

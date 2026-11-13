@@ -49,6 +49,7 @@ const Footer = () => {
         </Link>
       </div>
       <div className="link-pages">
+        <Link to="/how-to-use">{t("footer.howToUse")}</Link>
         <Link to="/privacy">{t("footer.privacy")}</Link>
       </div>
     </footer>

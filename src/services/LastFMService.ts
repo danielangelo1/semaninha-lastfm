@@ -24,6 +24,7 @@ import { UserRequest } from "../types/userRequest";
 import { api } from "./api";
 import { ERROR_MESSAGES } from "../constants";
 import { ServicesHelper } from "../helpers/services.helper";
+import { getGridItemCount } from "../helpers/grid.helper";
 
 const ENDPOINTS = {
   TOP_ALBUMS: "?method=user.gettopalbums&",
@@ -67,8 +68,7 @@ const requestLastFm = async <T>(
 };
 
 const buildTopUrl = (endpoint: string, data: UserRequest): string => {
-  const gridSize = data.limit * data.limit;
-  return ServicesHelper.buildLastFmUrl(endpoint, data.user, data.period, gridSize);
+  return ServicesHelper.buildLastFmUrl(endpoint, data.user, data.period, getGridItemCount(data.limit));
 };
 
 export const getTopAlbums = (data: UserRequest): Promise<AlbumApiResponse> =>

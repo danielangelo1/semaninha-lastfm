@@ -34,7 +34,7 @@ describe('useLastFmData Hook', () => {
   const mockUserRequest: UserRequest = {
     user: 'testuser',
     period: '7day',
-    limit: 3,
+    limit: '3',
     type: 'album',
   };
 
