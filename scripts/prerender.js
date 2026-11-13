@@ -12,6 +12,38 @@ const { render, PAGE_META, SITE_URL, getCanonicalUrl } = await import(
   pathToFileURL(join(serverDir, "entry-server.js")).href
 );
 
+// Source module of each page, to find its chunks in the Vite manifest (keep in sync with src/router/pages.ts)
+const PAGE_SOURCES = {
+  "/": "src/pages/Home/Home.tsx",
+  "/how-to-use": "src/pages/HowToUse/HowToUse.tsx",
+  "/wrapped": "src/pages/Wrapped/Wrapped.tsx",
+  "/support": "src/pages/Support/Support.tsx",
+  "/privacy": "src/pages/Privacy/Privacy.tsx",
+};
+
+const manifest = JSON.parse(await readFile(join(distDir, ".vite/manifest.json"), "utf8"));
+
+// The page chunk plus the chunks it imports, minus the entry the template already loads
+const collectPageAssets = (path) => {
+  const source = PAGE_SOURCES[path];
+  if (!source || !manifest[source]) {
+    throw new Error(`prerender: no chunk found for ${path} (${source})`);
+  }
+
+  const scripts = new Set();
+  const styles = new Set();
+  const visit = (key) => {
+    const chunk = manifest[key];
+    if (!chunk || chunk.isEntry || scripts.has(chunk.file)) return;
+    scripts.add(chunk.file);
+    chunk.css?.forEach((file) => styles.add(file));
+    chunk.imports?.forEach(visit);
+  };
+  visit(source);
+
+  return { scripts: [...scripts], styles: [...styles] };
+};
+
 const escapeAttribute = (value) =>
   value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 
@@ -46,6 +78,14 @@ const buildPage = (template, page, appHtml) => {
   html = replaceOrFail(html, /(<link\s+rel="canonical"\s+href=")[^"]*(")/, `$1${url}$2`, "canonical link");
   html = replaceOrFail(html, '<div id="root"></div>', `<div id="root">${appHtml}</div>`, "root element");
 
+  // Without these the prerendered markup shows unstyled until the app loads the page chunk
+  const { scripts, styles } = collectPageAssets(page.path);
+  const assetTags = [
+    ...styles.map((file) => `<link rel="stylesheet" crossorigin href="/${file}">`),
+    ...scripts.map((file) => `<link rel="modulepreload" crossorigin href="/${file}">`),
+  ].join("\n    ");
+  html = replaceOrFail(html, "</head>", `    ${assetTags}\n  </head>`, "</head>");
+
   return html;
 };
 
@@ -74,4 +114,6 @@ for (const page of PAGE_META) {
 
 await writeFile(join(distDir, "sitemap.xml"), buildSitemap(PAGE_META));
 await rm(serverDir, { recursive: true, force: true });
+// The manifest was only needed here; don't deploy it
+await rm(join(distDir, ".vite"), { recursive: true, force: true });
 console.log(`sitemap.xml written for ${SITE_URL}`);
