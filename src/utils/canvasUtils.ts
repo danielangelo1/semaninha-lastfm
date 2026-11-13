@@ -2,6 +2,7 @@ import { UserRequest } from "../types/userRequest";
 import { setFont } from "./FontHandler";
 import { CANVAS_CONFIG, ERROR_MESSAGES } from "../constants";
 import { getGridDimensions } from "../helpers/grid.helper";
+import { AppError } from "../helpers/errors.helper";
 
 export const createCanvasContext = (
   width: number = CANVAS_CONFIG.WIDTH,
@@ -96,7 +97,7 @@ export const processImages = async <T>(
   );
 
   if (dataItems.length < columns * rows) {
-    throw new Error(ERROR_MESSAGES.INSUFFICIENT_DATA);
+    throw new AppError("insufficientData");
   }
 
   const { canvas, context } = createCanvasContext(width, height);

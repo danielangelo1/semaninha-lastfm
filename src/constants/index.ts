@@ -49,14 +49,9 @@ export const API_CONFIG = {
   MAX_RETRY_ATTEMPTS: 3,
 } as const;
 
-// Error Messages
+// Error Messages (user-facing errors are translated, see "errors" in the locales)
 export const ERROR_MESSAGES = {
-  USER_NOT_FOUND: 'Usuário não encontrado',
-  INSUFFICIENT_DATA: 'Você não tem dados suficientes para gerar a imagem :(, tente diminuir o tamanho',
   CANVAS_CONTEXT_ERROR: 'Canvas context not found',
-  API_REQUEST_ERROR: 'Erro na requisição',
-  USER_REQUIRED: 'Usuário é obrigatório',
-  PERIOD_REQUIRED: 'Período é obrigatório',
 } as const;
 
 // Local Storage Keys

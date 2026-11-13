@@ -10,6 +10,8 @@ import {
   createTrackImage,
 } from "../../utils/generateCanvas";
 import { parseGridSize } from "../../helpers/grid.helper";
+import { getErrorKey } from "../../helpers/errors.helper";
+import { useTranslation } from "react-i18next";
 
 interface ImageRendererProps {
   data: ArtistApiResponse | AlbumApiResponse | TrackApiResponse;
@@ -22,6 +24,7 @@ const ImageRenderer = ({
 }: ImageRendererProps) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
   const { columns, rows } = parseGridSize(userInput.limit);
   const gridLabel = `${columns}x${rows}`;
 
@@ -39,16 +42,14 @@ const ImageRenderer = ({
           setImageSrc(await createTrackImage(data, userInput));
         }
       } catch (error) {
-        if (error instanceof Error) {
-          toast.error(error.message);
-        }
+        toast.error(t(`errors.${getErrorKey(error)}`));
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [data, userInput]);
+  }, [data, userInput, t]);
 
   return (
     <>
@@ -56,13 +57,13 @@ const ImageRenderer = ({
         <div 
           role="status" 
           aria-live="polite"
-          aria-label="Gerando colagem de álbuns"
+          aria-label={t("canvas.loading")}
         >
           <Audio
             height={80}
             width={80}
             color="red"
-            ariaLabel="Carregando colagem de álbuns do Last.fm"
+            ariaLabel={t("canvas.loadingAria")}
             wrapperClass="loading"
           />
         </div>
@@ -70,7 +71,12 @@ const ImageRenderer = ({
       {!loading && imageSrc && (
         <img 
           src={imageSrc} 
-          alt={`Colagem de ${gridLabel} álbuns mais escutados de ${userInput.user} no período de ${userInput.period}`}
+          alt={t("canvas.altText", {
+            grid: gridLabel,
+            type: t(`types.${userInput.type ?? "album"}`).toLocaleLowerCase(),
+            user: userInput.user,
+            period: t(`periods.${userInput.period}`).toLocaleLowerCase(),
+          })}
           loading="lazy"
           decoding="async"
           role="img"

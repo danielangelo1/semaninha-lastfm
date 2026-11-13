@@ -48,9 +48,9 @@
     "retry": "Tentar Novamente"
   },
   "canvas": {
-    "loading": "Gerando colagem de álbuns",
-    "loadingAria": "Carregando colagem de álbuns do Last.fm",
-    "altText": "Colagem de {{size}}x{{size}} álbuns mais escutados de {{user}} no período de {{period}}"
+    "loading": "Gerando sua colagem",
+    "loadingAria": "Carregando colagem do Last.fm",
+    "altText": "Colagem {{grid}} com os {{type}} mais ouvidos de {{user}} ({{period}})"
   },
   "footer": {
     "developedBy": "Desenvolvido por",
@@ -287,6 +287,9 @@
           ]
         }
       ]
+    },
+    "common": {
+      "loading": "Carregando..."
     }
   }
 }

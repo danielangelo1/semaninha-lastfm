@@ -48,9 +48,9 @@
     "retry": "Try Again"
   },
   "canvas": {
-    "loading": "Generating album collage",
-    "loadingAria": "Loading Last.fm album collage",
-    "altText": "Collage of {{size}}x{{size}} most listened albums by {{user}} in the {{period}} period"
+    "loading": "Generating your collage",
+    "loadingAria": "Loading Last.fm collage",
+    "altText": "{{grid}} collage of {{user}}'s most played {{type}} ({{period}})"
   },
   "footer": {
     "developedBy": "Developed by",
@@ -287,6 +287,9 @@
           ]
         }
       ]
+    },
+    "common": {
+      "loading": "Loading..."
     }
   }
 }

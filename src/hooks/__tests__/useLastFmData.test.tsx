@@ -125,8 +125,10 @@ describe('useLastFmData Hook', () => {
     const { getTopTracks } = await import('../../services/LastFMService');
     const { toast } = await import('react-toastify');
     
-    const errorMessage = 'User not found';
-    vi.mocked(getTopTracks).mockRejectedValueOnce(new Error(errorMessage));
+    const { AppError } = await import('../../helpers/errors.helper');
+    // The translated message comes from the error key (t() returns the key in tests)
+    const errorMessage = 'errors.userNotFound';
+    vi.mocked(getTopTracks).mockRejectedValueOnce(new AppError('userNotFound', 'User not found'));
 
     const { result } = renderUseLastFmData();
 
@@ -141,6 +143,22 @@ describe('useLastFmData Hook', () => {
     });
     expect(result.current.loading).toBe(false);
     expect(toast.error).toHaveBeenCalledWith(errorMessage);
+  });
+
+  it('shows a generic error for unexpected failures', async () => {
+    const { getTopTracks } = await import('../../services/LastFMService');
+
+    vi.mocked(getTopTracks).mockRejectedValueOnce(new Error('Network Error'));
+
+    const { result } = renderUseLastFmData();
+
+    await act(async () => {
+      await result.current.fetchData({ ...mockUserRequest, type: 'track' as const });
+    });
+
+    await waitFor(() => {
+      expect(result.current.error).toBe('errors.apiError');
+    });
   });
 
   it('should set loading state correctly during fetch', async () => {

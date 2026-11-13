@@ -3,6 +3,8 @@ import { http, HttpResponse } from "msw";
 import { server } from "../mocks/server";
 import { getTopAlbums, getTopArtists, getTopTracks, getUserInfo } from "../../src/services/LastFMService";
 import { UserRequest } from "../../src/types/userRequest";
+import { AppError } from "../../src/helpers/errors.helper";
+import { isAxiosError } from "axios";
 
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => server.resetHandlers());
@@ -31,6 +33,33 @@ describe("LastFM Service (MSW Integration)", () => {
       const request = { ...baseRequest, user: "nonexistent" };
 
       await expect(getTopAlbums(request)).rejects.toThrow("User not found");
+    });
+
+    it("maps Last.fm's real 404 for a missing user to a translatable error", async () => {
+      // Production answers a missing user with HTTP 404 and error 6, not a 200
+      server.use(
+        http.get("/api/lastfm", () =>
+          HttpResponse.json({ error: 6, message: "User not found" }, { status: 404 }),
+        ),
+      );
+
+      const error = await getTopAlbums(baseRequest).catch((e: unknown) => e);
+
+      expect(error).toBeInstanceOf(AppError);
+      expect((error as AppError).key).toBe("userNotFound");
+    });
+
+    it("keeps Last.fm server errors as HTTP errors so they can be retried", async () => {
+      server.use(
+        http.get("/api/lastfm", () =>
+          HttpResponse.json({ error: 8, message: "Operation failed" }, { status: 500 }),
+        ),
+      );
+
+      const error = await getTopAlbums(baseRequest).catch((e: unknown) => e);
+
+      expect(error).not.toBeInstanceOf(AppError);
+      expect(isAxiosError(error)).toBe(true);
     });
 
     it("should throw on network failure", async () => {

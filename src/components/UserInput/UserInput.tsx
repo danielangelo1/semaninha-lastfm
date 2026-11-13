@@ -12,7 +12,6 @@ import {
   CONTENT_TYPES,
   GRID_SIZES,
   DEFAULT_VALUES,
-  ERROR_MESSAGES,
 } from "../../constants";
 
 const UserInput = () => {
@@ -63,12 +62,12 @@ const UserInput = () => {
 
   useEffect(() => {
     if (errors.user) {
-      toast.error(ERROR_MESSAGES.USER_REQUIRED);
+      toast.error(t("errors.userRequired"));
     }
     if (errors.period) {
-      toast.error(ERROR_MESSAGES.PERIOD_REQUIRED);
+      toast.error(t("errors.periodRequired"));
     }
-  }, [errors]);
+  }, [errors, t]);
 
   const currentData = useMemo(() => {
     if (albumData) return albumData;
