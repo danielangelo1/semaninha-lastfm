@@ -31,9 +31,10 @@ footer::before {
 
 .link-pages {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 8px 20px;
 }
 
 .link-pages a:hover {
@@ -52,10 +53,12 @@ footer::before {
 
 .author {
   color: #c3000d;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .author:hover {
-  text-decoration: underline;
+  text-decoration-thickness: 2px;
 }
 
 @media (max-width: 768px) {

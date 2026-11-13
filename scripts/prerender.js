@@ -19,6 +19,9 @@ const PAGE_SOURCES = {
   "/wrapped": "src/pages/Wrapped/Wrapped.tsx",
   "/support": "src/pages/Support/Support.tsx",
   "/privacy": "src/pages/Privacy/Privacy.tsx",
+  "/about": "src/pages/Articles/About.tsx",
+  "/what-is-a-scrobble": "src/pages/Articles/WhatIsAScrobble.tsx",
+  "/connect-your-player": "src/pages/Articles/ConnectYourPlayer.tsx",
 };
 
 const manifest = JSON.parse(await readFile(join(distDir, ".vite/manifest.json"), "utf8"));
