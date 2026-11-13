@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --config config/vite.config.ts",
-    "build": "tsc -b config/tsconfig.app.json && vite build --config config/vite.config.ts",
+    "build": "tsc -b config/tsconfig.app.json && vite build --config config/vite.config.ts && npm run prerender",
+    "prerender": "vite build --config config/vite.config.ts --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.js",
     "lint": "eslint . --config config/eslint.config.js",
     "lint:fix": "eslint . --config config/eslint.config.js --fix",
     "type-check": "tsc --noEmit --project config/tsconfig.json",
