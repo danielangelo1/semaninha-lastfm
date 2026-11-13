@@ -9,16 +9,22 @@ import "./i18n";
 import { initSentry } from "./config/sentry.config";
 import { initWebVitals } from "./config/webVitals";
 import { queryClient } from "./config/queryClient";
+import { preloadPage } from "./router/pages";
 
 initSentry();
 initWebVitals();
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
-    </ErrorBoundary>
-  </StrictMode>,
-);
+const renderApp = () =>
+  createRoot(document.getElementById("root")!).render(
+    <StrictMode>
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
+      </ErrorBoundary>
+    </StrictMode>,
+  );
+
+// The prerendered page stays on screen until its chunk is ready, so React
+// replaces it with the same page instead of flashing the loading fallback
+preloadPage(window.location.pathname).then(renderApp, renderApp);
