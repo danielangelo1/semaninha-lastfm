@@ -1,6 +1,12 @@
 {
   "home": {
-    "description": "Show the world you have the best music taste! Use semaninha to generate collages of your most listened albums on Last.fm"
+    "description": "Show the world you have the best music taste! Use semaninha to generate collages of your most listened albums on Last.fm",
+    "guidesTitle": "First time here?",
+    "guides": {
+      "howToUse": "Full step-by-step guide",
+      "scrobble": "What is a scrobble",
+      "connectPlayer": "How to connect Spotify to Last.fm"
+    }
   },
   "form": {
     "username": "Username",
@@ -50,7 +56,8 @@
     "developedBy": "Developed by",
     "privacy": "Privacy Policy",
     "howToUse": "How to use",
-    "support": "Support semaninha"
+    "support": "Support semaninha",
+    "about": "About"
   },
   "privacy": {
     "title": "Privacy Policy - Semaninha",
@@ -160,5 +167,126 @@
       "feedback": "Found a bug or have an idea? Open an issue on GitHub"
     },
     "github": "View on GitHub"
+  },
+  "articles": {
+    "nextSteps": "Next steps",
+    "links": {
+      "generate": "Generate my collage",
+      "scrobble": "What is a scrobble",
+      "connectPlayer": "How to connect your player",
+      "howToUse": "How to use semaninha",
+      "support": "Support semaninha"
+    },
+    "scrobble": {
+      "eyebrow": "Guide",
+      "title": "What is a scrobble?",
+      "intro": "A scrobble is the record Last.fm keeps every time you listen to a song. Adding up your scrobbles, Last.fm builds your listening history, your stats and the rankings of your most played artists, albums and tracks — and that history is what semaninha turns into collages.",
+      "sections": [
+        {
+          "title": "How a scrobble is recorded",
+          "paragraphs": [
+            "When your Last.fm account is connected to a player, the player tells Last.fm about each track you listen to. The record keeps the track, artist, album and the time you listened.",
+            "Not every play counts. Under Last.fm's rule, the track has to be longer than 30 seconds and be played for half its length or for 4 minutes, whichever comes first. Skipping a song right at the start doesn't create a scrobble."
+          ]
+        },
+        {
+          "title": "What you can do with your scrobbles",
+          "items": [
+            "See how many times you played each artist, album and track, in any period.",
+            "Follow how your taste changes over months and years.",
+            "Compare your taste with your friends' on Last.fm.",
+            "Make collages and year-in-review images, like semaninha's collages and Wrapped."
+          ]
+        },
+        {
+          "title": "Your history starts when you connect",
+          "paragraphs": [
+            "Last.fm doesn't import what you listened to before connecting your player. So on a new account, the shorter periods — like the last 7 days — are the first to have enough data for a collage. Over time, the longer periods fill up."
+          ]
+        },
+        {
+          "title": "Scrobbles and privacy",
+          "paragraphs": [
+            "By default, a Last.fm profile's scrobble history is public, which is how semaninha can read it with just your username and no password. If you don't want a session recorded, use your player's features — on Spotify, for example, private sessions aren't sent to Last.fm."
+          ]
+        }
+      ]
+    },
+    "connectPlayer": {
+      "eyebrow": "Guide",
+      "title": "How to connect your player to Last.fm",
+      "intro": "For semaninha to build your collages, Last.fm needs to know what you listen to. That happens once you connect your music player to your Last.fm account. Here is how to do it on the most common services.",
+      "sections": [
+        {
+          "title": "Spotify",
+          "paragraphs": [
+            "Spotify has an official Last.fm integration, and you connect it from the Last.fm website:"
+          ],
+          "items": [
+            "Sign in at last.fm and open Settings.",
+            "Go to the Applications tab and find Spotify Scrobbling.",
+            "Click Connect and allow access on the Spotify screen."
+          ]
+        },
+        {
+          "title": "After connecting Spotify",
+          "paragraphs": [
+            "The integration works through your account, not the device: what you play on your phone, computer or speakers connected to Spotify gets recorded. Tracks usually show up on your Last.fm profile a few minutes after they play. Spotify private sessions aren't recorded."
+          ]
+        },
+        {
+          "title": "Other services and players",
+          "items": [
+            "Look for \"Last.fm\" or \"scrobble\" in your app's settings: some services offer the connection right in your account.",
+            "Players in the browser, like YouTube Music, SoundCloud and Bandcamp: the Web Scrobbler extension, for Chrome and Firefox, records what plays on those sites.",
+            "On Android, apps like Pano Scrobbler record what other music players are playing on your phone.",
+            "Apple Music has no built-in Last.fm integration; you'll need a third-party app to scrobble it."
+          ]
+        },
+        {
+          "title": "My music doesn't show up on Last.fm",
+          "items": [
+            "Check that the connection is active under Settings → Applications on the Last.fm website.",
+            "Remember that very short tracks or tracks skipped at the start don't count as scrobbles.",
+            "On semaninha, enter your Last.fm username, not your Spotify one.",
+            "semaninha only sees what is already on your Last.fm profile: if a track isn't there, it won't be in the collage either."
+          ]
+        }
+      ]
+    },
+    "about": {
+      "eyebrow": "About",
+      "title": "About semaninha",
+      "intro": "semaninha is a free website that turns your Last.fm history into images: collages of the albums and artists you listened to the most and, at the end of the year, a year-in-review in story format.",
+      "sections": [
+        {
+          "title": "What the site does",
+          "items": [
+            "Collages of your most played albums or artists, in grids from 2x2 to 10x10 and in a 2x6 layout.",
+            "Periods from the last 7 days to your whole history.",
+            "Wrapped, a year-in-review with your numbers, artist of the year and favorite tracks and albums.",
+            "All in Portuguese and English, with no sign-up."
+          ]
+        },
+        {
+          "title": "How it works under the hood",
+          "paragraphs": [
+            "The data comes from Last.fm's public API, queried with the username you enter — no password is ever asked for. Artist photos come from Spotify. The image is built in your own browser, and the site doesn't store your history on any server. The details are in the Privacy Policy."
+          ]
+        },
+        {
+          "title": "Who makes it",
+          "paragraphs": [
+            "semaninha is created and maintained by Daniel Ângelo, a developer and Last.fm user. The code is open source on GitHub, where you can also suggest ideas and report problems."
+          ]
+        },
+        {
+          "title": "How the site keeps running",
+          "paragraphs": [
+            "Keeping the site online costs hosting and a domain. Those are covered by ads and by contributions from people who use it — if semaninha ever made a collage you liked, the Support page shows how to help."
+          ]
+        }
+      ]
+    }
   }
 }

@@ -30,6 +30,24 @@ export const PAGE_META: PageMeta[] = [
     description: `Sua retrospectiva musical de ${WRAPPED_YEAR} com os dados do Last.fm: scrobbles, artista do ano, músicas e álbuns mais ouvidos numa imagem para o story.`,
   },
   {
+    path: '/what-is-a-scrobble',
+    title: 'O que é um scrobble no Last.fm? - Semaninha',
+    description:
+      'Entenda o que é um scrobble, como o Last.fm registra o que você ouve, quando uma música conta e como seu histórico vira estatísticas e colagens.',
+  },
+  {
+    path: '/connect-your-player',
+    title: 'Como conectar o Spotify ao Last.fm - Semaninha',
+    description:
+      'Passo a passo para conectar o Spotify e outros players ao Last.fm e começar a registrar o que você ouve, com dicas para quando as músicas não aparecem.',
+  },
+  {
+    path: '/about',
+    title: 'Sobre o semaninha',
+    description:
+      'O que é o semaninha, como ele gera colagens a partir do seu histórico do Last.fm, quem faz o site e como ele se mantém.',
+  },
+  {
     path: '/support',
     title: 'Apoie o semaninha',
     description:
