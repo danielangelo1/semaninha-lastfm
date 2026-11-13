@@ -9,7 +9,6 @@ export interface WrappedData {
   stats: {
     totalArtists: number;
     totalAlbums: number;
-    totalTracks: number;
     // Scrobbles per day from Jan 1st until today
     dailyAverage: number;
   };
@@ -25,7 +24,6 @@ export interface WrappedCanvasLabels {
   scrobbles: string;
   artists: string;
   albums: string;
-  tracks: string;
   topArtist: string;
   plays: string;
   dailyAverage: string;
