@@ -49,7 +49,8 @@
   "footer": {
     "developedBy": "Desenvolvido por",
     "privacy": "Política de Privacidade",
-    "howToUse": "Como usar"
+    "howToUse": "Como usar",
+    "support": "Apoie o semaninha"
   },
   "privacy": {
     "title": "Política de Privacidade - Semaninha",
@@ -143,5 +144,22 @@
       }
     },
     "cta": "Gerar minha colagem"
+  },
+  "support": {
+    "eyebrow": "Apoie",
+    "title": "Ajude a manter o semaninha no ar",
+    "intro": "O semaninha é gratuito e sem cadastro, mas mantê-lo no ar tem custos: hospedagem, domínio e o servidor que conversa com o Last.fm. Se o site já gerou alguma colagem que você curtiu, considere contribuir com qualquer valor.",
+    "pixLabel": "Chave Pix",
+    "copy": "Copiar chave",
+    "copied": "Copiada!",
+    "copyError": "Não deu para copiar. Selecione a chave e copie manualmente.",
+    "pixNote": "Qualquer valor ajuda, e tudo vai para os custos do site. Obrigado!",
+    "otherTitle": "Outras formas de ajudar",
+    "other": {
+      "share": "Compartilhe suas colagens e marque o semaninha.net",
+      "star": "Deixe uma estrela no repositório do GitHub",
+      "feedback": "Encontrou um bug ou tem uma ideia? Abra uma issue no GitHub"
+    },
+    "github": "Ver no GitHub"
   }
 }

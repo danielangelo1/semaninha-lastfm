@@ -1,0 +1,155 @@
+.support {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.75rem;
+}
+
+.support-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.support-eyebrow,
+.support-pix-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c3000d;
+}
+
+.support-hero h1 {
+  font-size: clamp(2rem, 5.5vw, 3rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #1a1a1a;
+}
+
+.support-hero p {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #6b6b6b;
+}
+
+.support-pix {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.5rem;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 18px 40px -24px rgba(0, 0, 0, 0.18);
+}
+
+.support-pix-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.support-pix-key {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+/* Resets the global button styles from the home form */
+.support-pix-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.15rem;
+  border: none;
+  border-radius: 999px;
+  background: #1a1a1a;
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.support-pix-copy:hover {
+  background: #c3000d;
+}
+
+.support-pix p {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #6b6b6b;
+}
+
+.support-other {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.support-other h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: #1a1a1a;
+}
+
+.support-other ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-left: 1.1rem;
+}
+
+.support-other li {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #5c5c5c;
+}
+
+.support-other li::marker {
+  color: #c3000d;
+}
+
+.support-external {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #c3000d;
+  text-decoration: none;
+}
+
+.support-external:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .support {
+    padding: 1.5rem 0.25rem 3rem;
+    gap: 2.25rem;
+  }
+
+  .support-pix {
+    padding: 1.25rem;
+  }
+
+  .support-pix-copy {
+    width: 100%;
+    justify-content: center;
+  }
+}

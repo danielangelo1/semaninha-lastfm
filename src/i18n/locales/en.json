@@ -49,7 +49,8 @@
   "footer": {
     "developedBy": "Developed by",
     "privacy": "Privacy Policy",
-    "howToUse": "How to use"
+    "howToUse": "How to use",
+    "support": "Support semaninha"
   },
   "privacy": {
     "title": "Privacy Policy - Semaninha",
@@ -143,5 +144,22 @@
       }
     },
     "cta": "Generate my collage"
+  },
+  "support": {
+    "eyebrow": "Support",
+    "title": "Help keep semaninha online",
+    "intro": "semaninha is free and needs no sign-up, but keeping it online has costs: hosting, the domain and the server that talks to Last.fm. If the site ever made a collage you liked, consider chipping in any amount.",
+    "pixLabel": "Pix key (Brazil)",
+    "copy": "Copy key",
+    "copied": "Copied!",
+    "copyError": "Couldn't copy. Select the key and copy it manually.",
+    "pixNote": "Any amount helps, and all of it goes to the site's costs. Thank you!",
+    "otherTitle": "Other ways to help",
+    "other": {
+      "share": "Share your collages and tag semaninha.net",
+      "star": "Star the repository on GitHub",
+      "feedback": "Found a bug or have an idea? Open an issue on GitHub"
+    },
+    "github": "View on GitHub"
   }
 }

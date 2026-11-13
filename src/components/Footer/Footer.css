@@ -40,6 +40,16 @@ footer::before {
   color: #c3000d;
 }
 
+.support-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.support-link svg {
+  color: #c3000d;
+}
+
 .author {
   color: #c3000d;
 }

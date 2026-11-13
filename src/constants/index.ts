@@ -77,3 +77,9 @@ export const DEFAULT_VALUES = {
   SHOW_PLAYS: false,
   TYPE: 'album',
 } as const;
+
+// Support / donations
+export const SUPPORT_CONFIG = {
+  // Pix key shown on the /support page; the Pix card stays hidden while empty
+  PIX_KEY: 'ab2a1d57-52ac-4499-963c-271ff6b4a6a4',
+} as const;
