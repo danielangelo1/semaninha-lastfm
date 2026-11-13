@@ -10,7 +10,3 @@ export const api = axios.create({
 export const spotifyApi = axios.create({
   baseURL: env.VITE_SPOTIFY_URL,
 });
-
-export const musicBrainzApi = axios.create({
-  baseURL: env.VITE_MUSICBRAINZ_URL,
-});

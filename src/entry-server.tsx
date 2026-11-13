@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components -- build-only module, never hot reloaded */
 // Build-time entry: renders each page to HTML so crawlers get real content
 import { renderToString } from "react-dom/server";
-import { StaticRouter } from "react-router-dom/server";
+import { StaticRouter } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import i18n from "./i18n";
 import { AppRoutes } from "./router/Router";

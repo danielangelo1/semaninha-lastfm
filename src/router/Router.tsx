@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router";
 import LayoutDefault from "../layouts/LayoutDefault";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 import { PAGES } from "./pages";

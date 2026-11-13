@@ -4,10 +4,6 @@ const envSchema = z.object({
   VITE_SPOTIFY_URL: z.string().optional().default("https://api.spotify.com/v1"),
   VITE_SPOTIFY_CLIENT_ID: z.string().optional().default(""),
   VITE_SPOTIFY_CLIENT_SECRET: z.string().optional().default(""),
-  VITE_MUSICBRAINZ_URL: z
-    .string()
-    .optional()
-    .default("https://musicbrainz.org/ws/2"),
 });
 
 type Env = z.infer<typeof envSchema>;
@@ -25,7 +21,6 @@ function validateEnv(): Env {
     VITE_SPOTIFY_URL: import.meta.env.VITE_SPOTIFY_URL,
     VITE_SPOTIFY_CLIENT_ID: import.meta.env.VITE_SPOTIFY_CLIENT_ID,
     VITE_SPOTIFY_CLIENT_SECRET: import.meta.env.VITE_SPOTIFY_CLIENT_SECRET,
-    VITE_MUSICBRAINZ_URL: import.meta.env.VITE_MUSICBRAINZ_URL,
   };
 
   const result = envSchema.safeParse(rawEnv);

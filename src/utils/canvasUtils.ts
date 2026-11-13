@@ -25,8 +25,6 @@ export const createCanvasContext = (
 
 const imageCache = new Map<string, HTMLImageElement>();
 
-export const clearImageCache = () => imageCache.clear();
-
 export const loadImage = (src: string): Promise<HTMLImageElement> => {
   const cached = imageCache.get(src);
   if (cached) {

@@ -77,26 +77,9 @@ export default function useLocalStorage() {
     }
   };
 
-  const clearLocalStorage = (): boolean => {
-    if (!isLocalStorageAvailable()) {
-      return false;
-    }
-
-    try {
-      Object.values(STORAGE_KEYS).forEach(key => {
-        localStorage.removeItem(key);
-      });
-      return true;
-    } catch (error) {
-      console.error('Failed to clear localStorage:', error);
-      return false;
-    }
-  };
-
   return { 
     setLocalStorage, 
     getLocalStorage, 
-    clearLocalStorage,
     isLocalStorageAvailable 
   };
 }

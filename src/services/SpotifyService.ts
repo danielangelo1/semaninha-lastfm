@@ -1,5 +1,5 @@
 import { Image, SpotifyArtistResponse } from "../types/spotifyResponse";
-import { musicBrainzApi, spotifyApi } from "./api";
+import { spotifyApi } from "./api";
 import { getSpotifyToken } from "./spotifyAuth";
 import { SpotifyHelper } from "../helpers/spotify.helper";
 
@@ -22,16 +22,4 @@ export const getArtistImage = async (artistName: string): Promise<Image> => {
     );
   const spotifyObject = found || response.data.artists.items[0];
   return spotifyObject.images[0];
-};
-
-export const getSpotifyIdFromMBID = async (mbid: string): Promise<string> => {
-  const response = await musicBrainzApi.get(
-    `/artist/${mbid}?fmt=json&inc=url-rels`,
-  );
-
-  const spotifyId = response.data.relations.find(
-    (relation: { type: string }) => relation.type === "streamingmusic",
-  );
-
-  return spotifyId.url.split(":")[2];
 };

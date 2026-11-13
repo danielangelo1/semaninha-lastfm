@@ -4,7 +4,6 @@ import {
   AlbumApiResponse,
   ArtistApiResponse,
   TrackApiResponse,
-  TagApiResponse,
   UserInfoApiResponse,
   WeeklyArtistChartResponse,
   WeeklyTrackChartResponse,
@@ -14,7 +13,6 @@ import {
   albumApiResponseSchema,
   artistApiResponseSchema,
   trackApiResponseSchema,
-  tagApiResponseSchema,
   userInfoApiResponseSchema,
   weeklyArtistChartResponseSchema,
   weeklyTrackChartResponseSchema,
@@ -31,7 +29,6 @@ const ENDPOINTS = {
   TOP_ALBUMS: "?method=user.gettopalbums&",
   TOP_ARTISTS: "?method=user.gettopartists&",
   TOP_TRACKS: "?method=user.gettoptracks&",
-  TOP_TAGS: "?method=user.gettoptags&",
   USER_INFO: "?method=user.getinfo&",
   WEEKLY_ARTIST_CHART: "?method=user.getweeklyartistchart&",
   WEEKLY_TRACK_CHART: "?method=user.getweeklytrackchart&",
@@ -90,9 +87,6 @@ export const getTopArtists = (data: UserRequest): Promise<ArtistApiResponse> =>
 
 export const getTopTracks = (data: UserRequest): Promise<TrackApiResponse> =>
   requestLastFm(buildTopUrl(ENDPOINTS.TOP_TRACKS, data), trackApiResponseSchema);
-
-export const getTopTags = (data: UserRequest): Promise<TagApiResponse> =>
-  requestLastFm(buildTopUrl(ENDPOINTS.TOP_TAGS, data), tagApiResponseSchema);
 
 export const getUserInfo = (username: string): Promise<UserInfoApiResponse> =>
   requestLastFm(
