@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, X } from "@phosphor-icons/react";
 import { WRAPPED_ANNOUNCEMENT_KEY, WRAPPED_YEAR } from "../../constants/wrapped";
