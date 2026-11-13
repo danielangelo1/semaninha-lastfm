@@ -28,7 +28,6 @@ const Wrapped = () => {
           scrobbles: t("wrapped.canvas.scrobbles"),
           artists: t("wrapped.canvas.artists"),
           albums: t("wrapped.canvas.albums"),
-          tracks: t("wrapped.canvas.tracks"),
           topArtist: t("wrapped.canvas.topArtist"),
           plays: t("wrapped.canvas.plays"),
           dailyAverage: t("wrapped.canvas.dailyAverage"),
