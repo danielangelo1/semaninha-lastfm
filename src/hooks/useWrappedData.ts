@@ -13,7 +13,6 @@ import {
 } from '../services/LastFMService';
 import { WRAPPED_API_CONFIG, WRAPPED_YEAR } from '../constants/wrapped';
 import { getErrorKey } from '../helpers/errors.helper';
-import { ERROR_MESSAGES } from '../constants';
 // Year-long charts make Last.fm intermittently answer 500
 import { withRetry } from '../helpers/retry.helper';
 
