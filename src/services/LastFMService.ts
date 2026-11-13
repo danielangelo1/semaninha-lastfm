@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isAxiosError } from "axios";
 import {
   AlbumApiResponse,
   ArtistApiResponse,
@@ -22,7 +23,7 @@ import {
 } from "../schemas/lastfmResponse.schema";
 import { UserRequest } from "../types/userRequest";
 import { api } from "./api";
-import { ERROR_MESSAGES } from "../constants";
+import { AppError, lastFmErrorKey } from "../helpers/errors.helper";
 import { ServicesHelper } from "../helpers/services.helper";
 import { getGridItemCount } from "../helpers/grid.helper";
 
@@ -46,24 +47,34 @@ const requestLastFm = async <T>(
     const response = await api.get(url);
 
     if (response.status !== 200) {
-      throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
+      throw new AppError("apiError");
     }
 
     // Check if the response contains an error from Last.fm API
     if (response.data.error) {
-      throw new Error(response.data.message || ERROR_MESSAGES.USER_NOT_FOUND);
+      throw new AppError(lastFmErrorKey(response.data.error), response.data.message);
     }
 
     return schema.parse(response.data);
   } catch (error) {
     if (error instanceof z.ZodError) {
       console.error("Last.fm response failed schema validation:", error.issues);
-      throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
+      throw new AppError("apiError");
+    }
+    // Last.fm answers client errors (like a missing user, error 6) with a 4xx
+    // and a JSON body. 5xx stays an AxiosError so it can be retried.
+    if (
+      isAxiosError(error) &&
+      error.response &&
+      error.response.status < 500 &&
+      error.response.data?.error
+    ) {
+      throw new AppError(lastFmErrorKey(error.response.data.error), error.response.data.message);
     }
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error(ERROR_MESSAGES.API_REQUEST_ERROR);
+    throw new AppError("apiError");
   }
 };
 

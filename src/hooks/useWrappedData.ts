@@ -12,7 +12,7 @@ import {
   getWeeklyTrackChart,
 } from '../services/LastFMService';
 import { WRAPPED_API_CONFIG, WRAPPED_YEAR } from '../constants/wrapped';
-import { ERROR_MESSAGES } from '../constants';
+import { getErrorKey } from '../helpers/errors.helper';
 
 interface UseWrappedDataReturn {
   wrappedData: WrappedData | null;
@@ -87,8 +87,7 @@ export const useWrappedData = (): UseWrappedDataReturn => {
       toast.success(t('wrapped.success'));
     },
     onError: (err) => {
-      const errorMessage = err instanceof Error ? err.message : ERROR_MESSAGES.API_REQUEST_ERROR;
-      toast.error(errorMessage);
+      toast.error(t(`errors.${getErrorKey(err)}`));
       console.error('Wrapped generation error:', err);
     },
   });
@@ -109,11 +108,7 @@ export const useWrappedData = (): UseWrappedDataReturn => {
     mutation.reset();
   }, [mutation]);
 
-  const errorMessage = mutation.error
-    ? mutation.error instanceof Error
-      ? mutation.error.message
-      : ERROR_MESSAGES.API_REQUEST_ERROR
-    : null;
+  const errorMessage = mutation.error ? t(`errors.${getErrorKey(mutation.error)}`) : null;
 
   return {
     wrappedData: mutation.data ?? null,

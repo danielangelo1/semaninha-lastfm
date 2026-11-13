@@ -39,14 +39,14 @@ describe("Canvas Component", () => {
     render(<Canvas data={mockAlbumData} userInput={mockUserInput} />);
 
     // Should show loading spinner initially
-    expect(screen.getByLabelText("Gerando colagem de álbuns")).toBeInTheDocument();
+    expect(screen.getByLabelText("canvas.loading")).toBeInTheDocument();
   });
 
   it("renders image after loading", async () => {
     render(<Canvas data={mockAlbumData} userInput={mockUserInput} />);
 
-    // Wait for image to load - using the new descriptive alt text
-    const image = await screen.findByAltText(/Colagem de \d+x\d+ álbuns mais escutados de .+ no período de .+/);
+    // Wait for image to load (translations aren't loaded in tests, so t() returns the key)
+    const image = await screen.findByAltText("canvas.altText");
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute("src", "data:image/png;base64,mock");
   });
