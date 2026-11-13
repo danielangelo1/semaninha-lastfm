@@ -34,27 +34,6 @@
   border-radius: 13px;
 }
 
-/* Resets the global button styles from the home form */
-.wrapped-download {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.3rem;
-  border: 1px solid #dcdcdc;
-  border-radius: 999px;
-  background: transparent;
-  color: #1a1a1a;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: border-color 0.2s ease, color 0.2s ease;
-}
-
-.wrapped-download:hover {
-  border-color: #c3000d;
-  color: #c3000d;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .wrapped-result {
