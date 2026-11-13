@@ -45,8 +45,6 @@ export const GRID_SIZES = [
 // API Configuration
 export const API_CONFIG = {
   SPOTIFY_TOKEN_BUFFER_MS: 60000, // 1 minute buffer before token expiry
-  REQUEST_TIMEOUT_MS: 10000, // 10 seconds
-  MAX_RETRY_ATTEMPTS: 3,
 } as const;
 
 // Error Messages (user-facing errors are translated, see "errors" in the locales)

@@ -35,12 +35,6 @@ const trackSchema = z.object({
   url: z.string(),
 });
 
-const tagSchema = z.object({
-  name: z.string(),
-  count: z.string(),
-  url: z.string(),
-});
-
 const attrSchema = z.object({ total: z.string() }).optional();
 
 export const albumApiResponseSchema = z.object({
@@ -61,12 +55,6 @@ export const trackApiResponseSchema = z.object({
   toptracks: z.object({
     track: z.array(trackSchema),
     "@attr": attrSchema,
-  }),
-});
-
-export const tagApiResponseSchema = z.object({
-  toptags: z.object({
-    tag: z.array(tagSchema),
   }),
 });
 
@@ -117,7 +105,6 @@ export const recentTracksTotalResponseSchema = z.object({
 export type AlbumApiResponse = z.infer<typeof albumApiResponseSchema>;
 export type ArtistApiResponse = z.infer<typeof artistApiResponseSchema>;
 export type TrackApiResponse = z.infer<typeof trackApiResponseSchema>;
-export type TagApiResponse = z.infer<typeof tagApiResponseSchema>;
 export type UserInfoApiResponse = z.infer<typeof userInfoApiResponseSchema>;
 export type WeeklyArtistChartResponse = z.infer<typeof weeklyArtistChartResponseSchema>;
 export type WeeklyTrackChartResponse = z.infer<typeof weeklyTrackChartResponseSchema>;
