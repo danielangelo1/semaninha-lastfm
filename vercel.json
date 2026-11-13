@@ -1,6 +1,6 @@
 {
   "cleanUrls": true,
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
+  "rewrites": [{ "source": "/((?!assets/).*)", "destination": "/" }],
   "headers": [
     {
       "source": "/(.*)",

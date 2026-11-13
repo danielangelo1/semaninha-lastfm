@@ -7,10 +7,12 @@ import "./index.css";
 import "./assets/FiraSans-Italic.ttf";
 import "./i18n";
 import { initSentry } from "./config/sentry.config";
+import { initChunkReload } from "./config/chunkReload";
 import { initWebVitals } from "./config/webVitals";
 import { queryClient } from "./config/queryClient";
 import { preloadPage } from "./router/pages";
 
+initChunkReload();
 initSentry();
 initWebVitals();
 
