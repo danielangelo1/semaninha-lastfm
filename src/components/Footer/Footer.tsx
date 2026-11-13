@@ -1,4 +1,4 @@
-import { GithubLogo, LastfmLogo, TwitterLogo } from "@phosphor-icons/react";
+import { GithubLogo, Heart, LastfmLogo, TwitterLogo } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import "./Footer.css";
@@ -49,6 +49,10 @@ const Footer = () => {
         </Link>
       </div>
       <div className="link-pages">
+        <Link to="/support" className="support-link">
+          <Heart size={14} weight="fill" aria-hidden="true" />
+          {t("footer.support")}
+        </Link>
         <Link to="/how-to-use">{t("footer.howToUse")}</Link>
         <Link to="/privacy">{t("footer.privacy")}</Link>
       </div>

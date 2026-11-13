@@ -7,6 +7,7 @@ const Home = lazy(() => import("../pages/Home/Home"));
 const Privacy = lazy(() => import("../pages/Privacy/Privacy"));
 const Wrapped = lazy(() => import("../pages/Wrapped/Wrapped"));
 const HowToUse = lazy(() => import("../pages/HowToUse/HowToUse"));
+const Support = lazy(() => import("../pages/Support/Support"));
 
 const Router = () => {
   return (
@@ -18,6 +19,7 @@ const Router = () => {
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/wrapped" element={<Wrapped />} />
             <Route path="/how-to-use" element={<HowToUse />} />
+            <Route path="/support" element={<Support />} />
             <Route path="*" element={<Home />} />
           </Route>
         </Routes>
