@@ -1,4 +1,6 @@
 {
+  "framework": "vite",
+  "outputDirectory": "dist",
   "cleanUrls": true,
   "rewrites": [{ "source": "/((?!assets/).*)", "destination": "/" }],
   "headers": [
