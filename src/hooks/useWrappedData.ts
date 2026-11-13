@@ -13,6 +13,9 @@ import {
 } from '../services/LastFMService';
 import { WRAPPED_API_CONFIG, WRAPPED_YEAR } from '../constants/wrapped';
 import { getErrorKey } from '../helpers/errors.helper';
+import { ERROR_MESSAGES } from '../constants';
+// Year-long charts make Last.fm intermittently answer 500
+import { withRetry } from '../helpers/retry.helper';
 
 interface UseWrappedDataReturn {
   wrappedData: WrappedData | null;
@@ -44,10 +47,12 @@ const fetchWrappedData = async (username: string): Promise<WrappedData> => {
   const { CHART_LIMIT, TOP_COUNT } = WRAPPED_API_CONFIG;
 
   const [artistChart, trackChart, albumChart, totalScrobbles, avatarUrl] = await Promise.all([
-    getWeeklyArtistChart(username, range, CHART_LIMIT),
-    getWeeklyTrackChart(username, range, CHART_LIMIT),
-    getWeeklyAlbumChart(username, range, CHART_LIMIT),
-    getScrobbleCount(username, range),
+    // Artist and album charts are fetched in full: their length is the yearly count
+    withRetry(() => getWeeklyArtistChart(username, range, CHART_LIMIT)),
+    // Only the top tracks are drawn, so skip the heavy 1000-track chart
+    withRetry(() => getWeeklyTrackChart(username, range, TOP_COUNT)),
+    withRetry(() => getWeeklyAlbumChart(username, range, CHART_LIMIT)),
+    withRetry(() => getScrobbleCount(username, range)),
     fetchAvatarUrl(username),
   ]);
 
@@ -70,7 +75,6 @@ const fetchWrappedData = async (username: string): Promise<WrappedData> => {
     stats: {
       totalArtists: artists.length,
       totalAlbums: albums.length,
-      totalTracks: tracks.length,
       dailyAverage: totalScrobbles / daysElapsed,
     },
   };
@@ -80,9 +84,6 @@ export const useWrappedData = (): UseWrappedDataReturn => {
   const { t } = useTranslation();
   const mutation = useMutation({
     mutationFn: fetchWrappedData,
-    // Last.fm intermittently returns 500 on large year-long charts
-    retry: 2,
-    retryDelay: 1000,
     onSuccess: () => {
       toast.success(t('wrapped.success'));
     },

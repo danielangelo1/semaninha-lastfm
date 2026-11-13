@@ -11,8 +11,13 @@ import { isReloadingForNewVersion } from "./chunkReload";
 const SENTRY_DSN = "https://cf8686780338d6ac0370478a9b857330@o4510807613833216.ingest.us.sentry.io/4510807614881792";
 
 // Only the live site reports: localhost, `npm run dev` and Vercel previews stay out
-const isProductionSite = (): boolean =>
-  import.meta.env.PROD && window.location.hostname.endsWith("semaninha.net");
+const isProductionSite = (): boolean => {
+  const { hostname } = window.location;
+  return (
+    import.meta.env.PROD &&
+    (hostname === "semaninha.net" || hostname.endsWith(".semaninha.net"))
+  );
+};
 
 export function initSentry() {
   if (!isProductionSite()) return;

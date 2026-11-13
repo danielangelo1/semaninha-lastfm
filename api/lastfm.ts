@@ -1,4 +1,15 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
+import type { IncomingMessage, ServerResponse } from "node:http";
+
+// The parts of Vercel's Node helpers this function uses. Declared here instead
+// of installing @vercel/node, which was only needed for these types and pulled
+// in a long chain of vulnerable build-time dependencies.
+type VercelRequest = IncomingMessage & {
+  query: Record<string, string | string[] | undefined>;
+};
+type VercelResponse = ServerResponse & {
+  status: (statusCode: number) => VercelResponse;
+  json: (body: unknown) => VercelResponse;
+};
 
 const LASTFM_API_URL = "https://ws.audioscrobbler.com/2.0/";
 

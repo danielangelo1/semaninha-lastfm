@@ -1,7 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import type { VercelRequest, VercelResponse } from "@vercel/node";
+import type lastfmHandler from "../../api/lastfm";
 
-type Handler = (req: VercelRequest, res: VercelResponse) => Promise<unknown>;
+type Handler = typeof lastfmHandler;
+type VercelRequest = Parameters<Handler>[0];
+type VercelResponse = Parameters<Handler>[1];
 
 const createRes = () => {
   const res = {
