@@ -10,6 +10,8 @@ import {
   createTrackImage,
 } from "../../utils/generateCanvas";
 import { parseGridSize } from "../../helpers/grid.helper";
+import { useTranslation } from "react-i18next";
+import ImageActions from "../ImageActions/ImageActions";
 
 interface ImageRendererProps {
   data: ArtistApiResponse | AlbumApiResponse | TrackApiResponse;
@@ -22,6 +24,7 @@ const ImageRenderer = ({
 }: ImageRendererProps) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
   const { columns, rows } = parseGridSize(userInput.limit);
   const gridLabel = `${columns}x${rows}`;
 
@@ -68,14 +71,21 @@ const ImageRenderer = ({
         </div>
       )}
       {!loading && imageSrc && (
-        <img 
-          src={imageSrc} 
-          alt={`Colagem de ${gridLabel} álbuns mais escutados de ${userInput.user} no período de ${userInput.period}`}
-          loading="lazy"
-          decoding="async"
-          role="img"
-          style={{ maxWidth: "100%" }} 
-        />
+        <div className="collage-result">
+          <img 
+            src={imageSrc} 
+            alt={`Colagem de ${gridLabel} álbuns mais escutados de ${userInput.user} no período de ${userInput.period}`}
+            loading="lazy"
+            decoding="async"
+            role="img"
+            style={{ maxWidth: "100%" }} 
+          />
+          <ImageActions
+            imageUrl={imageSrc}
+            fileName={`${userInput.user}-semaninha-${userInput.period}-${gridLabel}.png`}
+            shareText={t("share.collageText")}
+          />
+        </div>
       )}
     </>
   );

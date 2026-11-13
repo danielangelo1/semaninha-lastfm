@@ -77,8 +77,6 @@
     "success": "Seu Wrapped está pronto",
     "usernameRequired": "Por favor, insira seu nome de usuário do Last.fm",
     "altText": "Wrapped {{year}} de {{user}}",
-    "download": "Baixar imagem",
-    "downloadAria": "Baixar imagem do Wrapped",
     "eyebrow": "Semaninha Wrapped · {{year}}",
     "generateAria": "Gerar Wrapped {{year}}",
     "hint": "Considera seus scrobbles de 1º de janeiro até hoje.",
@@ -161,5 +159,12 @@
       "feedback": "Encontrou um bug ou tem uma ideia? Abra uma issue no GitHub"
     },
     "github": "Ver no GitHub"
+  },
+  "share": {
+    "share": "Compartilhar",
+    "download": "Baixar imagem",
+    "collageText": "Minha colagem do Last.fm, feita no semaninha.net",
+    "wrappedText": "Meu Wrapped {{year}}, feito no semaninha.net",
+    "error": "Não deu para compartilhar. Baixe a imagem e compartilhe por lá."
   }
 }

@@ -1,16 +1,15 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DownloadSimple } from '@phosphor-icons/react';
 import { WRAPPED_YEAR } from '../../constants/wrapped';
+import ImageActions from '../ImageActions/ImageActions';
 import './WrappedResult.css';
 
 interface WrappedResultProps {
   imageUrl: string;
   username: string;
-  onDownload: () => void;
 }
 
-const WrappedResult = ({ imageUrl, username, onDownload }: WrappedResultProps) => {
+const WrappedResult = ({ imageUrl, username }: WrappedResultProps) => {
   const { t } = useTranslation();
 
   return (
@@ -18,15 +17,11 @@ const WrappedResult = ({ imageUrl, username, onDownload }: WrappedResultProps) =
       <figure className="wrapped-figure">
         <img src={imageUrl} alt={t('wrapped.altText', { year: WRAPPED_YEAR, user: username })} />
       </figure>
-      <button
-        type="button"
-        className="wrapped-download"
-        onClick={onDownload}
-        aria-label={t('wrapped.downloadAria')}
-      >
-        <DownloadSimple size={16} weight="bold" aria-hidden="true" />
-        {t('wrapped.download')}
-      </button>
+      <ImageActions
+        imageUrl={imageUrl}
+        fileName={`${username}-wrapped-${WRAPPED_YEAR}.png`}
+        shareText={t('share.wrappedText', { year: WRAPPED_YEAR })}
+      />
     </div>
   );
 };

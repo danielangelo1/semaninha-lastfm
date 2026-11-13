@@ -47,15 +47,6 @@ const Wrapped = () => {
     }
   }, [wrappedData, t, i18n.language]);
 
-  const handleDownload = useCallback(() => {
-    if (!imageUrl) return;
-
-    const link = document.createElement("a");
-    link.download = `${username}-wrapped-${WRAPPED_YEAR}.png`;
-    link.href = imageUrl;
-    link.click();
-  }, [imageUrl, username]);
-
   // Covers both the API calls and drawing the canvas (artist photos load there)
   const isPreparing = loading || (wrappedData !== null && imageUrl === null);
 
@@ -80,7 +71,6 @@ const Wrapped = () => {
         <WrappedResult
           imageUrl={imageUrl}
           username={username}
-          onDownload={handleDownload}
         />
       )}
 
