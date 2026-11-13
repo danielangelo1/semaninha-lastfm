@@ -52,10 +52,12 @@ footer::before {
 
 .author {
   color: #c3000d;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .author:hover {
-  text-decoration: underline;
+  text-decoration-thickness: 2px;
 }
 
 @media (max-width: 768px) {

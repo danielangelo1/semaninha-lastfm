@@ -12,7 +12,7 @@
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #8a8a8a;
+  color: #6b6b6b;
 }
 
 .wrapped-field {
@@ -33,7 +33,7 @@
 
 .wrapped-field-prefix {
   font-size: 0.95rem;
-  color: #a0a0a0;
+  color: #707070;
   white-space: nowrap;
   user-select: none;
 }
@@ -89,7 +89,7 @@
 .wrapped-hint {
   padding-left: 1rem;
   font-size: 0.8rem;
-  color: #9a9a9a;
+  color: #6b6b6b;
 }
 
 @media (max-width: 480px) {

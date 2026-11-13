@@ -80,7 +80,7 @@
   border: none;
   border-radius: 999px;
   background: transparent;
-  color: #8a8a8a;
+  color: #6b6b6b;
   font-family: "Poppins", sans-serif;
   font-size: 0.85rem;
   cursor: pointer;
@@ -104,7 +104,7 @@
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: #9a9a9a;
+  color: #767676;
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
