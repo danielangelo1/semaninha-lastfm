@@ -12,7 +12,7 @@ describe("LastFM Service (MSW Integration)", () => {
   const baseRequest: UserRequest = {
     user: "testuser",
     period: "7day",
-    limit: 3,
+    limit: "3",
     type: "album",
   };
 

@@ -31,7 +31,7 @@ export default function useLocalStorage() {
     try {
       localStorage.setItem(STORAGE_KEYS.USER, values.user);
       localStorage.setItem(STORAGE_KEYS.PERIOD, values.period);
-      localStorage.setItem(STORAGE_KEYS.LIMIT, values.limit.toString());
+      localStorage.setItem(STORAGE_KEYS.LIMIT, values.limit);
       localStorage.setItem(STORAGE_KEYS.SHOW_ALBUM, values.showAlbum?.toString() || "false");
       localStorage.setItem(STORAGE_KEYS.SHOW_PLAYS, values.showPlays?.toString() || "false");
       localStorage.setItem(STORAGE_KEYS.TYPE, values.type || DEFAULT_VALUES.TYPE);

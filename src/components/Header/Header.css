@@ -39,9 +39,9 @@ header h1 {
 .nav-link {
   font-family: "Poppins", sans-serif;
   text-decoration: none;
-  color: #333;
+  color: #1a1a1a;
   font-weight: 500;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   padding: 0.5rem 1rem;
   border-radius: 8px;
   transition: all 0.3s ease;
@@ -56,8 +56,6 @@ header h1 {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.95rem;
-  color: #1a1a1a;
 }
 
 /* Small "live" dot marking the seasonal feature */

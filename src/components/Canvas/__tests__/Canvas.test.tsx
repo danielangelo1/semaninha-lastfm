@@ -29,7 +29,7 @@ describe("Canvas Component", () => {
   const mockUserInput: UserRequest = {
     user: "dandowski",
     period: "7day",
-    limit: 3,
+    limit: "3",
     showAlbum: true,
     showPlays: true,
     type: "albums",

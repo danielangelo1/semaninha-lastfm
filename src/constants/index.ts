@@ -30,11 +30,17 @@ export const CONTENT_TYPES = [
   // { value: 'track', label: 'Músicas' },
 ] as const;
 
-// Grid Size Options
-export const GRID_SIZES = Array.from({ length: GRID_CONFIG.MAX_SIZE - GRID_CONFIG.MIN_SIZE + 1 }, (_, i) => {
+// Grid Size Options: square sizes ("5") plus rectangular "columnsxrows" layouts
+const SQUARE_GRID_SIZES = Array.from({ length: GRID_CONFIG.MAX_SIZE - GRID_CONFIG.MIN_SIZE + 1 }, (_, i) => {
   const size = i + GRID_CONFIG.MIN_SIZE;
   return { value: size.toString(), label: `${size}x${size}` };
 });
+
+export const GRID_SIZES = [
+  SQUARE_GRID_SIZES[0],
+  { value: '2x6', label: '2x6' },
+  ...SQUARE_GRID_SIZES.slice(1),
+];
 
 // API Configuration
 export const API_CONFIG = {
@@ -66,7 +72,7 @@ export const STORAGE_KEYS = {
 // Default Values
 export const DEFAULT_VALUES = {
   PERIOD: '1month',
-  LIMIT: 5,
+  LIMIT: '5',
   SHOW_ALBUM: false,
   SHOW_PLAYS: false,
   TYPE: 'album',

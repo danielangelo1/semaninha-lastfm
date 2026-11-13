@@ -1,7 +1,8 @@
 export interface UserRequest {
   user: string;
   period: string;
-  limit: number;
+  /** Grid size: "5" for 5x5, or "columnsxrows" such as "2x6" */
+  limit: string;
   showAlbum?: boolean;
   showPlays?: boolean;
   type?: string;

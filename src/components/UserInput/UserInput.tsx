@@ -26,7 +26,7 @@ const UserInput = () => {
     return {
       user: storage.user || "",
       period: storage.period || DEFAULT_VALUES.PERIOD,
-      limit: parseInt(storage.limit || DEFAULT_VALUES.LIMIT.toString()),
+      limit: storage.limit || DEFAULT_VALUES.LIMIT,
       showAlbum: storage.showAlbum === "true",
       showPlays: storage.showPlays === "false",
       type: storage.type || DEFAULT_VALUES.TYPE,
@@ -106,6 +106,7 @@ const UserInput = () => {
         <div className="select">
           <label htmlFor="limit">{t("form.size")}</label>
           <select
+            id="limit"
             aria-label={t("form.sizeSelect")}
             {...register("limit", { required: true })}
           >
@@ -119,6 +120,7 @@ const UserInput = () => {
         <div className="select">
           <label htmlFor="type">{t("form.type")}</label>
           <select
+            id="type"
             aria-label={t("form.typeSelect")}
             {...register("type", { required: true })}
           >

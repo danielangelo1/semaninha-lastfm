@@ -20,7 +20,7 @@ describe('LastFM API Service Tests', () => {
   const mockUserRequest: UserRequest = {
     user: 'testuser',
     period: '7day',
-    limit: 3,
+    limit: '3',
     type: 'album',
   };
 
@@ -160,7 +160,7 @@ describe('LastFM API Service Tests', () => {
 
       vi.mocked(api.get).mockResolvedValueOnce(mockResponse);
 
-      const gridRequest = { ...mockUserRequest, limit: 4 };
+      const gridRequest = { ...mockUserRequest, limit: '4' };
       await getTopAlbums(gridRequest);
 
       // 4x4 grid = 16 items
@@ -178,12 +178,29 @@ describe('LastFM API Service Tests', () => {
 
       vi.mocked(api.get).mockResolvedValueOnce(mockResponse);
 
-      const grid2x2Request = { ...mockUserRequest, type: 'track', limit: 2 };
+      const grid2x2Request = { ...mockUserRequest, type: 'track', limit: '2' };
       await getTopTracks(grid2x2Request);
 
       // 2x2 grid = 4 items
       expect(api.get).toHaveBeenCalledWith(
         expect.stringContaining('limit=4')
+      );
+    });
+
+    it('should calculate correct limit for a rectangular 2x6 grid', async () => {
+      const { api } = await import('../api');
+      const mockResponse = {
+        status: 200,
+        data: { topalbums: { album: [] } },
+      };
+
+      vi.mocked(api.get).mockResolvedValueOnce(mockResponse);
+
+      await getTopAlbums({ ...mockUserRequest, limit: '2x6' });
+
+      // 2 columns x 6 rows = 12 items
+      expect(api.get).toHaveBeenCalledWith(
+        expect.stringContaining('limit=12')
       );
     });
 
