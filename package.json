@@ -15,6 +15,8 @@
     "test:ui": "vitest --ui --config config/vite.config.ts",
     "test:run": "vitest run --config config/vite.config.ts",
     "test:coverage": "vitest run --coverage --config config/vite.config.ts",
+    "test:e2e": "playwright test -c config/playwright.config.ts",
+    "test:e2e:ui": "playwright test -c config/playwright.config.ts --ui",
     "test:build": "npm run type-check && npm run build",
     "ci": "npm run lint && npm run type-check && npm run build"
   },
@@ -36,7 +38,9 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^9.11.1",
+    "@playwright/test": "^1.65.0",
     "@testing-library/jest-dom": "^6.7.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",

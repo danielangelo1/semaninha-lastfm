@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, X } from "@phosphor-icons/react";
-import { WRAPPED_YEAR } from "../../constants/wrapped";
+import { WRAPPED_ANNOUNCEMENT_KEY, WRAPPED_YEAR } from "../../constants/wrapped";
 import "./WrappedAnnouncement.css";
 
-// Year-scoped, so the notice comes back on its own for next year's Wrapped
-export const ANNOUNCEMENT_KEY = `semaninha-wrapped-${WRAPPED_YEAR}-seen`;
+export const ANNOUNCEMENT_KEY = WRAPPED_ANNOUNCEMENT_KEY;
 const SHOW_DELAY = 1000;
 
 // Storage can be unavailable (private mode, blocked site data)

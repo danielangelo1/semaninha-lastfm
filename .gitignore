@@ -27,3 +27,6 @@ coverage
 
 # TypeScript build info files
 *.tsbuildinfo
+# Playwright
+playwright-report
+test-results

@@ -86,3 +86,6 @@ export const WRAPPED_API_CONFIG = {
   CHART_LIMIT: 1000,
   TOP_COUNT: 5,
 } as const;
+
+// Year-scoped, so the home notice comes back on its own for next year's Wrapped
+export const WRAPPED_ANNOUNCEMENT_KEY = `semaninha-wrapped-${WRAPPED_YEAR}-seen`;
