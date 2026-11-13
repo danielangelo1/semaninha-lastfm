@@ -27,23 +27,9 @@
   color: #1a1a1a;
 }
 
-.home-about p,
 .home-about li {
   font-size: 0.95rem;
   line-height: 1.65;
-  color: #4a4a4a;
-}
-
-.home-about ol {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  padding-left: 1.2rem;
-}
-
-.home-about ol li::marker {
-  color: #c3000d;
-  font-weight: 600;
 }
 
 .home-guides {

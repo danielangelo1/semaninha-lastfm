@@ -1,14 +1,6 @@
 {
   "home": {
     "description": "Show the world you have the best music taste! Use semaninha to generate collages of your most listened albums on Last.fm",
-    "aboutTitle": "What is semaninha?",
-    "aboutText": "semaninha is a free collage generator for the albums and artists you listened to the most, built from your Last.fm history. Pick the period — from the last week to your whole history — and the grid size, then download an image ready to post.",
-    "stepsTitle": "How it works",
-    "steps": [
-      "You need a Last.fm account connected to your player, like Spotify, to record what you listen to.",
-      "Enter your Last.fm username, pick the period, size and type, and click Generate.",
-      "The collage is built in your browser from album covers or artist photos. Then just download or share it."
-    ],
     "guidesTitle": "First time here?",
     "guides": {
       "howToUse": "Full step-by-step guide",

@@ -1,14 +1,6 @@
 {
   "home": {
     "description": "Mostre que você tem o melhor gosto músical do mundo! Use o semaninha para gerar colagens com os seus albuns mais ouvidos do Last.fm",
-    "aboutTitle": "O que é o semaninha?",
-    "aboutText": "O semaninha é um gerador gratuito de colagens com os álbuns e artistas que você mais ouviu, usando o seu histórico do Last.fm. Escolha o período — da última semana até todo o seu histórico — e o tamanho do grid, e baixe a imagem pronta para postar.",
-    "stepsTitle": "Como funciona",
-    "steps": [
-      "Você precisa de uma conta no Last.fm conectada ao seu player, como o Spotify, para registrar o que ouve.",
-      "Digite seu usuário do Last.fm, escolha período, tamanho e tipo, e clique em Gerar.",
-      "A colagem é montada no seu navegador com as capas dos álbuns ou fotos dos artistas. É só baixar ou compartilhar."
-    ],
     "guidesTitle": "Primeira vez por aqui?",
     "guides": {
       "howToUse": "Passo a passo completo",
