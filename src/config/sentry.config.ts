@@ -4,7 +4,7 @@ import {
   matchRoutes,
   useLocation,
   useNavigationType,
-} from "react-router-dom";
+} from "react-router";
 import { useEffect } from "react";
 import { isReloadingForNewVersion } from "./chunkReload";
 
@@ -27,7 +27,7 @@ export function initSentry() {
         
     // Integração com React Router para rastreamento de navegação
     integrations: [
-      Sentry.reactRouterV6BrowserTracingIntegration({
+      Sentry.reactRouterV7BrowserTracingIntegration({
         useEffect,
         useLocation,
         useNavigationType,

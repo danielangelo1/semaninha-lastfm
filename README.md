@@ -17,6 +17,7 @@ O Site **Semaninha** é um gerador de colagem dos albuns, artistas ou faixas mai
 - **Axios**
 - **Phosphor Icons**
 - **Vitest** + **Testing Library** + **MSW**
+- **Playwright** + **axe** (testes ponta a ponta e acessibilidade)
 - **ESLint**
 - **Sentry**
 - **Vercel** (deploy + funções serverless)
@@ -58,6 +59,29 @@ Como essa variável só existe no lado do servidor, rodar `vite` sozinho não é
 npm install -g vercel
 vercel dev
 ```
+
+---
+
+## 🧪 Testes
+
+```bash
+# Testes unitários e de integração (Vitest)
+npm run test:run
+
+# Testes ponta a ponta (Playwright): gera o build de produção, sobe com
+# `vite preview` e testa colagem, Wrapped, navegação, HTML pré-renderizado e
+# acessibilidade, no desktop e no celular, com a API do Last.fm simulada.
+npx playwright install chromium   # só na primeira vez
+npm run test:e2e
+
+# Os mesmos testes no modo interativo
+npm run test:e2e:ui
+
+# Smoke contra um site publicado, com o Last.fm de verdade
+E2E_BASE_URL=https://www.semaninha.net npm run test:e2e -- --project=desktop
+```
+
+No GitHub Actions, o workflow `E2E` roda a suíte completa em todo PR e o smoke em cada deploy da Vercel (preview e produção).
 
 ---
 

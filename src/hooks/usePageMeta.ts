@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import { getCanonicalUrl, getPageMeta } from "../constants/seo";
 
 const setAttribute = (selector: string, attribute: string, value: string) => {

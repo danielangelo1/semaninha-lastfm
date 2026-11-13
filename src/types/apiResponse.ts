@@ -2,7 +2,6 @@ export type {
   AlbumApiResponse,
   ArtistApiResponse,
   TrackApiResponse,
-  TagApiResponse,
   UserInfoApiResponse,
   WeeklyArtistChartResponse,
   WeeklyTrackChartResponse,

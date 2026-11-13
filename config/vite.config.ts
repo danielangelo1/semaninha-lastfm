@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
+import { configDefaults } from "vitest/config";
 import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
@@ -24,6 +25,8 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: ["tests/setup.ts"],
+    // Playwright runs these (npm run test:e2e)
+    exclude: [...configDefaults.exclude, "tests/e2e/**"],
     css: true,
     coverage: {
       provider: "v8",
