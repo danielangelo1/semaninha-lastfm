@@ -23,6 +23,9 @@ export const PAGES = {
   "/wrapped": lazyPage(() => import("../pages/Wrapped/Wrapped")),
   "/how-to-use": lazyPage(() => import("../pages/HowToUse/HowToUse")),
   "/support": lazyPage(() => import("../pages/Support/Support")),
+  "/about": lazyPage(() => import("../pages/Articles/About")),
+  "/what-is-a-scrobble": lazyPage(() => import("../pages/Articles/WhatIsAScrobble")),
+  "/connect-your-player": lazyPage(() => import("../pages/Articles/ConnectYourPlayer")),
 };
 
 /** Loads the page for a path; unknown paths fall back to Home, like the router */

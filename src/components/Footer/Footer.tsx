@@ -53,6 +53,7 @@ const Footer = () => {
           <Heart size={14} weight="fill" aria-hidden="true" />
           {t("footer.support")}
         </Link>
+        <Link to="/about">{t("footer.about")}</Link>
         <Link to="/how-to-use">{t("footer.howToUse")}</Link>
         <Link to="/privacy">{t("footer.privacy")}</Link>
       </div>

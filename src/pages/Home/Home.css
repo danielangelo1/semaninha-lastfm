@@ -1,11 +1,77 @@
-.home p {
+.home > p {
   max-width: 500px;
   margin: 0 auto 20px;
   text-align: start;
 }
 
+.home-about {
+  width: 80%;
+  margin: 3.5rem auto 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.home-about-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e6e6e6;
+}
+
+.home-about h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: #1a1a1a;
+}
+
+.home-about p,
+.home-about li {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #4a4a4a;
+}
+
+.home-about ol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-left: 1.2rem;
+}
+
+.home-about ol li::marker {
+  color: #c3000d;
+  font-weight: 600;
+}
+
+.home-guides {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+.home-guides a {
+  color: #c3000d;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 968px) {
+  .home-about {
+    width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
-  .home p {
+  .home > p {
     font-size: 0.85em;
+  }
+
+  .home-about {
+    margin-top: 2.5rem;
   }
 }
