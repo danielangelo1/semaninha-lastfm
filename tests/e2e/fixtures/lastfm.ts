@@ -13,6 +13,8 @@ export const USERS = {
 
 const ALBUM_COUNT: Record<string, number> = { [USERS.active]: 120, [USERS.sparse]: 4 };
 
+const LASTFM_IMAGE_HOST = "lastfm.freetls.fastly.net";
+
 // 1x1 PNG, served for every cover/avatar so the canvas can draw without the network
 const PIXEL_PNG = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
@@ -23,7 +25,7 @@ const image = (name: string) => [
   { "#text": "", size: "small" },
   { "#text": "", size: "medium" },
   { "#text": "", size: "large" },
-  { "#text": `https://lastfm.freetls.fastly.net/i/u/300x300/${name}.png`, size: "extralarge" },
+  { "#text": `https://${LASTFM_IMAGE_HOST}/i/u/300x300/${name}.png`, size: "extralarge" },
 ];
 
 const artistRef = (i: number) => ({ mbid: "", name: `Artista ${i}`, url: "" });
@@ -119,7 +121,7 @@ export const mockLastFm = async (page: Page): Promise<LastFmMock> => {
 
   await page.route(/^https?:\/\/(?!localhost)/, (route) => {
     const { hostname } = new URL(route.request().url());
-    if (hostname.endsWith("fastly.net")) {
+    if (hostname === LASTFM_IMAGE_HOST) {
       return route.fulfill({
         body: PIXEL_PNG,
         contentType: "image/png",
